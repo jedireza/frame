@@ -16,9 +16,6 @@ Frame is built with the [hapi.js framework](https://github.com/hapijs/hapi) and
 also use [Nodemailer](https://github.com/andris9/Nodemailer) for email
 transport.
 
-Please [refer to the wiki](https://github.com/jedireza/frame/wiki/) for
-more details.
-
 
 ## Live demo
 
