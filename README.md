@@ -25,7 +25,7 @@ more details.
 | endpoint                                                                 | username | password |
 |:------------------------------------------------------------------------ |:-------- |:-------- |
 | [https://hapiframe.herokuapp.com/](https://hapiframe.herokuapp.com/docs) | root     | root     |
-| [https://hapiframe.nodejitsu.com/docs](#)                                | coming   | soon     |
+| [https://hapiframe.nodejitsu.com/](#)                                | coming   | soon     |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs.
