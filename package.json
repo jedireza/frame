@@ -1,0 +1,41 @@
+{
+  "name": "frame",
+  "version": "0.0.0",
+  "description": "A user api kit for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "setup": "./setup.js",
+    "start": "./node_modules/nodemon/bin/nodemon.js -e js,md server",
+    "test": "./node_modules/lab/bin/lab -c",
+    "test-cover": "./node_modules/lab/bin/lab -c -r html -o ./test/artifacts/coverage.html && open ./test/artifacts/coverage.html"
+  },
+  "author": "Reza Akhavan <jedireza@gmail.com> (http://reza.akhavan.me/)",
+  "license": "MIT",
+  "dependencies": {
+    "ampersand-class-extend": "^1.0.0",
+    "async": "^0.9.0",
+    "bcrypt": "^0.8.0",
+    "boom": "^2.5.1",
+    "confidence": "^0.12.1",
+    "extend-object": "^1.0.0",
+    "handlebars": "^2.0.0",
+    "hapi": "^6.7.1",
+    "hapi-auth-basic": "^1.1.1",
+    "hoek": "^2.4.1",
+    "jade": "^1.5.0",
+    "joi": "^4.6.2",
+    "lout": "^5.0.1",
+    "marked": "^0.3.2",
+    "mongodb": "^1.4.8",
+    "node-uuid": "^1.4.1",
+    "nodemailer": "^1.3.0",
+    "nodemailer-markdown": "^1.0.0",
+    "slug": "^0.5.0"
+  },
+  "devDependencies": {
+    "lab": "^4.2.0",
+    "nodemon": "^1.2.1",
+    "promptly": "^0.2.0",
+    "proxyquire": "^1.0.1"
+  }
+}
