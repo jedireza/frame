@@ -20,12 +20,11 @@ Please [refer to the wiki](https://github.com/jedireza/frame/wiki/) for
 more details.
 
 
-## Live demos
+## Live demo
 
 | endpoint                                                                 | username | password |
 |:------------------------------------------------------------------------ |:-------- |:-------- |
 | [https://hapiframe.herokuapp.com/](https://hapiframe.herokuapp.com/docs) | root     | root     |
-| [https://hapiframe.nodejitsu.com/](#)                                | coming   | soon     |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs.
