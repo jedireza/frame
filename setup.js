@@ -158,7 +158,7 @@ async.auto({
                 var id = dbResults.user._id.toString();
                 var update = {
                     $set: {
-                        admin: {
+                        'roles.admin': {
                             id: dbResults.admin._id.toString(),
                             name: 'Root Admin'
                         }
