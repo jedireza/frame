@@ -14,7 +14,6 @@ var user = new User({
         account: new Account({
             _id: '5250W35',
             name: {
-                full: 'Stimpson J Cat',
                 first: 'Stimpson',
                 middle: 'J',
                 last: 'Cat'

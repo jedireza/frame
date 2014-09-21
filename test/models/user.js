@@ -354,7 +354,6 @@ lab.experiment('User Instance Methods', function () {
             callback(null, new Admin({
                 _id: '953P150D35',
                 name: {
-                    full: 'Ren Höek',
                     first: 'Ren',
                     last: 'Höek'
                 }
@@ -367,7 +366,6 @@ lab.experiment('User Instance Methods', function () {
             callback(null, new Account({
                 _id: '5250W35',
                 name: {
-                    full: 'Stimpson J Cat',
                     first: 'Stimpson',
                     middle: 'J',
                     last: 'Cat'

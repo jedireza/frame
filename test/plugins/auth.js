@@ -269,7 +269,6 @@ lab.experiment('Auth Plugin', function () {
                 admin: {
                     _id: '953P150D35',
                     name: {
-                        full: 'Ren Höek',
                         first: 'Ren',
                         last: 'Höek'
                     }
@@ -336,7 +335,6 @@ lab.experiment('Auth Plugin', function () {
                 admin: new Admin({
                     _id: '953P150D35',
                     name: {
-                        full: 'Ren Höek',
                         first: 'Ren',
                         last: 'Höek'
                     }
@@ -404,7 +402,6 @@ lab.experiment('Auth Plugin', function () {
                 admin: new Admin({
                     _id: '953P150D35',
                     name: {
-                        full: 'Ren Höek',
                         first: 'Ren',
                         last: 'Höek'
                     },

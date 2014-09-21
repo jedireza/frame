@@ -145,7 +145,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             }
@@ -161,7 +160,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -182,7 +180,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             }
@@ -201,7 +198,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -239,7 +235,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -278,7 +273,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -302,7 +296,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -331,7 +324,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },
@@ -355,7 +347,6 @@ lab.experiment('Admin Instance Methods', function () {
 
         var admin = new Admin({
             name: {
-                full: 'Ren Höek',
                 first: 'Ren',
                 last: 'Höek'
             },

@@ -52,7 +52,6 @@ Account.create = function (name, callback) {
 
     var document = {
         name: {
-            full: name,
             first: nameParts.shift(),
             middle: nameParts.length > 1 ? nameParts.shift() : undefined,
             last: nameParts.join(' ')
