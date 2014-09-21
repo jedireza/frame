@@ -2,6 +2,8 @@
 
 An API boilerplate for Node.js. Bring your own front-end.
 
+[![Dependency Status](https://david-dm.org/jedireza/frame.svg?theme=shields.io)](https://david-dm.org/jedireza/frame)
+[![devDependency Status](https://david-dm.org/jedireza/frame/dev-status.svg?theme=shields.io)](https://david-dm.org/jedireza/frame#info=devDependencies)
 
 ## Technology
 
