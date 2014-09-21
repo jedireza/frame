@@ -22,10 +22,10 @@ more details.
 
 ## Live demos
 
-| endpoint                              | username | password |
-|:------------------------------------- |:-------- |:-------- |
-| https://hapiframe.herokuapp.com/docs/ | coming   | soon     |
-| https://hapiframe.nodejitsu.com/docs/ | coming   | soon     |
+| endpoint                             | username | password |
+|:------------------------------------ |:-------- |:-------- |
+| https://hapiframe.herokuapp.com/docs | coming   | soon     |
+| https://hapiframe.nodejitsu.com/docs | coming   | soon     |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs.
@@ -55,7 +55,7 @@ $ npm install
 ## Setup
 
 __WARNING:__ This will clear all data in existing `users`, `admins` and
-`admingroups` MongoDB collections. It will also overwrite an existing
+`adminGroups` MongoDB collections. It will also overwrite an existing
 `/config.js` file.
 
 ```bash
