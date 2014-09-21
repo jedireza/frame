@@ -51,8 +51,8 @@ $ npm install
 ## Setup
 
 __WARNING:__ This will clear all data in existing `users`, `admins` and
-`adminGroups` MongoDB collections. It will also overwrite an existing
-`/config.js` file if one exists.
+`adminGroups` MongoDB collections. It will also overwrite `/config.js` if one
+exists.
 
 ```bash
 $ npm run setup
