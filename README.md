@@ -132,18 +132,6 @@ $ npm version
 #   frame: '0.0.0' }
 ```
 
-```bash
-$ mongo --version
-
-# MongoDB shell version: 2.2.1
-```
-
-```bash
-$ mongod --version
-
-# db version v2.2.1, pdfile version 4.5
-```
-
 Contributions welcome. Your code should:
 
  - include 100% test coverage
