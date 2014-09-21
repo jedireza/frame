@@ -4,4 +4,4 @@ node_js:
 services:
   - mongodb
 before_script:
-  - npm run setup -y
+  - npm run setup
