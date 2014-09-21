@@ -13,7 +13,7 @@ __Primary goal:__ include as few dependencies as possible
 Frame is built with the [hapi.js framework](https://github.com/hapijs/hapi) and
 [toolset](https://github.com/hapijs). We're using
 [MongoDB](https://github.com/mongodb/node-mongodb-native/) as a data store. We
-also user [Nodemailer](https://github.com/andris9/Nodemailer) for email
+also use [Nodemailer](https://github.com/andris9/Nodemailer) for email
 transport.
 
 Please [refer to the wiki](https://github.com/jedireza/frame/wiki/) for
