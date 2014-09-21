@@ -192,7 +192,7 @@ $ npm run test-cover
 ```
 
 This will run the tests and open a web browser to the visual code coverage
-artifcacts. The generated source can be found in `/tests/artifacts/coverage.html`.
+artifacts. The generated source can be found in `/tests/artifacts/coverage.html`.
 
 
 ## License
