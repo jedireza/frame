@@ -1,6 +1,6 @@
 {
   "name": "frame",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A user api kit for Node.js",
   "main": "index.js",
   "scripts": {
