@@ -29,7 +29,7 @@ more details.
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs.
 
-__Note:__ The live demos have been modified so you cannot change the root user, the root user's linked admin role or the root admin group. This was done in order to keep the API ready to show at all times.
+__Note:__ The live demo has been modified so you cannot change the root user, the root user's linked admin role or the root admin group. This was done in order to keep the API ready to use at all times.
 
 
 ## Requirements
