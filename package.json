@@ -1,7 +1,7 @@
 {
   "name": "frame",
   "version": "0.1.1",
-  "description": "A user api kit for Node.js",
+  "description": "A user system API for Node.js",
   "main": "index.js",
   "scripts": {
     "setup": "./setup.js",
