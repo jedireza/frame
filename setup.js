@@ -7,6 +7,28 @@ var promptly = require('promptly');
 var mongodb = require('mongodb');
 var handlebars = require('handlebars');
 
+if (process.env.NODE_ENV === 'test') {
+    var configTemplatePath = path.resolve(__dirname, 'config.example.js');
+    var configPath = path.resolve(__dirname, 'config.js');
+    var options = { encoding: 'utf-8' };
+    var source = fs.readFileSync(configTemplatePath, options);
+    var configTemplate = handlebars.compile(source);
+    var context = {
+        projectName: 'Frame',
+        mongodbUrl: 'mongodb://localhost:27017/frame',
+        rootEmail: 'root@root',
+        rootPassword: 'root',
+        systemEmail: 'sys@tem',
+        smtpHost: 'smtp.gmail.com',
+        smtpPort: 465,
+        smtpUsername: '',
+        smtpPassword: ''
+    };
+    fs.writeFileSync(configPath, configTemplate(context));
+    console.log('Setup complete.');
+    process.exit(0);
+}
+
 async.auto({
     projectName: function (done) {
 
