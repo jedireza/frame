@@ -3,5 +3,5 @@ node_js:
   - "0.10"
 services:
   - mongodb
-before_install:
+before_script:
   - npm run setup -y
