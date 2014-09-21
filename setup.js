@@ -124,7 +124,7 @@ async.auto({
 
                 async.parallel([
                     User.remove.bind(User, {}),
-                    Admin.remove.bind(AdminGroup, {}),
+                    Admin.remove.bind(Admin, {}),
                     AdminGroup.remove.bind(AdminGroup, {})
                 ], done);
             }],
