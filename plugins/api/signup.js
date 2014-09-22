@@ -2,6 +2,7 @@ var Joi = require('joi');
 var async = require('async');
 var config = require('../../config');
 
+
 exports.register = function (plugin, options, next) {
 
     plugin.route({
@@ -83,11 +84,13 @@ exports.register = function (plugin, options, next) {
                     var username = request.payload.username;
                     var password = request.payload.password;
                     var email = request.payload.email;
+
                     User.create(username, password, email, done);
                 },
                 account: ['user', function (done, results) {
 
                     var name = request.payload.name;
+
                     Account.create(name, done);
                 }],
                 linkUser: ['account', function (done, results) {

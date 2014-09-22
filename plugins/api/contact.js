@@ -1,6 +1,7 @@
 var Joi = require('joi');
 var config = require('../../config');
 
+
 exports.register = function (plugin, options, next) {
 
     plugin.route({
@@ -38,6 +39,7 @@ exports.register = function (plugin, options, next) {
             });
         }
     });
+
 
     next();
 };

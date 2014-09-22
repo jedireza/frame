@@ -270,8 +270,8 @@ exports.register = function (plugin, options, next) {
                             }
 
                             if (user.roles &&
-                                    user.roles.account &&
-                                    user.roles.account.id !== request.params.id) {
+                                user.roles.account &&
+                                user.roles.account.id !== request.params.id) {
 
                                 var response = {
                                     message: 'User is already linked to another account. Unlink first.'
@@ -578,6 +578,8 @@ exports.register = function (plugin, options, next) {
 
     next();
 };
+
+
 exports.register.attributes = {
     name: 'account'
 };
