@@ -1,0 +1,86 @@
+doctype html
+html(lang='en')
+  head
+    title Frame - An API boilerplate for Node.js
+    link(rel='shortcut icon', href='favicon.ico')
+    link(rel='stylesheet', href='public/build.css')
+  body
+    div.jumbotron
+      h1.text-center Frame
+      h2.text-center A user system API for Node.js
+      p.text-center: a.btn.btn-primary.btn-lg(href='https://hapiframe.herokuapp.com/docs')
+        |Live Demo on Heroku
+      ul.project-links
+        li: a(href='https://github.com/jedireza/frame/') View GitHub Project
+        li Version 0.1.1
+        li: a(href='https://github.com/jedireza/frame/zipball/master') Download Frame
+      div.gh-btns
+        iframe(src='http://ghbtns.com/github-btn.html?user=jedireza&repo=frame&type=watch&count=true&size=large', allowtransparency='true', frameborder='0', scrolling='0', width='130px', height='30px')
+        iframe(src='http://ghbtns.com/github-btn.html?user=jedireza&repo=frame&type=fork&count=true&size=large', allowtransparency='true', frameborder='0', scrolling='0', width='125px', height='30px')
+        iframe(src='http://ghbtns.com/github-btn.html?user=jedireza&repo=frame&type=follow&count=false&size=large', allowtransparency='true', frameborder='0', scrolling='0', width='173px', height='30px')
+    div.container.marketing
+      div.page-header
+        h2.text-center Built-in Features
+      div.row
+        div.col-sm-4
+          h3
+            i.fa.fa-hand-o-right
+            |  Signup
+          p.
+            The <code>/signup</code> endpoint makes sure the supplied username
+            and email address are unique and creates new <code>User</code> and
+            <code>Account</code> documents.
+        div.col-sm-4
+          h3
+            i.fa.fa-sign-in
+            |  Login
+          p.
+            When supplied valid credentials, the <code>/login</code> endpoint
+            creates a new <code>Session</code>.  We've also included
+            endpoints for resetting a forgotten password.
+        div.col-sm-4
+          h3
+            i.fa.fa-paper-plane
+            |  Email Utility
+          p.
+            The <code>/contact</code> endpoint demonstrates the built-in email
+            utility. By combinging Handlebars and Markdown, personalized emails
+            with HTML and text parts are easy to handle.
+      div.row
+        div.col-sm-4
+          h3
+            i.fa.fa-user
+            |  Users &amp; Roles
+          p.
+            <code>User</code> documents store login credentials and roles.
+            Frame ships with two roles; <code>Account</code> and
+            <code>Admin</code>.
+        div.col-sm-4
+          h3
+            i.fa.fa-users
+            |  Admin Groups
+          p.
+            Frame also ships with an <code>Admin</code> grouping facility
+            (<code>AdminGroup</code>). Think about these like departments;
+            sales, support, manager, etc...
+        div.col-sm-4
+          h3
+            i.fa.fa-key
+            |  Permissions
+          p.
+            Permissions can be granted to an <code>AdminGroup</code> or
+            individually for an <code>Admin</code>. <code>Admin</code>
+            permissions will win over their group's permission.
+    footer
+      div.container
+        p.
+          Made using the force by <a href='http://twitter.com/jedireza', target='_blank'>@jedireza</a>.
+          Code licensed under The MIT License.
+        p.
+          A special thanks goes to the creators and contributors of the tools
+          Frame is built with.
+        ul.footer-links
+          li: a(href='https://github.com/jedireza/frame/issues?state=open') Submit issues
+          li.muted ·
+          li: a(href='#') Back to top
+    script(src='public/build.js')

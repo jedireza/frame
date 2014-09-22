@@ -12,13 +12,22 @@ var paths = {
     ],
     less: [
         './node_modules/bootstrap/less/bootstrap.less',
-        './src/index.less',
+        './src/less/font-awesome.less',
+        './src/less/index.less',
     ],
-    jade: './*.jade'
+    jade: './src/jade/*.jade'
 };
 
 
+gulp.task('copy', function (cb) {
+
+    return gulp.src('./node_modules/font-awesome/fonts/*.*')
+        .pipe(gulp.dest('./public/fonts/'));
+});
+
+
 gulp.task('less', function (cb) {
+
     return gulp.src(paths.less)
         .pipe(less({
             compress: true
@@ -37,6 +46,7 @@ gulp.task('scripts', function () {
 
 
 gulp.task('jade', function () {
+
     return gulp.src(paths.jade)
         .pipe(jade({}))
         .pipe(gulp.dest('./'));
@@ -44,10 +54,11 @@ gulp.task('jade', function () {
 
 
 gulp.task('watch', function() {
+
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.less, ['less']);
     gulp.watch(paths.jade, ['jade']);
 });
 
 
-gulp.task('default', ['scripts', 'less', 'jade', 'watch']);
+gulp.task('default', ['copy', 'scripts', 'less', 'jade', 'watch']);
