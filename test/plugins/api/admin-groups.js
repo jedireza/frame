@@ -48,10 +48,7 @@ lab.experiment('Admin Groups Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/admin-groups',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -106,10 +103,7 @@ lab.experiment('Admin Groups Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/admin-groups/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -177,10 +171,7 @@ lab.experiment('Admin Groups Plugin Create', function () {
             payload: {
                 name: 'Sales'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -231,10 +222,7 @@ lab.experiment('Admin Groups Plugin Update', function () {
             payload: {
                 name: 'Salez'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -285,10 +273,7 @@ lab.experiment('Admin Groups Plugin Update Permissions', function () {
             payload: {
                 permissions: { SPACE_RACE: true }
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -336,10 +321,7 @@ lab.experiment('Admin Groups Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/admin-groups/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

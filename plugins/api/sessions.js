@@ -8,7 +8,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/sessions',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 query: {
                     fields: Joi.string(),
@@ -18,7 +21,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -47,9 +49,11 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/sessions/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -77,9 +81,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/sessions/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },

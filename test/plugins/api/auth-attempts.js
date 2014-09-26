@@ -48,10 +48,7 @@ lab.experiment('Auth Attempts Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/auth-attempts',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -106,10 +103,7 @@ lab.experiment('Auth Attempts Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/auth-attempts/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -174,10 +168,7 @@ lab.experiment('Auth Attempt Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/auth-attempts/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

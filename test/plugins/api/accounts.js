@@ -53,10 +53,7 @@ lab.experiment('Accounts Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/accounts',
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -111,10 +108,7 @@ lab.experiment('Accounts Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/accounts/93EP150D35',
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -179,10 +173,7 @@ lab.experiment('Accounts Plugin (My) Read', function () {
         request = {
             method: 'GET',
             url: '/accounts/my',
-            credentials: {
-                user: authenticatedAccount,
-                roles: authenticatedAccount._roles
-            }
+            credentials: authenticatedAccount
         };
 
         done();
@@ -259,10 +250,7 @@ lab.experiment('Accounts Plugin Create', function () {
             payload: {
                 name: 'Muddy Mudskipper'
             },
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -316,10 +304,7 @@ lab.experiment('Accounts Plugin Update', function () {
                     last: 'Mudskipper'
                 }
             },
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -373,10 +358,7 @@ lab.experiment('Accounts Plugin (My) Update', function () {
                     last: 'Skipper'
                 }
             },
-            credentials: {
-                user: authenticatedAccount,
-                roles: authenticatedAccount._roles
-            }
+            credentials: authenticatedAccount
         };
 
         done();
@@ -433,10 +415,7 @@ lab.experiment('Accounts Plugin Link User', function () {
             payload: {
                 username: 'ren'
             },
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -685,10 +664,7 @@ lab.experiment('Accounts Plugin Add Note', function () {
             payload: {
                 data: 'This is a wonderful note.'
             },
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -738,10 +714,7 @@ lab.experiment('Accounts Plugin Update Status', function () {
             payload: {
                 status: 'account-happy'
             },
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -814,10 +787,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
         request = {
             method: 'DELETE',
             url: '/accounts/93EP150D35/user',
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();
@@ -1049,10 +1019,7 @@ lab.experiment('Accounts Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/accounts/93EP150D35',
-            credentials: {
-                user: authenticatedAdmin,
-                roles: authenticatedAdmin._roles
-            }
+            credentials: authenticatedAdmin
         };
 
         done();

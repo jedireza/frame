@@ -48,10 +48,7 @@ lab.experiment('Session Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/sessions',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -106,10 +103,7 @@ lab.experiment('Session Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/sessions/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -174,10 +168,7 @@ lab.experiment('Session Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/sessions/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

@@ -48,10 +48,7 @@ lab.experiment('User Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/users',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -129,10 +126,7 @@ lab.experiment('Users Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/users/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -197,10 +191,7 @@ lab.experiment('Users Plugin (My) Read', function () {
         request = {
             method: 'GET',
             url: '/users/my',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -279,10 +270,7 @@ lab.experiment('Users Plugin Create', function () {
                 password: 'dirtandwater',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -429,10 +417,7 @@ lab.experiment('Users Plugin Update', function () {
                 username: 'muddy',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -578,10 +563,7 @@ lab.experiment('Users Plugin (My) Update', function () {
                 username: 'muddy',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -732,10 +714,7 @@ lab.experiment('Users Plugin Set Password', function () {
             payload: {
                 password: 'fromdirt'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -811,10 +790,7 @@ lab.experiment('Users Plugin (My) Set Password', function () {
             payload: {
                 password: 'fromdirt'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -893,10 +869,7 @@ lab.experiment('Users Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/users/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

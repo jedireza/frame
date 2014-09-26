@@ -48,10 +48,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
         request = {
             method: 'DELETE',
             url: '/logout',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
