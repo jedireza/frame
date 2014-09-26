@@ -31,6 +31,14 @@ exports.register = function (plugin, options, next) {
                         }
 
                         results.user.hydrateRoles(done);
+                    }],
+                    scope: ['user', function (done, results) {
+
+                        if (!results.user || !results.user.roles) {
+                            return done();
+                        }
+
+                        done(null, Object.keys(results.user.roles));
                     }]
                 }, function (err, results) {
 
@@ -53,35 +61,6 @@ exports.register = function (plugin, options, next) {
 
 
 exports.preware = {};
-
-
-exports.preware.ensureUserRole = function (roles) {
-
-    return {
-        assign: 'ensureUserRole',
-        method: function (request, reply) {
-
-            if (Object.prototype.toString.call(roles) !== '[object Array]') {
-                roles = [roles];
-            }
-
-            var roleFound = roles.some(function (role) {
-
-                return request.auth.credentials.user.canPlayRole(role);
-            });
-
-            if (!roleFound) {
-                var response = {
-                    message: 'Permission denied to this resouce.'
-                };
-
-                return reply(response).takeover().code(403);
-            }
-
-            reply();
-        }
-    };
-};
 
 
 exports.preware.ensureAdminGroup = function (groups) {

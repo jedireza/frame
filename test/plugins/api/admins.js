@@ -50,10 +50,7 @@ lab.experiment('Admins Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/admins',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -108,10 +105,7 @@ lab.experiment('Admins Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/admins/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -179,10 +173,7 @@ lab.experiment('Admins Plugin Create', function () {
             payload: {
                 name: 'Toast Man'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -236,10 +227,7 @@ lab.experiment('Admins Plugin Update', function () {
                     last: 'Höek'
                 }
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -290,10 +278,7 @@ lab.experiment('Admins Plugin Update Permissions', function () {
             payload: {
                 permissions: { SPACE_RACE: true }
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -344,10 +329,7 @@ lab.experiment('Admins Plugin Update Groups', function () {
             payload: {
                 groups: { sales: 'Sales' }
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -398,10 +380,7 @@ lab.experiment('Admins Plugin Link User', function () {
             payload: {
                 username: 'ren'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -647,10 +626,7 @@ lab.experiment('Admins Plugin Unlink User', function () {
         request = {
             method: 'DELETE',
             url: '/admins/93EP150D35/user',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -882,10 +858,7 @@ lab.experiment('Admins Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/admins/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

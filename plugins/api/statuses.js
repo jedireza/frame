@@ -8,7 +8,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/statuses',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 query: {
                     fields: Joi.string(),
@@ -18,7 +21,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -47,9 +49,11 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/statuses/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -77,7 +81,10 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/statuses',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     pivot: Joi.string().required(),
@@ -85,7 +92,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -111,14 +117,16 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/statuses/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     name: Joi.string().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -148,9 +156,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/statuses/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },

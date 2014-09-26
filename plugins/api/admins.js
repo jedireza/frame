@@ -9,7 +9,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/admins',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 query: {
                     fields: Joi.string(),
@@ -19,7 +22,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -48,9 +50,11 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/admins/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -78,14 +82,16 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/admins',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     name: Joi.string().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -110,7 +116,10 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/admins/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     name: Joi.object().keys({
@@ -121,7 +130,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -151,14 +159,16 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/admins/{id}/permissions',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     permissions: Joi.object().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -188,14 +198,16 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/admins/{id}/groups',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     groups: Joi.object().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -225,14 +237,16 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/admins/{id}/user',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     username: Joi.string().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root'),
                 {
                     assign: 'admin',
@@ -351,9 +365,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/admins/{id}/user',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root'),
                 {
                     assign: 'admin',
@@ -443,9 +459,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/admins/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },

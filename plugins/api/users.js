@@ -8,7 +8,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/users',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 query: {
                     username: Joi.string().token(),
@@ -21,7 +24,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -59,9 +61,11 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/users/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
@@ -89,10 +93,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/users/my',
         config: {
-            auth: 'simple',
-            pre: [
-                authPlugin.preware.ensureUserRole(['account', 'admin'])
-            ]
+            auth: {
+                strategy: 'simple',
+                scope: ['admin', 'account']
+            }
         },
         handler: function (request, reply) {
 
@@ -120,7 +124,10 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/users',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     username: Joi.string().token().required(),
@@ -129,7 +136,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root'),
                 {
                     assign: 'usernameCheck',
@@ -209,7 +215,10 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/users/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     isActive: Joi.boolean().required(),
@@ -218,7 +227,6 @@ exports.register = function (plugin, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root'),
                 {
                     assign: 'usernameCheck',
@@ -305,71 +313,71 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/users/my',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: ['account', 'admin']
+            },
             validate: {
                 payload: {
                     username: Joi.string().token().required(),
                     email: Joi.string().email().required()
                 }
             },
-            pre: [
-                authPlugin.preware.ensureUserRole(['account', 'admin']),
-                {
-                    assign: 'usernameCheck',
-                    method: function (request, reply) {
+            pre: [{
+                assign: 'usernameCheck',
+                method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
-                        var conditions = {
-                            username: request.payload.username,
-                            _id: { $ne: request.auth.credentials.user._id }
-                        };
+                    var User = request.server.plugins.models.User;
+                    var conditions = {
+                        username: request.payload.username,
+                        _id: { $ne: request.auth.credentials.user._id }
+                    };
 
-                        User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, function (err, user) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            if (user) {
-                                var response = {
-                                    message: 'Username already in use.'
-                                };
+                        if (user) {
+                            var response = {
+                                message: 'Username already in use.'
+                            };
 
-                                return reply(response).takeover().code(409);
-                            }
+                            return reply(response).takeover().code(409);
+                        }
 
-                            reply(true);
-                        });
-                    }
-                }, {
-                    assign: 'emailCheck',
-                    method: function (request, reply) {
-
-                        var User = request.server.plugins.models.User;
-                        var conditions = {
-                            email: request.payload.email.toLowerCase(),
-                            _id: { $ne: request.auth.credentials.user._id }
-                        };
-
-                        User.findOne(conditions, function (err, user) {
-
-                            if (err) {
-                                return reply(err);
-                            }
-
-                            if (user) {
-                                var response = {
-                                    message: 'Email already in use.'
-                                };
-
-                                return reply(response).takeover().code(409);
-                            }
-
-                            reply(true);
-                        });
-                    }
+                        reply(true);
+                    });
                 }
-            ]
+            }, {
+                assign: 'emailCheck',
+                method: function (request, reply) {
+
+                    var User = request.server.plugins.models.User;
+                    var conditions = {
+                        email: request.payload.email.toLowerCase(),
+                        _id: { $ne: request.auth.credentials.user._id }
+                    };
+
+                    User.findOne(conditions, function (err, user) {
+
+                        if (err) {
+                            return reply(err);
+                        }
+
+                        if (user) {
+                            var response = {
+                                message: 'Email already in use.'
+                            };
+
+                            return reply(response).takeover().code(409);
+                        }
+
+                        reply(true);
+                    });
+                }
+            }]
         },
         handler: function (request, reply) {
 
@@ -401,14 +409,16 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/users/{id}/password',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     password: Joi.string().required()
                 }
             },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root'),
                 {
                     assign: 'password',
@@ -454,31 +464,31 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/users/my/password',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: ['account', 'admin']
+            },
             validate: {
                 payload: {
                     password: Joi.string().required()
                 }
             },
-            pre: [
-                authPlugin.preware.ensureUserRole(['account', 'admin']),
-                {
-                    assign: 'password',
-                    method: function (request, reply) {
+            pre: [{
+                assign: 'password',
+                method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                    var User = request.server.plugins.models.User;
 
-                        User.generatePasswordHash(request.payload.password, function (err, hash) {
+                    User.generatePasswordHash(request.payload.password, function (err, hash) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            reply(hash);
-                        });
-                    }
+                        reply(hash);
+                    });
                 }
-            ]
+            }]
         },
         handler: function (request, reply) {
 
@@ -509,9 +519,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/users/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },

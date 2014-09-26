@@ -216,10 +216,10 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             path: '/',
             config: {
-                auth: 'simple',
-                pre: [
-                    authPlugin.preware.ensureUserRole('admin')
-                ]
+                auth: {
+                    strategy: 'simple',
+                    scope: 'admin'
+                }
             },
             handler: function (request, reply) {
 
@@ -239,7 +239,7 @@ lab.experiment('Auth Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result.message).to.match(/permission denied/i);
+            Lab.expect(response.result.message).to.match(/insufficient scope/i);
 
             done();
         });
@@ -282,10 +282,10 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             path: '/',
             config: {
-                auth: 'simple',
-                pre: [
-                    authPlugin.preware.ensureUserRole(['admin', 'account'])
-                ]
+                auth: {
+                    strategy: 'simple',
+                    scope: ['account', 'admin']
+                }
             },
             handler: function (request, reply) {
 
@@ -348,9 +348,11 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             path: '/',
             config: {
-                auth: 'simple',
+                auth: {
+                    strategy: 'simple',
+                    scope: 'admin'
+                },
                 pre: [
-                    authPlugin.preware.ensureUserRole('admin'),
                     authPlugin.preware.ensureAdminGroup('root')
                 ]
             },
@@ -418,9 +420,11 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             path: '/',
             config: {
-                auth: 'simple',
+                auth: {
+                    strategy: 'simple',
+                    scope: 'admin'
+                },
                 pre: [
-                    authPlugin.preware.ensureUserRole('admin'),
                     authPlugin.preware.ensureAdminGroup(['sales', 'root'])
                 ]
             },

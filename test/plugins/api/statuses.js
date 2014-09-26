@@ -48,10 +48,7 @@ lab.experiment('Statuses Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/statuses',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -106,10 +103,7 @@ lab.experiment('Statuses Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/statuses/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -178,10 +172,7 @@ lab.experiment('Statuses Plugin Create', function () {
                 pivot: 'Account',
                 name: 'Happy'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -232,10 +223,7 @@ lab.experiment('Statuses Plugin Update', function () {
             payload: {
                 name: 'Happy'
             },
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();
@@ -283,10 +271,7 @@ lab.experiment('Statuses Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/statuses/93EP150D35',
-            credentials: {
-                user: authenticatedUser,
-                roles: authenticatedUser._roles
-            }
+            credentials: authenticatedUser
         };
 
         done();

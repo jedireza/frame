@@ -9,7 +9,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/accounts',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 query: {
                     fields: Joi.string(),
@@ -17,11 +20,7 @@ exports.register = function (plugin, options, next) {
                     limit: Joi.number().default(20),
                     page: Joi.number().default(1)
                 }
-            },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root')
-            ]
+            }
         },
         handler: function (request, reply) {
 
@@ -48,11 +47,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/accounts/{id}',
         config: {
-            auth: 'simple',
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root')
-            ]
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            }
         },
         handler: function (request, reply) {
 
@@ -78,10 +76,10 @@ exports.register = function (plugin, options, next) {
         method: 'GET',
         path: '/accounts/my',
         config: {
-            auth: 'simple',
-            pre: [
-                authPlugin.preware.ensureUserRole('account'),
-            ]
+            auth: {
+                strategy: 'simple',
+                scope: 'account'
+            }
         },
         handler: function (request, reply) {
 
@@ -109,16 +107,15 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/accounts',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     name: Joi.string().required()
                 }
-            },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root')
-            ]
+            }
         },
         handler: function (request, reply) {
 
@@ -141,7 +138,10 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/accounts/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     name: Joi.object().keys({
@@ -150,11 +150,7 @@ exports.register = function (plugin, options, next) {
                         last: Joi.string().required()
                     }).required()
                 }
-            },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root')
-            ]
+            }
         },
         handler: function (request, reply) {
 
@@ -182,7 +178,10 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/accounts/my',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'account'
+            },
             validate: {
                 payload: {
                     name: Joi.object().keys({
@@ -191,10 +190,7 @@ exports.register = function (plugin, options, next) {
                         last: Joi.string().required()
                     }).required()
                 }
-            },
-            pre: [
-                authPlugin.preware.ensureUserRole('account')
-            ]
+            }
         },
         handler: function (request, reply) {
 
@@ -225,82 +221,81 @@ exports.register = function (plugin, options, next) {
         method: 'PUT',
         path: '/accounts/{id}/user',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     username: Joi.string().required()
                 }
             },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root'),
-                {
-                    assign: 'account',
-                    method: function (request, reply) {
+            pre: [{
+                assign: 'account',
+                method: function (request, reply) {
 
-                        var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins.models.Account;
 
-                        Account.findById(request.params.id, function (err, account) {
+                    Account.findById(request.params.id, function (err, account) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            if (!account) {
-                                return reply({ message: 'Document not found.' }).takeover().code(404);
-                            }
+                        if (!account) {
+                            return reply({ message: 'Document not found.' }).takeover().code(404);
+                        }
 
-                            reply(account);
-                        });
-                    }
-                },{
-                    assign: 'user',
-                    method: function (request, reply) {
+                        reply(account);
+                    });
+                }
+            },{
+                assign: 'user',
+                method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                    var User = request.server.plugins.models.User;
 
-                        User.findByUsername(request.payload.username, function (err, user) {
+                    User.findByUsername(request.payload.username, function (err, user) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            if (!user) {
-                                return reply({ message: 'User document not found.' }).takeover().code(404);
-                            }
+                        if (!user) {
+                            return reply({ message: 'User document not found.' }).takeover().code(404);
+                        }
 
-                            if (user.roles &&
-                                user.roles.account &&
-                                user.roles.account.id !== request.params.id) {
-
-                                var response = {
-                                    message: 'User is already linked to another account. Unlink first.'
-                                };
-
-                                return reply(response).takeover().code(409);
-                            }
-
-                            reply(user);
-                        });
-                    }
-                },{
-                    assign: 'userCheck',
-                    method: function (request, reply) {
-
-                        if (request.pre.account.user &&
-                            request.pre.account.user.id !== request.pre.user._id.toString()) {
+                        if (user.roles &&
+                            user.roles.account &&
+                            user.roles.account.id !== request.params.id) {
 
                             var response = {
-                                message: 'Account is already linked to another user. Unlink first.'
+                                message: 'User is already linked to another account. Unlink first.'
                             };
 
                             return reply(response).takeover().code(409);
                         }
 
-                        reply(true);
-                    }
+                        reply(user);
+                    });
                 }
-            ]
+            },{
+                assign: 'userCheck',
+                method: function (request, reply) {
+
+                    if (request.pre.account.user &&
+                        request.pre.account.user.id !== request.pre.user._id.toString()) {
+
+                        var response = {
+                            message: 'Account is already linked to another user. Unlink first.'
+                        };
+
+                        return reply(response).takeover().code(409);
+                    }
+
+                    reply(true);
+                }
+            }]
         },
         handler: function (request, reply) {
 
@@ -351,54 +346,53 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/accounts/{id}/user',
         config: {
-            auth: 'simple',
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                authPlugin.preware.ensureAdminGroup('root'),
-                {
-                    assign: 'account',
-                    method: function (request, reply) {
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
+            pre: [{
+                assign: 'account',
+                method: function (request, reply) {
 
-                        var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins.models.Account;
 
-                        Account.findById(request.params.id, function (err, account) {
+                    Account.findById(request.params.id, function (err, account) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            if (!account) {
-                                return reply({ message: 'Document not found.' }).takeover().code(404);
-                            }
+                        if (!account) {
+                            return reply({ message: 'Document not found.' }).takeover().code(404);
+                        }
 
-                            if (!account.user || !account.user.id) {
-                                return reply(account).takeover();
-                            }
+                        if (!account.user || !account.user.id) {
+                            return reply(account).takeover();
+                        }
 
-                            reply(account);
-                        });
-                    }
-                },{
-                    assign: 'user',
-                    method: function (request, reply) {
-
-                        var User = request.server.plugins.models.User;
-
-                        User.findById(request.pre.account.user.id, function (err, user) {
-
-                            if (err) {
-                                return reply(err);
-                            }
-
-                            if (!user) {
-                                return reply({ message: 'User document not found.' }).takeover().code(404);
-                            }
-
-                            reply(user);
-                        });
-                    }
+                        reply(account);
+                    });
                 }
-            ]
+            },{
+                assign: 'user',
+                method: function (request, reply) {
+
+                    var User = request.server.plugins.models.User;
+
+                    User.findById(request.pre.account.user.id, function (err, user) {
+
+                        if (err) {
+                            return reply(err);
+                        }
+
+                        if (!user) {
+                            return reply({ message: 'User document not found.' }).takeover().code(404);
+                        }
+
+                        reply(user);
+                    });
+                }
+            }]
         },
         handler: function (request, reply) {
 
@@ -443,15 +437,15 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/accounts/{id}/notes',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     data: Joi.string().required()
                 }
-            },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin')
-            ]
+            }
         },
         handler: function (request, reply) {
 
@@ -486,31 +480,31 @@ exports.register = function (plugin, options, next) {
         method: 'POST',
         path: '/accounts/{id}/status',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             validate: {
                 payload: {
                     status: Joi.string().required()
                 }
             },
-            pre: [
-                authPlugin.preware.ensureUserRole('admin'),
-                {
-                    assign: 'status',
-                    method: function (request, reply) {
+            pre: [{
+                assign: 'status',
+                method: function (request, reply) {
 
-                        var Status = request.server.plugins.models.Status;
+                    var Status = request.server.plugins.models.Status;
 
-                        Status.findById(request.payload.status, function (err, status) {
+                    Status.findById(request.payload.status, function (err, status) {
 
-                            if (err) {
-                                return reply(err);
-                            }
+                        if (err) {
+                            return reply(err);
+                        }
 
-                            reply(status);
-                        });
-                    }
+                        reply(status);
+                    });
                 }
-            ]
+            }]
         },
         handler: function (request, reply) {
 
@@ -550,9 +544,11 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: '/accounts/{id}',
         config: {
-            auth: 'simple',
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
             pre: [
-                authPlugin.preware.ensureUserRole('admin'),
                 authPlugin.preware.ensureAdminGroup('root')
             ]
         },
