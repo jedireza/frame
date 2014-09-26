@@ -38,6 +38,7 @@ gulp.task('less', function (cb) {
 
 
 gulp.task('scripts', function () {
+
     return gulp.src(paths.scripts)
         .pipe(uglify())
         .pipe(concat('build.js'))
