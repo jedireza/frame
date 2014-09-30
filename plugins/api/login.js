@@ -40,7 +40,7 @@ exports.register = function (plugin, options, next) {
                     });
                 }
             },{
-                assign: 'userInfo',
+                assign: 'user',
                 method: function (request, reply) {
 
                     var User = request.server.plugins.models.User;
@@ -60,7 +60,7 @@ exports.register = function (plugin, options, next) {
                 assign: 'logAttempt',
                 method: function (request, reply) {
 
-                    if (request.pre.userInfo) {
+                    if (request.pre.user) {
                         return reply();
                     }
 
@@ -79,19 +79,33 @@ exports.register = function (plugin, options, next) {
                         }).takeover().code(400);
                     });
                 }
+            },{
+                assign: 'session',
+                method: function (request, reply) {
+
+                    var Session = request.server.plugins.models.Session;
+
+                    Session.create(request.payload.username, function (err, session) {
+
+                        if (err) {
+                            return reply(err);
+                        }
+
+                        return reply(session);
+                    });
+                }
             }]
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
-
-            Session.create(request.payload.username, function (err, session) {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                return reply(session);
+            reply({
+                user: {
+                    _id: request.pre.user._id,
+                    username: request.pre.user.username,
+                    email: request.pre.user.email,
+                    roles: request.pre.user.roles
+                },
+                session: request.pre.session
             });
         }
     });
