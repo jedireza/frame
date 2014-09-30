@@ -10,6 +10,7 @@ var manifest = {
     servers: [{
         port: config.get('/port/web'),
         options: {
+            security: true,
             debug: {
                 request: ['error']
             },
@@ -24,6 +25,7 @@ var manifest = {
     },{
         port: config.get('/port/api'),
         options: {
+            security: true,
             debug: {
                 request: ['error']
             },
