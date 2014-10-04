@@ -102,7 +102,7 @@ exports.register = function (plugin, options, next) {
 
             var User = request.server.plugins.models.User;
             var id = request.auth.credentials.user._id.toString();
-            var fields = User.fieldsAdapter('username email');
+            var fields = User.fieldsAdapter('username email roles');
 
             User.findById(id, fields, function (err, user) {
 
