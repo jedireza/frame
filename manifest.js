@@ -14,13 +14,7 @@ var manifest = {
             debug: {
                 request: ['error']
             },
-            labels: ['web'],
-            views: {
-                engines: {
-                    jade: require('jade')
-                },
-                path: './plugins/web'
-            }
+            labels: ['web']
         }
     },{
         port: config.get('/port/api'),
@@ -35,6 +29,10 @@ var manifest = {
     plugins: {
         'hapi-auth-basic': {},
         'lout': [{ select: 'api' }],
+        'visionary': {
+            engines: { jade: 'jade' },
+            path: './plugins/web'
+        },
         './plugins/auth': {},
         './plugins/models': {},
         './plugins/mailer': {},
