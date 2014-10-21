@@ -24,7 +24,7 @@ lab.beforeEach(function (done) {
     });
 
     var plugins = [ hapiAuthBasic, modelsPlugin, mailerPlugin, signupPlugin ];
-    server = new Hapi.Server(config.get('/port/api'));
+    server = new Hapi.Server(config.get('/port/web'));
     server.pack.register(plugins, function (err) {
 
         if (err) {

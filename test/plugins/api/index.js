@@ -1,39 +1,43 @@
 var Lab = require('lab');
 var lab = exports.lab = Lab.script();
-var composer = require('../../../index');
+var config = require('../../../config');
+var Hapi = require('hapi');
+var indexPlugin = require('../../../plugins/api/index');
+var server, request;
 
 
-lab.experiment('Index', function () {
+lab.beforeEach(function (done) {
 
-    var apiServer;
+    var plugins = [ indexPlugin ];
+    server = new Hapi.Server(config.get('/port/web'));
+    server.pack.register(plugins, function (err) {
 
-    lab.before(function (done) {
+        if (err) {
+            return done(err);
+        }
 
-        composer(function (err, composedPack) {
-
-            apiServer = composedPack._servers[1];
-
-            done();
-        });
+        done();
     });
+});
 
 
-    lab.after(function (done) {
+lab.experiment('Index Plugin', function () {
 
-        apiServer.plugins.models.BaseModel.disconnect();
+    lab.beforeEach(function (done) {
+
+        request = {
+            method: 'GET',
+            url: '/'
+        };
 
         done();
     });
 
 
+
     lab.test('it returns the default message', function (done) {
 
-        var options = {
-            method: 'GET',
-            url: '/'
-        };
-
-        apiServer.inject(options, function (response) {
+        server.inject(request, function (response) {
 
             Lab.expect(response.result.message).to.match(/welcome to the plot device/i);
             Lab.expect(response.statusCode).to.equal(200);

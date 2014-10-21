@@ -1,12 +1,16 @@
 var Joi = require('joi');
+var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
 exports.register = function (plugin, options, next) {
 
+    options = Hoek.applyToDefaults({ basePath: '' }, options);
+
+
     plugin.route({
         method: 'GET',
-        path: '/sessions',
+        path: options.basePath + '/sessions',
         config: {
             auth: {
                 strategy: 'simple',
@@ -47,7 +51,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'GET',
-        path: '/sessions/{id}',
+        path: options.basePath + '/sessions/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -79,7 +83,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'DELETE',
-        path: '/sessions/{id}',
+        path: options.basePath + '/sessions/{id}',
         config: {
             auth: {
                 strategy: 'simple',

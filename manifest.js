@@ -16,19 +16,10 @@ var manifest = {
             },
             labels: ['web']
         }
-    },{
-        port: config.get('/port/api'),
-        options: {
-            security: true,
-            debug: {
-                request: ['error']
-            },
-            labels: ['api']
-        }
     }],
     plugins: {
         'hapi-auth-basic': {},
-        'lout': [{ select: 'api' }],
+        'lout': {},
         'visionary': {
             engines: { jade: 'jade' },
             path: './plugins/web'
@@ -36,19 +27,19 @@ var manifest = {
         './plugins/auth': {},
         './plugins/models': {},
         './plugins/mailer': {},
-        './plugins/api/accounts': [{ select: 'api' }],
-        './plugins/api/admin-groups': [{ select: 'api' }],
-        './plugins/api/admins': [{ select: 'api' }],
-        './plugins/api/auth-attempts': [{ select: 'api' }],
-        './plugins/api/contact': [{ select: 'api' }],
-        './plugins/api/index': [{ select: 'api' }],
-        './plugins/api/login': [{ select: 'api' }],
-        './plugins/api/logout': [{ select: 'api' }],
-        './plugins/api/sessions': [{ select: 'api' }],
-        './plugins/api/signup': [{ select: 'api' }],
-        './plugins/api/statuses': [{ select: 'api' }],
-        './plugins/api/users': [{ select: 'api' }],
-        './plugins/web/index': [{ select: 'web' }]
+        './plugins/api/accounts': { basePath: '/api' },
+        './plugins/api/admin-groups': { basePath: '/api' },
+        './plugins/api/admins': { basePath: '/api' },
+        './plugins/api/auth-attempts': { basePath: '/api' },
+        './plugins/api/contact': { basePath: '/api' },
+        './plugins/api/index': { basePath: '/api' },
+        './plugins/api/login': { basePath: '/api' },
+        './plugins/api/logout': { basePath: '/api' },
+        './plugins/api/sessions': { basePath: '/api' },
+        './plugins/api/signup': { basePath: '/api' },
+        './plugins/api/statuses': { basePath: '/api' },
+        './plugins/api/users': { basePath: '/api' },
+        './plugins/web/index': {}
     }
 };
 

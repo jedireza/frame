@@ -1,12 +1,16 @@
 var Joi = require('joi');
+var Hoek = require('hoek');
 var config = require('../../config');
 
 
 exports.register = function (plugin, options, next) {
 
+    options = Hoek.applyToDefaults({ basePath: '' }, options);
+
+
     plugin.route({
         method: 'POST',
-        path: '/contact',
+        path: options.basePath + '/contact',
         config: {
             validate: {
                 payload: {

@@ -1,12 +1,16 @@
 var Joi = require('joi');
+var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
 exports.register = function (plugin, options, next) {
 
+    options = Hoek.applyToDefaults({ basePath: '' }, options);
+
+
     plugin.route({
         method: 'GET',
-        path: '/users',
+        path: options.basePath + '/users',
         config: {
             auth: {
                 strategy: 'simple',
@@ -59,7 +63,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'GET',
-        path: '/users/{id}',
+        path: options.basePath + '/users/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -91,7 +95,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'GET',
-        path: '/users/my',
+        path: options.basePath + '/users/my',
         config: {
             auth: {
                 strategy: 'simple',
@@ -122,7 +126,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'POST',
-        path: '/users',
+        path: options.basePath + '/users',
         config: {
             auth: {
                 strategy: 'simple',
@@ -213,7 +217,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'PUT',
-        path: '/users/{id}',
+        path: options.basePath + '/users/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -311,7 +315,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'PUT',
-        path: '/users/my',
+        path: options.basePath + '/users/my',
         config: {
             auth: {
                 strategy: 'simple',
@@ -407,7 +411,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'PUT',
-        path: '/users/{id}/password',
+        path: options.basePath + '/users/{id}/password',
         config: {
             auth: {
                 strategy: 'simple',
@@ -462,7 +466,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'PUT',
-        path: '/users/my/password',
+        path: options.basePath + '/users/my/password',
         config: {
             auth: {
                 strategy: 'simple',
@@ -517,7 +521,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'DELETE',
-        path: '/users/{id}',
+        path: options.basePath + '/users/{id}',
         config: {
             auth: {
                 strategy: 'simple',
