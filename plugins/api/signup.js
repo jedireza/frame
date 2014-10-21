@@ -1,13 +1,17 @@
 var Joi = require('joi');
+var Hoek = require('hoek');
 var async = require('async');
 var config = require('../../config');
 
 
 exports.register = function (plugin, options, next) {
 
+    options = Hoek.applyToDefaults({ basePath: '' }, options);
+
+
     plugin.route({
         method: 'POST',
-        path: '/signup',
+        path: options.basePath + '/signup',
         config: {
             validate: {
                 payload: {
@@ -148,6 +152,7 @@ exports.register = function (plugin, options, next) {
             });
         }
     });
+
 
     next();
 };

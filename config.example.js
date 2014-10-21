@@ -8,11 +8,6 @@ var config = {
     $meta: 'This file configures the plot device.',
     projectName: '{{projectName}}',
     port: {
-        api: {
-            $filter: 'env',
-            test: 9001,
-            $default: 8001
-        },
         web: {
             $filter: 'env',
             test: 9000,

@@ -1,38 +1,50 @@
 var Lab = require('lab');
 var lab = exports.lab = Lab.script();
-var composer = require('../../../index');
-var webServer;
+var config = require('../../../config');
+var Hapi = require('hapi');
+var homePlugin = require('../../../plugins/web/index');
+var visionaryPlugin = {
+    plugin: require('visionary'),
+    options: {
+        engines: { jade: 'jade' },
+        path: './plugins/web'
+    }
+};
+var server, request;
+
+
+lab.beforeEach(function (done) {
+
+    var plugins = [ visionaryPlugin, homePlugin ];
+    server = new Hapi.Server(config.get('/port/web'));
+    server.pack.register(plugins, function (err) {
+
+        if (err) {
+            return done(err);
+        }
+
+        done();
+    });
+});
 
 
 lab.experiment('Home Page View', function () {
 
-    lab.before(function (done) {
+    lab.beforeEach(function (done) {
 
-        composer(function (err, composedPack) {
-
-            webServer = composedPack._servers[0];
-
-            done();
-        });
-    });
-
-
-    lab.after(function (done) {
-
-        webServer.plugins.models.BaseModel.disconnect();
+        request = {
+            method: 'GET',
+            url: '/'
+        };
 
         done();
     });
 
 
+
     lab.test('home page renders properly', function (done) {
 
-        var options = {
-            method: 'GET',
-            url: '/'
-        };
-
-        webServer.inject(options, function (response) {
+        server.inject(request, function (response) {
 
             Lab.expect(response.result).to.match(/activate the plot device/i);
             Lab.expect(response.statusCode).to.equal(200);

@@ -1,4 +1,5 @@
 var Joi = require('joi');
+var Hoek = require('hoek');
 var async = require('async');
 var bcrypt = require('bcrypt');
 var config = require('../../config');
@@ -6,9 +7,12 @@ var config = require('../../config');
 
 exports.register = function (plugin, options, next) {
 
+    options = Hoek.applyToDefaults({ basePath: '' }, options);
+
+
     plugin.route({
         method: 'POST',
-        path: '/login',
+        path: options.basePath + '/login',
         config: {
             validate: {
                 payload: {
@@ -113,7 +117,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'POST',
-        path: '/login/forgot',
+        path: options.basePath + '/login/forgot',
         config: {
             validate: {
                 payload: {
@@ -196,7 +200,7 @@ exports.register = function (plugin, options, next) {
 
     plugin.route({
         method: 'POST',
-        path: '/login/reset',
+        path: options.basePath + '/login/reset',
         config: {
             validate: {
                 payload: {
