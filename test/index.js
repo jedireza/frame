@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var composer = require('../index');
 
@@ -9,7 +10,7 @@ lab.experiment('App', function () {
 
         composer(function (err, composedPack) {
 
-            Lab.expect(composedPack).to.be.an('object');
+            Code.expect(composedPack).to.be.an.object();
 
             done(err);
         });

@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -72,7 +73,7 @@ lab.experiment('Accounts Plugin Result List', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -91,9 +92,9 @@ lab.experiment('Accounts Plugin Result List', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result.data).to.be.an('array');
-            Lab.expect(response.result.data[0]).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.data).to.be.an.array();
+            Code.expect(response.result.data[0]).to.be.an.object();
 
             done();
         });
@@ -124,7 +125,7 @@ lab.experiment('Accounts Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -140,8 +141,8 @@ lab.experiment('Accounts Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/document not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -157,8 +158,8 @@ lab.experiment('Accounts Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -192,7 +193,7 @@ lab.experiment('Accounts Plugin (My) Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -211,8 +212,8 @@ lab.experiment('Accounts Plugin (My) Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/document not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -231,8 +232,8 @@ lab.experiment('Accounts Plugin (My) Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -266,7 +267,7 @@ lab.experiment('Accounts Plugin Create', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -282,8 +283,8 @@ lab.experiment('Accounts Plugin Create', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -320,7 +321,7 @@ lab.experiment('Accounts Plugin Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -336,8 +337,8 @@ lab.experiment('Accounts Plugin Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -377,7 +378,7 @@ lab.experiment('Accounts Plugin (My) Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -396,8 +397,8 @@ lab.experiment('Accounts Plugin (My) Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -431,7 +432,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -447,7 +448,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
+            Code.expect(response.statusCode).to.equal(404);
 
             done();
         });
@@ -468,7 +469,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -489,7 +490,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
+            Code.expect(response.statusCode).to.equal(404);
 
             done();
         });
@@ -519,7 +520,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(409);
+            Code.expect(response.statusCode).to.equal(409);
 
             done();
         });
@@ -558,7 +559,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(409);
+            Code.expect(response.statusCode).to.equal(409);
 
             done();
         });
@@ -602,7 +603,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -646,7 +647,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -680,7 +681,7 @@ lab.experiment('Accounts Plugin Add Note', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -696,7 +697,7 @@ lab.experiment('Accounts Plugin Add Note', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -730,7 +731,7 @@ lab.experiment('Accounts Plugin Update Status', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -751,7 +752,7 @@ lab.experiment('Accounts Plugin Update Status', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -772,7 +773,7 @@ lab.experiment('Accounts Plugin Update Status', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -803,7 +804,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -819,7 +820,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
+            Code.expect(response.statusCode).to.equal(404);
 
             done();
         });
@@ -835,7 +836,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -851,7 +852,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -879,7 +880,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -907,7 +908,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
+            Code.expect(response.statusCode).to.equal(404);
 
             done();
         });
@@ -956,7 +957,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -1004,7 +1005,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -1035,7 +1036,7 @@ lab.experiment('Accounts Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -1051,8 +1052,8 @@ lab.experiment('Accounts Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/document not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -1068,8 +1069,8 @@ lab.experiment('Accounts Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result.message).to.match(/success/i);
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.message).to.match(/success/i);
 
             done();
         });

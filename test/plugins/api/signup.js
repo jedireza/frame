@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -77,7 +78,7 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -98,7 +99,7 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(409);
+            Code.expect(response.statusCode).to.equal(409);
 
             done();
         });
@@ -119,7 +120,7 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -140,7 +141,7 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(409);
+            Code.expect(response.statusCode).to.equal(409);
 
             done();
         });
@@ -161,7 +162,7 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -216,8 +217,8 @@ lab.experiment('Signup Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             server.plugins.mailer.sendEmail = realSendEmail;
 

@@ -1,5 +1,6 @@
 var async = require('async');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var AuthAttempt = require('../../models/auth-attempt');
 var config = require('../../config');
@@ -31,8 +32,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         AuthAttempt.create('127.0.0.1', 'ren', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(AuthAttempt);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(AuthAttempt);
 
             done();
         });
@@ -52,8 +53,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         AuthAttempt.create('127.0.0.1', 'ren', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             AuthAttempt.insert = realInsert;
 
@@ -66,8 +67,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         AuthAttempt.abuseDetected('127.0.0.1', 'ren', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.equal(false);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.equal(false);
 
             done();
         });
@@ -84,8 +85,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
                 AuthAttempt.create('127.0.0.1', 'stimpy', function (err, result) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(result).to.be.an('object');
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.object();
 
                     cb();
                 });
@@ -96,8 +97,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
             AuthAttempt.abuseDetected('127.0.0.1', 'stimpy', function (err, result) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(result).to.equal(true);
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.equal(true);
 
                 done();
             });
@@ -116,8 +117,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
                 var randomUsername = 'mudskipper' + i;
                 AuthAttempt.create('127.0.0.2', randomUsername, function (err, result) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(result).to.be.an('object');
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.object();
 
                     cb();
                 });
@@ -128,8 +129,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
             AuthAttempt.abuseDetected('127.0.0.2', 'yak', function (err, result) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(result).to.equal(true);
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.equal(true);
 
                 done();
             });
@@ -150,8 +151,8 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         AuthAttempt.abuseDetected('127.0.0.1', 'toastman', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             AuthAttempt.count = realCount;
 

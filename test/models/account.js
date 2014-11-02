@@ -1,5 +1,6 @@
 var async = require('async');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var Account = require('../../models/account');
 
@@ -29,8 +30,8 @@ lab.experiment('Account Class Methods', function () {
 
         Account.create('Ren Höek', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(Account);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(Account);
 
             done();
         });
@@ -41,9 +42,9 @@ lab.experiment('Account Class Methods', function () {
 
         Account.create('Stimpson J Cat', function (err, account) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(account).to.be.an.instanceOf(Account);
-            Lab.expect(account.name.middle).to.equal('J');
+            Code.expect(err).to.not.exist();
+            Code.expect(account).to.be.an.instanceOf(Account);
+            Code.expect(account.name.middle).to.equal('J');
 
             done();
         });
@@ -63,8 +64,8 @@ lab.experiment('Account Class Methods', function () {
 
         Account.create('Stimpy Cat', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             Account.insert = realInsert;
 
@@ -101,8 +102,8 @@ lab.experiment('Account Class Methods', function () {
 
             Account.findByUsername('stimpy', function (err, account) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(account).to.be.an.instanceOf(Account);
+                Code.expect(err).to.not.exist();
+                Code.expect(account).to.be.an.instanceOf(Account);
 
                 done();
             });

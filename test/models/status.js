@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var Status = require('../../models/status');
 
@@ -29,8 +30,8 @@ lab.experiment('Status Class Methods', function () {
 
         Status.create('Order', 'Complete', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(Status);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(Status);
 
             done();
         });
@@ -50,8 +51,8 @@ lab.experiment('Status Class Methods', function () {
 
         Status.create('Order', 'Fulfilled', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             Status.insert = realInsert;
 

@@ -1,5 +1,6 @@
 var async = require('async');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var proxyquire = require('proxyquire');
 var stub = {
@@ -42,10 +43,10 @@ lab.experiment('User Class Methods', function () {
 
         User.generatePasswordHash('bighouseblues', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
-            Lab.expect(result.password).to.be.a('string');
-            Lab.expect(result.hash).to.be.a('string');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
+            Code.expect(result.password).to.be.a.string();
+            Code.expect(result.hash).to.be.a.string();
 
             done();
         });
@@ -62,8 +63,8 @@ lab.experiment('User Class Methods', function () {
 
         User.generatePasswordHash('bighouseblues', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             stub.bcrypt.genSalt = realGenSalt;
 
@@ -76,8 +77,8 @@ lab.experiment('User Class Methods', function () {
 
         User.create('ren', 'bighouseblues', 'ren@stimpy.show', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(User);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(User);
 
             done();
         });
@@ -97,8 +98,8 @@ lab.experiment('User Class Methods', function () {
 
         User.create('ren', 'bighouseblues', 'ren@stimpy.show', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             User.insert = realInsert;
 
@@ -114,8 +115,8 @@ lab.experiment('User Class Methods', function () {
 
                 User.create('stimpy', 'thebigshot', 'stimpy@ren.show', function (err, result) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(result).to.be.an.instanceOf(User);
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.instanceOf(User);
 
                     cb(null, result);
                 });
@@ -131,8 +132,8 @@ lab.experiment('User Class Methods', function () {
 
             User.findByCredentials(username, password, function (err, result) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(result).to.be.an.instanceOf(User);
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.be.an.instanceOf(User);
 
                 done();
             });
@@ -159,8 +160,8 @@ lab.experiment('User Class Methods', function () {
 
         User.findByCredentials('toastman', 'doorislocked', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.not.exist();
 
             User.findOne = realFindOne;
             stub.bcrypt.compare = realCompare;
@@ -183,8 +184,8 @@ lab.experiment('User Class Methods', function () {
 
         User.findByCredentials('stimpy', 'dog', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.not.exist();
 
             User.findOne = realFindOne;
 
@@ -206,8 +207,8 @@ lab.experiment('User Class Methods', function () {
 
         User.findByCredentials('stimpy', 'dog', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             User.findOne = realFindOne;
 
@@ -223,8 +224,8 @@ lab.experiment('User Class Methods', function () {
 
                 User.create('horseman', 'eathay', 'horse@man.show', function (err, result) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(result).to.be.an.instanceOf(User);
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.instanceOf(User);
 
                     cb(null, result);
                 });
@@ -239,8 +240,8 @@ lab.experiment('User Class Methods', function () {
 
             User.findByUsername(username, function (err, result) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(result).to.be.an.instanceOf(User);
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.be.an.instanceOf(User);
 
                 done();
             });
@@ -255,7 +256,7 @@ lab.experiment('User Instance Methods', function () {
 
         var user = new User({ username: 'ren' });
 
-        Lab.expect(user.canPlayRole('admin')).to.equal(false);
+        Code.expect(user.canPlayRole('admin')).to.equal(false);
 
         done();
     });
@@ -270,8 +271,8 @@ lab.experiment('User Instance Methods', function () {
             }
         });
 
-        Lab.expect(user.canPlayRole('admin')).to.equal(false);
-        Lab.expect(user.canPlayRole('account')).to.equal(true);
+        Code.expect(user.canPlayRole('admin')).to.equal(false);
+        Code.expect(user.canPlayRole('account')).to.equal(true);
 
         done();
     });
@@ -283,7 +284,7 @@ lab.experiment('User Instance Methods', function () {
 
         user.hydrateRoles(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
             done();
         });
     });
@@ -310,7 +311,7 @@ lab.experiment('User Instance Methods', function () {
 
         user.hydrateRoles(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             done();
         });
@@ -337,7 +338,7 @@ lab.experiment('User Instance Methods', function () {
 
         user.hydrateRoles(function (err) {
 
-            Lab.expect(err).to.be.an('object');
+            Code.expect(err).to.be.an.object();
 
             stub.Admin.findById = realFindById;
 
@@ -389,7 +390,7 @@ lab.experiment('User Instance Methods', function () {
 
         user.hydrateRoles(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             stub.Account.findById = realAccountFindById;
             stub.Admin.findById = realAdminFindById;
@@ -408,7 +409,7 @@ lab.experiment('User Instance Methods', function () {
 
         user.hydrateRoles(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             done();
         });

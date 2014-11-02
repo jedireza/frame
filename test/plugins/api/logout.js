@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -67,7 +68,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -86,8 +87,8 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/session not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/session not found/i);
 
             done();
         });
@@ -106,8 +107,8 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result.message).to.match(/success/i);
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.message).to.match(/success/i);
 
             done();
         });

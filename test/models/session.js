@@ -1,5 +1,6 @@
 var async = require('async');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var proxyquire = require('proxyquire');
 var stub = {
@@ -34,10 +35,10 @@ lab.experiment('Session Class Methods', function () {
 
         Session.generateKeyHash(function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
-            Lab.expect(result.key).to.be.a('string');
-            Lab.expect(result.hash).to.be.a('string');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
+            Code.expect(result.key).to.be.a.string();
+            Code.expect(result.hash).to.be.a.string();
 
             done();
         });
@@ -54,8 +55,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.generateKeyHash(function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             stub.bcrypt.genSalt = realGenSalt;
 
@@ -68,8 +69,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.create('ren', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(Session);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(Session);
 
             done();
         });
@@ -88,8 +89,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.create('ren', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             Session.insert = realInsert;
 
@@ -105,8 +106,8 @@ lab.experiment('Session Class Methods', function () {
 
                 Session.create('ren', function (err, result) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(result).to.be.an.instanceOf(Session);
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.instanceOf(Session);
 
                     cb(null, result);
                 });
@@ -122,8 +123,8 @@ lab.experiment('Session Class Methods', function () {
 
             Session.findByCredentials(username, key, function (err, result) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(result).to.be.an.instanceOf(Session);
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.be.an.instanceOf(Session);
 
                 done();
             });
@@ -150,8 +151,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.findByCredentials('toastman', 'doorislocked', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.not.exist();
 
             Session.findOne = realFindOne;
             stub.bcrypt.compare = realCompare;
@@ -174,8 +175,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.findByCredentials('stimpy', 'dog', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             Session.findOne = realFindOne;
 
@@ -197,8 +198,8 @@ lab.experiment('Session Class Methods', function () {
 
         Session.findByCredentials('stimpy', 'dog', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.not.exist();
 
             Session.findOne = realFindOne;
 

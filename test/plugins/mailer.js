@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../config');
 var Hapi = require('hapi');
@@ -48,8 +49,8 @@ lab.experiment('Mailer Plugin', function () {
 
     lab.test('it successfuly registers itself', function (done) {
 
-        Lab.expect(server.plugins.mailer).to.be.an('object');
-        Lab.expect(server.plugins.mailer.sendEmail).to.be.a('function');
+        Code.expect(server.plugins.mailer).to.be.an.object();
+        Code.expect(server.plugins.mailer.sendEmail).to.be.a.function();
 
         done();
     });
@@ -66,7 +67,7 @@ lab.experiment('Mailer Plugin', function () {
         server.plugins.mailer.sendEmail({}, 'path', {}, function (err, info) {
 
             stub.fs.readFile = realReadFile;
-            Lab.expect(err).to.be.an('object');
+            Code.expect(err).to.be.an.object();
 
             done();
         });
@@ -83,8 +84,8 @@ lab.experiment('Mailer Plugin', function () {
 
         server.plugins.mailer.sendEmail({}, 'path', {}, function (err, info) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(info).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(info).to.be.an.object();
 
             stub.fs.readFile = realReadFile;
 
@@ -103,8 +104,8 @@ lab.experiment('Mailer Plugin', function () {
 
         server.plugins.mailer.sendEmail({}, 'path', {}, function (err, info) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(info).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(info).to.be.an.object();
 
             stub.fs.readFile = realReadFile;
 
