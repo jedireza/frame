@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var AdminGroup = require('../../models/admin-group');
 
@@ -29,8 +30,8 @@ lab.experiment('AdminGroup Class Methods', function () {
 
         AdminGroup.create('Sales', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(AdminGroup);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(AdminGroup);
 
             done();
         });
@@ -50,8 +51,8 @@ lab.experiment('AdminGroup Class Methods', function () {
 
         AdminGroup.create('Support', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             AdminGroup.insert = realInsert;
 
@@ -87,9 +88,9 @@ lab.experiment('AdminGroup Instance Methods', function () {
 
         AdminGroup.create('Sales', function (err, adminGroup) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(adminGroup).to.be.an.instanceOf(AdminGroup);
-            Lab.expect(adminGroup.hasPermissionTo('SPACE_MADNESS')).to.equal(false);
+            Code.expect(err).to.not.exist();
+            Code.expect(adminGroup).to.be.an.instanceOf(AdminGroup);
+            Code.expect(adminGroup.hasPermissionTo('SPACE_MADNESS')).to.equal(false);
 
             done();
         });
@@ -100,16 +101,16 @@ lab.experiment('AdminGroup Instance Methods', function () {
 
         AdminGroup.create('Support', function (err, adminGroup) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(adminGroup).to.be.an.instanceOf(AdminGroup);
+            Code.expect(err).to.not.exist();
+            Code.expect(adminGroup).to.be.an.instanceOf(AdminGroup);
 
             adminGroup.permissions = {
                 SPACE_MADNESS: true,
                 UNTAMED_WORLD: false
             };
 
-            Lab.expect(adminGroup.hasPermissionTo('SPACE_MADNESS')).to.equal(true);
-            Lab.expect(adminGroup.hasPermissionTo('UNTAMED_WORLD')).to.equal(false);
+            Code.expect(adminGroup.hasPermissionTo('SPACE_MADNESS')).to.equal(true);
+            Code.expect(adminGroup.hasPermissionTo('UNTAMED_WORLD')).to.equal(false);
 
             done();
         });

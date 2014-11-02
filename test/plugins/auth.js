@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../config');
 var Hapi = require('hapi');
@@ -65,8 +66,8 @@ lab.experiment('Auth Plugin', function () {
 
                 server.auth.test('simple', request, function (err, credentials) {
 
-                    Lab.expect(err).to.not.be.ok;
-                    Lab.expect(credentials).to.be.an('object');
+                    Code.expect(err).to.not.exist();
+                    Code.expect(credentials).to.be.an.object();
                     reply('ok');
                 });
             }
@@ -101,8 +102,8 @@ lab.experiment('Auth Plugin', function () {
 
                 server.auth.test('simple', request, function (err, credentials) {
 
-                    Lab.expect(err).to.be.an('object');
-                    Lab.expect(credentials).to.not.be.ok;
+                    Code.expect(err).to.be.an.object();
+                    Code.expect(credentials).to.not.exist();
                     reply('ok');
                 });
             }
@@ -142,8 +143,8 @@ lab.experiment('Auth Plugin', function () {
 
                 server.auth.test('simple', request, function (err, credentials) {
 
-                    Lab.expect(err).to.be.an('object');
-                    Lab.expect(credentials).to.not.be.ok;
+                    Code.expect(err).to.be.an.object();
+                    Code.expect(credentials).to.not.exist();
                     reply('ok');
                 });
             }
@@ -178,8 +179,8 @@ lab.experiment('Auth Plugin', function () {
 
                 server.auth.test('simple', request, function (err, credentials) {
 
-                    Lab.expect(err).to.be.an('object');
-                    Lab.expect(credentials).to.not.be.ok;
+                    Code.expect(err).to.be.an.object();
+                    Code.expect(credentials).to.not.exist();
                     reply('ok');
                 });
             }
@@ -223,7 +224,7 @@ lab.experiment('Auth Plugin', function () {
             },
             handler: function (request, reply) {
 
-                Lab.expect(request.auth.credentials).to.be.an('object');
+                Code.expect(request.auth.credentials).to.be.an.object();
 
                 reply('ok');
             }
@@ -239,7 +240,7 @@ lab.experiment('Auth Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result.message).to.match(/insufficient scope/i);
+            Code.expect(response.result.message).to.match(/insufficient scope/i);
 
             done();
         });
@@ -289,7 +290,7 @@ lab.experiment('Auth Plugin', function () {
             },
             handler: function (request, reply) {
 
-                Lab.expect(request.auth.credentials).to.be.an('object');
+                Code.expect(request.auth.credentials).to.be.an.object();
 
                 reply('ok');
             }
@@ -305,7 +306,7 @@ lab.experiment('Auth Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result).to.match(/ok/i);
+            Code.expect(response.result).to.match(/ok/i);
 
             done();
         });
@@ -358,7 +359,7 @@ lab.experiment('Auth Plugin', function () {
             },
             handler: function (request, reply) {
 
-                Lab.expect(request.auth.credentials).to.be.an('object');
+                Code.expect(request.auth.credentials).to.be.an.object();
 
                 reply('ok');
             }
@@ -374,7 +375,7 @@ lab.experiment('Auth Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result.message).to.match(/permission denied/i);
+            Code.expect(response.result.message).to.match(/permission denied/i);
 
             done();
         });
@@ -430,7 +431,7 @@ lab.experiment('Auth Plugin', function () {
             },
             handler: function (request, reply) {
 
-                Lab.expect(request.auth.credentials).to.be.an('object');
+                Code.expect(request.auth.credentials).to.be.an.object();
 
                 reply('ok');
             }
@@ -446,7 +447,7 @@ lab.experiment('Auth Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result).to.match(/ok/i);
+            Code.expect(response.result).to.match(/ok/i);
 
             done();
         });

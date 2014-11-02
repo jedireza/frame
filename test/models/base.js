@@ -1,6 +1,7 @@
 var async = require('async');
 var Joi = require('joi');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var extend = require('extend-object');
 var proxyquire = require('proxyquire');
@@ -20,12 +21,12 @@ lab.experiment('BaseModel DB Connection', function () {
 
         BaseModel.connect(function (err, db) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(db).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(db).to.be.an.object();
 
-            Lab.expect(BaseModel.db.openCalled).to.equal(true);
+            Code.expect(BaseModel.db.openCalled).to.equal(true);
             BaseModel.disconnect();
-            Lab.expect(BaseModel.db.openCalled).to.equal(false);
+            Code.expect(BaseModel.db.openCalled).to.equal(false);
 
             done();
         });
@@ -45,8 +46,8 @@ lab.experiment('BaseModel DB Connection', function () {
 
         BaseModel.connect(function (err, db) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(db).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(db).to.not.exist();
 
             stub.mongodb.MongoClient = realMongoClient;
 
@@ -71,7 +72,7 @@ lab.experiment('BaseModel Validation', function () {
             name: Joi.string().required()
         });
 
-        Lab.expect(SubModel.validate()).to.be.an('object');
+        Code.expect(SubModel.validate()).to.be.an.object();
 
         done();
     });
@@ -92,7 +93,7 @@ lab.experiment('BaseModel Validation', function () {
 
         var myModel = new SubModel({name: 'Stimpy'});
 
-        Lab.expect(myModel.validate()).to.be.an('object');
+        Code.expect(myModel.validate()).to.be.an.object();
 
         done();
     });
@@ -112,8 +113,8 @@ lab.experiment('BaseModel Result Factory', function () {
 
         var callback = function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             done();
         };
@@ -133,8 +134,8 @@ lab.experiment('BaseModel Result Factory', function () {
 
         var callback = function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(SubModel);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(SubModel);
 
             done();
         };
@@ -154,11 +155,11 @@ lab.experiment('BaseModel Result Factory', function () {
 
         var callback = function (err, results) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             results.forEach(function (result) {
 
-                Lab.expect(result).to.be.an.instanceOf(SubModel);
+                Code.expect(result).to.be.an.instanceOf(SubModel);
             });
 
             done();
@@ -204,8 +205,8 @@ lab.experiment('BaseModel Indexes', function () {
 
         SubModel.ensureIndex({ username: 1 }, {}, function (err, indexName) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(indexName).to.be.a('string');
+            Code.expect(err).to.not.exist();
+            Code.expect(indexName).to.be.a.string();
 
             done();
         });
@@ -223,8 +224,8 @@ lab.experiment('BaseModel Indexes', function () {
 
         SubModel.ensureIndexes(function (err, results) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(results).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(results).to.not.exist();
 
             stub.config.get = realGet;
 
@@ -239,8 +240,8 @@ lab.experiment('BaseModel Indexes', function () {
 
         SubModel.ensureIndexes(function (err, results) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(results).to.not.be.ok;
+            Code.expect(err).to.not.exist();
+            Code.expect(results).to.not.exist();
 
             done();
         });
@@ -256,8 +257,8 @@ lab.experiment('BaseModel Indexes', function () {
 
         SubModel.ensureIndexes(function (err, results) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(results).to.be.an('array');
+            Code.expect(err).to.not.exist();
+            Code.expect(results).to.be.an.array();
 
             done();
         });
@@ -271,7 +272,7 @@ lab.experiment('BaseModel Indexes', function () {
             [{ bar: -1 }]
         ];
 
-        Lab.expect(SubModel.ensureIndexes()).to.equal(undefined);
+        Code.expect(SubModel.ensureIndexes()).to.equal(undefined);
 
         done();
     });
@@ -283,16 +284,13 @@ lab.experiment('BaseModel Helpers', function () {
     lab.test('it returns expected results for the fields adapter', function (done) {
 
         var fieldsDoc = BaseModel.fieldsAdapter('one two three');
-        Lab.expect(fieldsDoc).to.be.an('object');
-        Lab.expect(fieldsDoc).to.have.ownProperty('one');
-        Lab.expect(fieldsDoc.one).to.equal(true);
-        Lab.expect(fieldsDoc).to.have.ownProperty('two');
-        Lab.expect(fieldsDoc.two).to.equal(true);
-        Lab.expect(fieldsDoc).to.have.ownProperty('three');
-        Lab.expect(fieldsDoc.three).to.equal(true);
+        Code.expect(fieldsDoc).to.be.an.object();
+        Code.expect(fieldsDoc.one).to.equal(true);
+        Code.expect(fieldsDoc.two).to.equal(true);
+        Code.expect(fieldsDoc.three).to.equal(true);
 
         var fieldsDoc2 = BaseModel.fieldsAdapter('');
-        Lab.expect(Object.keys(fieldsDoc2)).to.have.length(0);
+        Code.expect(Object.keys(fieldsDoc2)).to.have.length(0);
 
         done();
     });
@@ -301,16 +299,13 @@ lab.experiment('BaseModel Helpers', function () {
     lab.test('it returns expected results for the sort adapter', function (done) {
 
         var sortDoc = BaseModel.sortAdapter('one -two three');
-        Lab.expect(sortDoc).to.be.an('object');
-        Lab.expect(sortDoc).to.have.ownProperty('one');
-        Lab.expect(sortDoc.one).to.equal(1);
-        Lab.expect(sortDoc).to.have.ownProperty('two');
-        Lab.expect(sortDoc.two).to.equal(-1);
-        Lab.expect(sortDoc).to.have.ownProperty('three');
-        Lab.expect(sortDoc.three).to.equal(1);
+        Code.expect(sortDoc).to.be.an.object();
+        Code.expect(sortDoc.one).to.equal(1);
+        Code.expect(sortDoc.two).to.equal(-1);
+        Code.expect(sortDoc.three).to.equal(1);
 
         var sortDoc2 = BaseModel.sortAdapter('');
-        Lab.expect(Object.keys(sortDoc2)).to.have.length(0);
+        Code.expect(Object.keys(sortDoc2)).to.have.length(0);
 
         done();
     });
@@ -366,8 +361,8 @@ lab.experiment('BaseModel Paged Find', function () {
 
         SubModel.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(results).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(results).to.not.exist();
 
             SubModel.count = realCount;
 
@@ -395,8 +390,8 @@ lab.experiment('BaseModel Paged Find', function () {
 
             SubModel.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(results).to.be.an('object');
+                Code.expect(err).to.not.exist();
+                Code.expect(results).to.be.an.object();
 
                 done();
             });
@@ -423,8 +418,8 @@ lab.experiment('BaseModel Paged Find', function () {
 
             SubModel.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(results).to.be.an('object');
+                Code.expect(err).to.not.exist();
+                Code.expect(results).to.be.an.object();
 
                 done();
             });
@@ -455,8 +450,8 @@ lab.experiment('BaseModel Paged Find', function () {
 
             SubModel.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(results).to.be.an('object');
+                Code.expect(err).to.not.exist();
+                Code.expect(results).to.be.an.object();
 
                 done();
             });
@@ -508,8 +503,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
             liveTestData = results;
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(results).to.be.an('array');
+            Code.expect(err).to.not.exist();
+            Code.expect(results).to.be.an.array();
 
             done(err);
         });
@@ -527,9 +522,9 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.update(query, update, function (err, count, status) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(count).to.be.a('number');
-            Lab.expect(status).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(count).to.be.a.number();
+            Code.expect(status).to.be.an.object();
 
             done(err);
         });
@@ -540,8 +535,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.count({}, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.a('number');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.a.number();
 
             done();
         });
@@ -552,8 +547,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.find({}, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('array');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.array();
 
             done();
         });
@@ -564,8 +559,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.findOne({}, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
 
             done();
         });
@@ -576,8 +571,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.findById(liveTestData[0]._id, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
 
             done();
         });
@@ -590,8 +585,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.findByIdAndUpdate(liveTestData[0]._id, document, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
 
             done();
         });
@@ -605,8 +600,8 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.findByIdAndUpdate(liveTestData[0]._id, document, options, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an('object');
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.object();
 
             done();
         });
@@ -617,9 +612,9 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.findByIdAndRemove(liveTestData[0]._id, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.a('number');
-            Lab.expect(result).to.equal(1);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.a.number();
+            Code.expect(result).to.equal(1);
 
             done();
         });
@@ -630,9 +625,9 @@ lab.experiment('BaseModel Proxied Methods', function () {
 
         SubModel.remove({}, function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.a('number');
-            Lab.expect(result).to.equal(2);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.a.number();
+            Code.expect(result).to.equal(2);
 
             done();
         });

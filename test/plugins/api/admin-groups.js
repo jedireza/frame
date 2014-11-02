@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -67,7 +68,7 @@ lab.experiment('Admin Groups Plugin Result List', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -86,9 +87,9 @@ lab.experiment('Admin Groups Plugin Result List', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result.data).to.be.an('array');
-            Lab.expect(response.result.data[0]).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.data).to.be.an.array();
+            Code.expect(response.result.data[0]).to.be.an.object();
 
             done();
         });
@@ -119,7 +120,7 @@ lab.experiment('Admin Groups Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -135,8 +136,8 @@ lab.experiment('Admin Groups Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/document not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -152,8 +153,8 @@ lab.experiment('Admin Groups Plugin Read', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -187,7 +188,7 @@ lab.experiment('Admin Groups Plugin Create', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -203,8 +204,8 @@ lab.experiment('Admin Groups Plugin Create', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -238,7 +239,7 @@ lab.experiment('Admin Groups Plugin Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -254,8 +255,8 @@ lab.experiment('Admin Groups Plugin Update', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -289,7 +290,7 @@ lab.experiment('Admin Groups Plugin Update Permissions', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -305,8 +306,8 @@ lab.experiment('Admin Groups Plugin Update Permissions', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -337,7 +338,7 @@ lab.experiment('Admin Groups Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -353,8 +354,8 @@ lab.experiment('Admin Groups Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(404);
-            Lab.expect(response.result.message).to.match(/document not found/i);
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -370,8 +371,8 @@ lab.experiment('Admin Groups Plugin Delete', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result.message).to.match(/success/i);
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.message).to.match(/success/i);
 
             done();
         });

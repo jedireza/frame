@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../config');
 var Hapi = require('hapi');
@@ -24,7 +25,7 @@ lab.experiment('Models Plugin', function () {
         var server = new Hapi.Server(config.get('/port/api'));
         server.pack.register(modelsPlugin, function (err) {
 
-            Lab.expect(err).to.be.an('object');
+            Code.expect(err).to.be.an.object();
 
             stub.BaseModel.connect = realConnect;
 
@@ -42,8 +43,8 @@ lab.experiment('Models Plugin', function () {
                 return done(err);
             }
 
-            Lab.expect(server.plugins.models).to.be.an('object');
-            Lab.expect(server.plugins.models.BaseModel).to.be.an('object');
+            Code.expect(server.plugins.models).to.be.an.object();
+            Code.expect(server.plugins.models.BaseModel).to.be.an.object();
 
             server.plugins.models.BaseModel.disconnect();
 

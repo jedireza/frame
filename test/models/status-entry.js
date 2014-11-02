@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var StatusEntry = require('../../models/status-entry');
 
@@ -9,7 +10,7 @@ lab.experiment('Status Entry Class', function () {
 
         var statusEntry = new StatusEntry({});
 
-        Lab.expect(statusEntry).to.be.an.instanceOf(StatusEntry);
+        Code.expect(statusEntry).to.be.an.instanceOf(StatusEntry);
 
         done();
     });

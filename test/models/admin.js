@@ -1,5 +1,6 @@
 var async = require('async');
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var proxyquire = require('proxyquire');
 var stub = {
@@ -37,8 +38,8 @@ lab.experiment('Admin Class Methods', function () {
 
         Admin.create('Ren Höek', function (err, result) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(result).to.be.an.instanceOf(Admin);
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(Admin);
 
             done();
         });
@@ -49,9 +50,9 @@ lab.experiment('Admin Class Methods', function () {
 
         Admin.create('Stimpson J Cat', function (err, admin) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(admin).to.be.an.instanceOf(Admin);
-            Lab.expect(admin.name.middle).to.equal('J');
+            Code.expect(err).to.not.exist();
+            Code.expect(admin).to.be.an.instanceOf(Admin);
+            Code.expect(admin.name.middle).to.equal('J');
 
             done();
         });
@@ -71,8 +72,8 @@ lab.experiment('Admin Class Methods', function () {
 
         Admin.create('Stimpy Cat', function (err, result) {
 
-            Lab.expect(err).to.be.an('object');
-            Lab.expect(result).to.not.be.ok;
+            Code.expect(err).to.be.an.object();
+            Code.expect(result).to.not.exist();
 
             Admin.insert = realInsert;
 
@@ -109,8 +110,8 @@ lab.experiment('Admin Class Methods', function () {
 
             Admin.findByUsername('ren', function (err, admin) {
 
-                Lab.expect(err).to.not.be.ok;
-                Lab.expect(admin).to.be.an.instanceOf(Admin);
+                Code.expect(err).to.not.exist();
+                Code.expect(admin).to.be.an.instanceOf(Admin);
 
                 done();
             });
@@ -150,7 +151,7 @@ lab.experiment('Admin Instance Methods', function () {
             }
         });
 
-        Lab.expect(admin.isMemberOf('sales')).to.equal(false);
+        Code.expect(admin.isMemberOf('sales')).to.equal(false);
 
         done();
     });
@@ -169,8 +170,8 @@ lab.experiment('Admin Instance Methods', function () {
             }
         });
 
-        Lab.expect(admin.isMemberOf('sales')).to.equal(true);
-        Lab.expect(admin.isMemberOf('support')).to.equal(true);
+        Code.expect(admin.isMemberOf('sales')).to.equal(true);
+        Code.expect(admin.isMemberOf('support')).to.equal(true);
 
         done();
     });
@@ -187,7 +188,7 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hydrateGroups(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             done();
         });
@@ -218,7 +219,7 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hydrateGroups(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             done();
         });
@@ -245,7 +246,7 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hydrateGroups(function (err) {
 
-            Lab.expect(err).to.be.an('object');
+            Code.expect(err).to.be.an.object();
 
             stub.AdminGroup.findById = realFindById;
 
@@ -283,7 +284,7 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hydrateGroups(function (err) {
 
-            Lab.expect(err).to.not.be.ok;
+            Code.expect(err).to.not.exist();
 
             stub.AdminGroup.findById = realFindById;
 
@@ -307,8 +308,8 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hasPermissionTo('SPACE_MADNESS', function (err, permit) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(permit).to.equal(true);
+            Code.expect(err).to.not.exist();
+            Code.expect(permit).to.equal(true);
 
             done();
         });
@@ -334,7 +335,7 @@ lab.experiment('Admin Instance Methods', function () {
 
         admin.hasPermissionTo('SPACE_MADNESS', function (err) {
 
-            Lab.expect(err).to.be.an('object');
+            Code.expect(err).to.be.an.object();
 
             Admin.prototype.hydrateGroups = realHydrateGroups;
 
@@ -386,9 +387,9 @@ lab.experiment('Admin Instance Methods', function () {
             }
         }, function (err, results) {
 
-            Lab.expect(err).to.not.be.ok;
-            Lab.expect(results.test1).to.equal(true);
-            Lab.expect(results.test2).to.equal(false);
+            Code.expect(err).to.not.exist();
+            Code.expect(results.test1).to.equal(true);
+            Code.expect(results.test2).to.equal(false);
 
             done(err);
         });

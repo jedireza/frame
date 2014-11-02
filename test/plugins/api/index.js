@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -39,8 +40,8 @@ lab.experiment('Index Plugin', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.result.message).to.match(/welcome to the plot device/i);
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result.message).to.match(/welcome to the plot device/i);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });

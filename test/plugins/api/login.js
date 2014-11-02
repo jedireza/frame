@@ -1,4 +1,5 @@
 var Lab = require('lab');
+var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
@@ -75,7 +76,7 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -91,8 +92,8 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(400);
-            Lab.expect(response.result.message).to.match(/maximum number of auth attempts reached/i);
+            Code.expect(response.statusCode).to.equal(400);
+            Code.expect(response.result.message).to.match(/maximum number of auth attempts reached/i);
 
             done();
         });
@@ -113,7 +114,7 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -139,7 +140,7 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -165,8 +166,8 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(400);
-            Lab.expect(response.result.message).to.match(/username and password combination not found/i);
+            Code.expect(response.statusCode).to.equal(400);
+            Code.expect(response.result.message).to.match(/username and password combination not found/i);
 
             done();
         });
@@ -197,7 +198,7 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -228,8 +229,8 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
-            Lab.expect(response.result).to.be.an('object');
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
 
             done();
         });
@@ -262,7 +263,7 @@ lab.experiment('Login Plugin Forgot Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -278,7 +279,7 @@ lab.experiment('Login Plugin Forgot Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             done();
         });
@@ -303,7 +304,7 @@ lab.experiment('Login Plugin Forgot Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -334,7 +335,7 @@ lab.experiment('Login Plugin Forgot Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             server.plugins.mailer.sendEmail = realSendEmail;
 
@@ -371,7 +372,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             done();
         });
@@ -387,7 +388,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(400);
+            Code.expect(response.statusCode).to.equal(400);
 
             done();
         });
@@ -416,7 +417,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(500);
+            Code.expect(response.statusCode).to.equal(500);
 
             bcrypt.compare = realBcryptCompare;
 
@@ -447,7 +448,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(400);
+            Code.expect(response.statusCode).to.equal(400);
 
             bcrypt.compare = realBcryptCompare;
 
@@ -483,7 +484,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
         server.inject(request, function (response) {
 
-            Lab.expect(response.statusCode).to.equal(200);
+            Code.expect(response.statusCode).to.equal(200);
 
             bcrypt.compare = realBcryptCompare;
 
