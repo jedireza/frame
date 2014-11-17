@@ -16,7 +16,7 @@ exports.register = function (plugin, options, next) {
         config: {
             validate: {
                 payload: {
-                    username: Joi.string().token().required(),
+                    username: Joi.string().required(),
                     password: Joi.string().required()
                 }
             },
