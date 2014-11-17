@@ -89,7 +89,7 @@ exports.register = function (plugin, options, next) {
 
                     var Session = request.server.plugins.models.Session;
 
-                    Session.create(request.payload.username, function (err, session) {
+                    Session.create(request.pre.user.username, function (err, session) {
 
                         if (err) {
                             return reply(err);
