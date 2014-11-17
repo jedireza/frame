@@ -127,6 +127,7 @@ lab.experiment('User Class Methods', function () {
                 return done(err);
             }
 
+            var email = results.user.email;
             var username = results.user.username;
             var password = results.user.password;
 
@@ -135,7 +136,13 @@ lab.experiment('User Class Methods', function () {
                 Code.expect(err).to.not.exist();
                 Code.expect(result).to.be.an.instanceOf(User);
 
-                done();
+                User.findByCredentials(email, password, function (err, result) {
+
+                    Code.expect(err).to.not.exist();
+                    Code.expect(result).to.be.an.instanceOf(User);
+
+                    done();
+                });
             });
         });
     });

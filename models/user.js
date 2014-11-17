@@ -167,9 +167,15 @@ User.findByCredentials = function (username, password, callback) {
         user: function (done) {
 
             var query = {
-                isActive: true,
-                username: username
+                isActive: true
             };
+
+            if (username.indexOf('@') > -1) {
+                query.email = username;
+            }
+            else {
+                query.username = username;
+            }
 
             self.findOne(query, done);
         },
