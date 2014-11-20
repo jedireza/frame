@@ -16,9 +16,9 @@ exports.register = function (plugin, options, next) {
             validate: {
                 payload: {
                     name: Joi.string().required(),
+                    email: Joi.string().email().required(),
                     username: Joi.string().token().required(),
-                    password: Joi.string().required(),
-                    email: Joi.string().email().required()
+                    password: Joi.string().required()
                 }
             },
             pre: [{
@@ -116,9 +116,11 @@ exports.register = function (plugin, options, next) {
                     var id = results.user._id.toString();
                     var update = {
                         $set: {
-                            account: {
-                                id: results.account._id.toString(),
-                                name: results.account.name.first + ' ' + results.account.name.last
+                            roles: {
+                                account: {
+                                    id: results.account._id.toString(),
+                                    name: results.account.name.first + ' ' + results.account.name.last
+                                }
                             }
                         }
                     };
@@ -148,7 +150,20 @@ exports.register = function (plugin, options, next) {
                     return reply(err);
                 }
 
-                reply(results.session);
+                var user = results.linkAccount[0];
+                var credentials = user.username + ':' + results.session.key;
+                var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+
+                reply({
+                    user: {
+                        _id: user._id,
+                        username: user.username,
+                        email: user.email,
+                        roles: user.roles
+                    },
+                    session: results.session,
+                    authHeader: authHeader
+                });
             });
         }
     });

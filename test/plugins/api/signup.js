@@ -196,12 +196,12 @@ lab.experiment('Signup Plugin', function () {
 
         stub.User.findByIdAndUpdate = function (id, update, callback) {
 
-            callback(null, {});
+            callback(null, [{}, {}]);
         };
 
         stub.Account.findByIdAndUpdate = function (id, update, callback) {
 
-            callback(null, {});
+            callback(null, [{}, {}]);
         };
 
         var realSendEmail = server.plugins.mailer.sendEmail;
