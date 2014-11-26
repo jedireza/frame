@@ -1,6 +1,6 @@
 {
   "name": "frame",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A user system API for Node.js",
   "main": "index.js",
   "scripts": {
