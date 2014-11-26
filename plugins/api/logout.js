@@ -10,13 +10,17 @@ exports.register = function (plugin, options, next) {
         method: 'DELETE',
         path: options.basePath + '/logout',
         config: {
-            auth: 'simple'
+            auth: {
+                mode: 'try',
+                strategy: 'simple'
+            }
         },
         handler: function (request, reply) {
 
             var Session = request.server.plugins.models.Session;
+            var credentials = request.auth.credentials || { user: undefined };
             var query = {
-                username: request.auth.credentials.user.username
+                username: credentials.user
             };
 
             Session.remove(query, function (err, count) {
@@ -26,7 +30,7 @@ exports.register = function (plugin, options, next) {
                 }
 
                 if (count === 0) {
-                    return reply({ message: 'Session not found. That is strange.' }).code(404);
+                    return reply({ message: 'Session not found.' }).code(404);
                 }
 
                 reply({ message: 'Success.' });
