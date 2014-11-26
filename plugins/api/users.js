@@ -1,5 +1,6 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
+var async = require('async');
 var authPlugin = require('../auth');
 
 
@@ -385,25 +386,49 @@ exports.register = function (plugin, options, next) {
         },
         handler: function (request, reply) {
 
+            var Session = request.server.plugins.models.Session;
             var User = request.server.plugins.models.User;
-            var id = request.auth.credentials.user._id.toString();
-            var update = {
-                $set: {
-                    username: request.payload.username,
-                    email: request.payload.email
-                }
-            };
-            var options = {
-                fields: User.fieldsAdapter('username email')
-            };
 
-            User.findByIdAndUpdate(id, update, options, function (err, user) {
+            async.auto({
+                user: function (done) {
+
+                    var id = request.auth.credentials.user._id.toString();
+                    var update = {
+                        $set: {
+                            username: request.payload.username,
+                            email: request.payload.email
+                        }
+                    };
+                    var options = {
+                        fields: User.fieldsAdapter('username email')
+                    };
+
+                    User.findByIdAndUpdate(id, update, options, done);
+                },
+                session: ['user', function (done, results) {
+
+                    Session.create(results.user[0].username, done);
+                }]
+            }, function (err, results) {
 
                 if (err) {
                     return reply(err);
                 }
 
-                reply(user);
+                var user = results.user[0];
+                var credentials = user.username + ':' + results.session.key;
+                var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+
+                reply({
+                    user: {
+                        _id: user._id,
+                        username: user.username,
+                        email: user.email,
+                        roles: user.roles
+                    },
+                    session: results.session,
+                    authHeader: authHeader
+                });
             });
         }
     });

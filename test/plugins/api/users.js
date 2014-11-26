@@ -691,7 +691,7 @@ lab.experiment('Users Plugin (My) Update', function () {
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
 
-            callback(null, {});
+            callback(null, [{}, {}]);
         };
 
         server.inject(request, function (response) {
