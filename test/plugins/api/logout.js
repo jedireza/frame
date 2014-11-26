@@ -85,6 +85,8 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
             callback(null, 0);
         };
 
+        delete request.credentials;
+
         server.inject(request, function (response) {
 
             Code.expect(response.statusCode).to.equal(404);
