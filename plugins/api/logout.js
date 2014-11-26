@@ -18,9 +18,9 @@ exports.register = function (plugin, options, next) {
         handler: function (request, reply) {
 
             var Session = request.server.plugins.models.Session;
-            var credentials = request.auth.credentials || { user: undefined };
+            var credentials = request.auth.credentials || { user: {} };
             var query = {
-                username: credentials.user
+                username: credentials.user.username
             };
 
             Session.remove(query, function (err, count) {
