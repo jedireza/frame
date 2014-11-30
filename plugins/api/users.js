@@ -400,7 +400,7 @@ exports.register = function (plugin, options, next) {
                         }
                     };
                     var options = {
-                        fields: User.fieldsAdapter('username email')
+                        fields: User.fieldsAdapter('username email roles')
                     };
 
                     User.findByIdAndUpdate(id, update, options, done);
