@@ -1,12 +1,12 @@
 var Hoek = require('hoek');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/logout',
         config: {

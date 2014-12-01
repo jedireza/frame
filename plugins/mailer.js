@@ -52,10 +52,10 @@ var sendEmail = exports.sendEmail = function(options, template, context, callbac
 };
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
-    plugin.expose('sendEmail', sendEmail);
-    plugin.expose('transport', transport);
+    server.expose('sendEmail', sendEmail);
+    server.expose('transport', transport);
 
     next();
 };

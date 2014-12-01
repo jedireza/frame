@@ -4,21 +4,19 @@ var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
 var homePlugin = require('../../../plugins/web/index');
-var visionaryPlugin = {
-    plugin: require('visionary'),
-    options: {
-        engines: { jade: 'jade' },
-        path: './plugins/web'
-    }
-};
 var server, request;
 
 
 lab.beforeEach(function (done) {
 
-    var plugins = [ visionaryPlugin, homePlugin ];
-    server = new Hapi.Server(config.get('/port/web'));
-    server.pack.register(plugins, function (err) {
+    var plugins = [ homePlugin ];
+    server = new Hapi.Server();
+    server.connection({ port: config.get('/port/web') });
+    server.views({
+        engines: { jade: require('jade') },
+        path: './plugins/web'
+    });
+    server.register(plugins, function (err) {
 
         if (err) {
             return done(err);

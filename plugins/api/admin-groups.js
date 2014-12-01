@@ -3,12 +3,12 @@ var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/admin-groups',
         config: {
@@ -49,7 +49,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/admin-groups/{id}',
         config: {
@@ -81,7 +81,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/admin-groups',
         config: {
@@ -115,7 +115,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admin-groups/{id}',
         config: {
@@ -154,7 +154,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admin-groups/{id}/permissions',
         config: {
@@ -193,7 +193,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/admin-groups/{id}',
         config: {

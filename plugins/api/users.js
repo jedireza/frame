@@ -4,12 +4,12 @@ var async = require('async');
 var authPlugin = require('../auth');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/users',
         config: {
@@ -62,7 +62,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/users/{id}',
         config: {
@@ -94,7 +94,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/users/my',
         config: {
@@ -125,7 +125,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/users',
         config: {
@@ -216,7 +216,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/users/{id}',
         config: {
@@ -314,7 +314,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/users/my',
         config: {
@@ -434,7 +434,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/users/{id}/password',
         config: {
@@ -489,7 +489,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/users/my/password',
         config: {
@@ -544,7 +544,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/users/{id}',
         config: {

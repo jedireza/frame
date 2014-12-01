@@ -35,8 +35,9 @@ lab.experiment('Mailer Plugin', function () {
 
     lab.before(function (done) {
 
-        server = new Hapi.Server(config.get('/port/api'));
-        server.pack.register(mailerPlugin, function (err) {
+        server = new Hapi.Server();
+        server.connection({ port: config.get('/port/web') });
+        server.register(mailerPlugin, function (err) {
 
             if (err) {
                 return done(err);

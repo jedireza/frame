@@ -4,12 +4,12 @@ var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/accounts',
         config: {
@@ -47,7 +47,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/accounts/{id}',
         config: {
@@ -76,7 +76,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/accounts/my',
         config: {
@@ -107,7 +107,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/accounts',
         config: {
@@ -138,7 +138,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/accounts/{id}',
         config: {
@@ -178,7 +178,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/accounts/my',
         config: {
@@ -221,7 +221,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/accounts/{id}/user',
         config: {
@@ -346,7 +346,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/accounts/{id}/user',
         config: {
@@ -437,7 +437,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/accounts/{id}/notes',
         config: {
@@ -480,7 +480,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/accounts/{id}/status',
         config: {
@@ -544,7 +544,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/accounts/{id}',
         config: {

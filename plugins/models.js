@@ -1,4 +1,4 @@
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     var models = {
         Account: require('../models/account'),
@@ -14,14 +14,14 @@ exports.register = function (plugin, options, next) {
     models.BaseModel.connect(function (err, db) {
 
         if (err) {
-            plugin.log('Error connecting to MongoDB via BaseModel.');
+            server.log('Error connecting to MongoDB via BaseModel.');
             return next(err);
         }
 
         Object.keys(models).forEach(function (model) {
 
             models[model].ensureIndexes();
-            plugin.expose(model, models[model]);
+            server.expose(model, models[model]);
         });
 
         next();

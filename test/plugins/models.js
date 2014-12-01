@@ -22,8 +22,9 @@ lab.experiment('Models Plugin', function () {
             callback(Error('connect failed'));
         };
 
-        var server = new Hapi.Server(config.get('/port/api'));
-        server.pack.register(modelsPlugin, function (err) {
+        var server = new Hapi.Server();
+        server.connection({ port: config.get('/port/web') });
+        server.register(modelsPlugin, function (err) {
 
             Code.expect(err).to.be.an.object();
 
@@ -36,8 +37,9 @@ lab.experiment('Models Plugin', function () {
 
     lab.test('it successfuly connects to the db and exposes models', function (done) {
 
-        var server = new Hapi.Server(config.get('/port/api'));
-        server.pack.register(modelsPlugin, function (err) {
+        var server = new Hapi.Server();
+        server.connection({ port: config.get('/port/web') });
+        server.register(modelsPlugin, function (err) {
 
             if (err) {
                 return done(err);

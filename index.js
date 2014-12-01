@@ -1,7 +1,10 @@
-var Hapi = require('hapi');
+var Glue = require('glue');
 var manifest = require('./manifest');
+
+
 var composeOptions = {
     relativeTo: __dirname
 };
 
-module.exports = Hapi.Pack.compose.bind(Hapi.Pack, manifest.get('/'), composeOptions);
+
+module.exports = Glue.compose.bind(Glue, manifest.get('/'), composeOptions);

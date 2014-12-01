@@ -4,12 +4,12 @@ var async = require('async');
 var config = require('../../config');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/signup',
         config: {

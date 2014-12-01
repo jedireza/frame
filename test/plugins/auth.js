@@ -25,8 +25,9 @@ lab.beforeEach(function (done) {
     });
 
     var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin ];
-    server = new Hapi.Server(config.get('/port/api'));
-    server.pack.register(plugins, function (err) {
+    server = new Hapi.Server();
+    server.connection({ port: config.get('/port/web') });
+    server.register(plugins, function (err) {
 
         if (err) {
             return done(err);
@@ -144,7 +145,6 @@ lab.experiment('Auth Plugin', function () {
                 server.auth.test('simple', request, function (err, credentials) {
 
                     Code.expect(err).to.be.an.object();
-                    Code.expect(credentials).to.not.exist();
                     reply('ok');
                 });
             }

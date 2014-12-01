@@ -1,5 +1,7 @@
 var Confidence = require('confidence');
 var config = require('./config');
+
+
 var criteria = {
     env: process.env.NODE_ENV
 };
@@ -7,19 +9,22 @@ var criteria = {
 
 var manifest = {
     $meta: 'This file defines the plot device.',
-    servers: [{
-        port: config.get('/port/web'),
-        options: {
-            security: true,
-            debug: {
-                request: ['error']
-            },
-            labels: ['web']
+    server: {
+        debug: {
+            request: ['error']
+        },
+        connections: {
+            routes: {
+                security: true
+            }
         }
+    },
+    connections: [{
+        port: config.get('/port/web'),
+        labels: ['web']
     }],
     plugins: {
         'hapi-auth-basic': {},
-        'lout': {},
         'visionary': {
             engines: { jade: 'jade' },
             path: './plugins/web'

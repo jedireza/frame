@@ -1,15 +1,15 @@
 var async = require('async');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
-    plugin.servers.forEach(function (server) {
+    server.connections.forEach(function (server) {
 
         server.auth.strategy('simple', 'basic', {
             validateFunc: function (username, password, callback) {
 
-                var Session = plugin.plugins.models.Session;
-                var User = plugin.plugins.models.User;
+                var Session = server.plugins.models.Session;
+                var User = server.plugins.models.User;
 
                 async.auto({
                     session: function (done) {
@@ -42,15 +42,15 @@ exports.register = function (plugin, options, next) {
                     }]
                 }, function (err, results) {
 
-                        if (err) {
-                            return callback(err);
-                        }
+                    if (err) {
+                        return callback(err);
+                    }
 
-                        if (!results.session) {
-                            return callback(null, false);
-                        }
+                    if (!results.session) {
+                        return callback(null, false);
+                    }
 
-                        callback(null, Boolean(results.user), results);
+                    callback(null, Boolean(results.user), results);
                 });
             }
         });

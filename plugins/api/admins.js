@@ -4,12 +4,12 @@ var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/admins',
         config: {
@@ -50,7 +50,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/admins/{id}',
         config: {
@@ -82,7 +82,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/admins',
         config: {
@@ -116,7 +116,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admins/{id}',
         config: {
@@ -159,7 +159,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admins/{id}/permissions',
         config: {
@@ -198,7 +198,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admins/{id}/groups',
         config: {
@@ -237,7 +237,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'PUT',
         path: options.basePath + '/admins/{id}/user',
         config: {
@@ -365,7 +365,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/admins/{id}/user',
         config: {
@@ -459,7 +459,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/admins/{id}',
         config: {

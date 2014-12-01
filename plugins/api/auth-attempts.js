@@ -3,12 +3,12 @@ var Hoek = require('hoek');
 var authPlugin = require('../auth');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/auth-attempts',
         config: {
@@ -49,7 +49,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'GET',
         path: options.basePath + '/auth-attempts/{id}',
         config: {
@@ -81,7 +81,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'DELETE',
         path: options.basePath + '/auth-attempts/{id}',
         config: {

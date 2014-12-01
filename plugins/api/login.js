@@ -5,12 +5,12 @@ var bcrypt = require('bcrypt');
 var config = require('../../config');
 
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/login',
         config: {
@@ -119,7 +119,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/login/forgot',
         config: {
@@ -202,7 +202,7 @@ exports.register = function (plugin, options, next) {
     });
 
 
-    plugin.route({
+    server.route({
         method: 'POST',
         path: options.basePath + '/login/reset',
         config: {
