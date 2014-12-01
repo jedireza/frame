@@ -27,24 +27,24 @@ var manifest = {
         'hapi-auth-basic': {},
         'visionary': {
             engines: { jade: 'jade' },
-            path: './plugins/web'
+            path: './server/web'
         },
-        './plugins/auth': {},
-        './plugins/models': {},
-        './plugins/mailer': {},
-        './plugins/api/accounts': { basePath: '/api' },
-        './plugins/api/admin-groups': { basePath: '/api' },
-        './plugins/api/admins': { basePath: '/api' },
-        './plugins/api/auth-attempts': { basePath: '/api' },
-        './plugins/api/contact': { basePath: '/api' },
-        './plugins/api/index': { basePath: '/api' },
-        './plugins/api/login': { basePath: '/api' },
-        './plugins/api/logout': { basePath: '/api' },
-        './plugins/api/sessions': { basePath: '/api' },
-        './plugins/api/signup': { basePath: '/api' },
-        './plugins/api/statuses': { basePath: '/api' },
-        './plugins/api/users': { basePath: '/api' },
-        './plugins/web/index': {}
+        './server/auth': {},
+        './server/models': {},
+        './server/mailer': {},
+        './server/api/accounts': { basePath: '/api' },
+        './server/api/admin-groups': { basePath: '/api' },
+        './server/api/admins': { basePath: '/api' },
+        './server/api/auth-attempts': { basePath: '/api' },
+        './server/api/contact': { basePath: '/api' },
+        './server/api/index': { basePath: '/api' },
+        './server/api/login': { basePath: '/api' },
+        './server/api/logout': { basePath: '/api' },
+        './server/api/sessions': { basePath: '/api' },
+        './server/api/signup': { basePath: '/api' },
+        './server/api/statuses': { basePath: '/api' },
+        './server/api/users': { basePath: '/api' },
+        './server/web/index': {}
     }
 };
 

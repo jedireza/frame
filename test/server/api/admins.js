@@ -5,28 +5,25 @@ var config = require('../../../config');
 var Hapi = require('hapi');
 var hapiAuthBasic = require('hapi-auth-basic');
 var proxyquire = require('proxyquire');
-var authPlugin = require('../../../plugins/auth');
-var accountPlugin = require('../../../plugins/api/accounts');
-var authenticatedAdmin = require('../../fixtures/credentials-admin');
-var authenticatedAccount = require('../../fixtures/credentials-account');
+var authPlugin = require('../../../server/auth');
+var adminPlugin = require('../../../server/api/admins');
+var authenticatedUser = require('../fixtures/credentials-admin');
 var stub, modelsPlugin, server, request;
 
 
 lab.beforeEach(function (done) {
 
     stub = {
-        Account: {},
-        Status: {},
+        Admin: {},
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../plugins/models', {
-        '../models/account': stub.Account,
-        '../models/status': stub.Status,
+    modelsPlugin = proxyquire('../../../server/models', {
+        '../models/admin': stub.Admin,
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, accountPlugin ];
+    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, adminPlugin ];
     server = new Hapi.Server();
     server.connection({ port: config.get('/port/web') });
     server.register(plugins, function (err) {
@@ -48,14 +45,14 @@ lab.afterEach(function (done) {
 });
 
 
-lab.experiment('Accounts Plugin Result List', function () {
+lab.experiment('Admins Plugin Result List', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'GET',
-            url: '/accounts',
-            credentials: authenticatedAdmin
+            url: '/admins',
+            credentials: authenticatedUser
         };
 
         done();
@@ -64,7 +61,7 @@ lab.experiment('Accounts Plugin Result List', function () {
 
     lab.test('it returns an error when paged find fails', function (done) {
 
-        stub.Account.pagedFind = function () {
+        stub.Admin.pagedFind = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -83,7 +80,7 @@ lab.experiment('Accounts Plugin Result List', function () {
 
     lab.test('it returns an array of documents successfully', function (done) {
 
-        stub.Account.pagedFind = function () {
+        stub.Admin.pagedFind = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -103,14 +100,14 @@ lab.experiment('Accounts Plugin Result List', function () {
 });
 
 
-lab.experiment('Accounts Plugin Read', function () {
+lab.experiment('Admins Plugin Read', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'GET',
-            url: '/accounts/93EP150D35',
-            credentials: authenticatedAdmin
+            url: '/admins/93EP150D35',
+            credentials: authenticatedUser
         };
 
         done();
@@ -119,7 +116,7 @@ lab.experiment('Accounts Plugin Read', function () {
 
     lab.test('it returns an error when find by id fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(Error('find by id failed'));
         };
@@ -135,7 +132,7 @@ lab.experiment('Accounts Plugin Read', function () {
 
     lab.test('it returns a not found when find by id misses', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback();
         };
@@ -152,7 +149,7 @@ lab.experiment('Accounts Plugin Read', function () {
 
     lab.test('it returns a document successfully', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, { _id: '93EP150D35' });
         };
@@ -168,91 +165,17 @@ lab.experiment('Accounts Plugin Read', function () {
 });
 
 
-lab.experiment('Accounts Plugin (My) Read', function () {
-
-    lab.beforeEach(function (done) {
-
-        request = {
-            method: 'GET',
-            url: '/accounts/my',
-            credentials: authenticatedAccount
-        };
-
-        done();
-    });
-
-
-    lab.test('it returns an error when find by id fails', function (done) {
-
-        stub.Account.findById = function () {
-
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
-
-            callback(Error('find by id failed'));
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(500);
-
-            done();
-        });
-    });
-
-
-    lab.test('it returns a not found when find by id misses', function (done) {
-
-        stub.Account.findById = function () {
-
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
-
-            callback();
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(404);
-            Code.expect(response.result.message).to.match(/document not found/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it returns a document successfully', function (done) {
-
-        stub.Account.findById = function () {
-
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
-
-            callback(null, { _id: '93EP150D35' });
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(200);
-            Code.expect(response.result).to.be.an.object();
-
-            done();
-        });
-    });
-});
-
-
-lab.experiment('Accounts Plugin Create', function () {
+lab.experiment('Admins Plugin Create', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'POST',
-            url: '/accounts',
+            url: '/admins',
             payload: {
-                name: 'Muddy Mudskipper'
+                name: 'Toast Man'
             },
-            credentials: authenticatedAdmin
+            credentials: authenticatedUser
         };
 
         done();
@@ -261,7 +184,7 @@ lab.experiment('Accounts Plugin Create', function () {
 
     lab.test('it returns an error when create fails', function (done) {
 
-        stub.Account.create = function (name, callback) {
+        stub.Admin.create = function (name, callback) {
 
             callback(Error('create failed'));
         };
@@ -277,7 +200,7 @@ lab.experiment('Accounts Plugin Create', function () {
 
     lab.test('it creates a document successfully', function (done) {
 
-        stub.Account.create = function (name, callback) {
+        stub.Admin.create = function (name, callback) {
 
             callback(null, {});
         };
@@ -293,20 +216,20 @@ lab.experiment('Accounts Plugin Create', function () {
 });
 
 
-lab.experiment('Accounts Plugin Update', function () {
+lab.experiment('Admins Plugin Update', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'PUT',
-            url: '/accounts/93EP150D35',
+            url: '/admins/93EP150D35',
             payload: {
                 name: {
-                    first: 'Muddy',
-                    last: 'Mudskipper'
+                    first: 'Ren',
+                    last: 'Höek'
                 }
             },
-            credentials: authenticatedAdmin
+            credentials: authenticatedUser
         };
 
         done();
@@ -315,7 +238,7 @@ lab.experiment('Accounts Plugin Update', function () {
 
     lab.test('it returns an error when update fails', function (done) {
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(Error('update failed'));
         };
@@ -331,7 +254,7 @@ lab.experiment('Accounts Plugin Update', function () {
 
     lab.test('it updates a document successfully', function (done) {
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(null, {});
         };
@@ -347,20 +270,17 @@ lab.experiment('Accounts Plugin Update', function () {
 });
 
 
-lab.experiment('Accounts Plugin (My) Update', function () {
+lab.experiment('Admins Plugin Update Permissions', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'PUT',
-            url: '/accounts/my',
+            url: '/admins/93EP150D35/permissions',
             payload: {
-                name: {
-                    first: 'Mud',
-                    last: 'Skipper'
-                }
+                permissions: { SPACE_RACE: true }
             },
-            credentials: authenticatedAccount
+            credentials: authenticatedUser
         };
 
         done();
@@ -369,10 +289,7 @@ lab.experiment('Accounts Plugin (My) Update', function () {
 
     lab.test('it returns an error when update fails', function (done) {
 
-        stub.Account.findByIdAndUpdate = function () {
-
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(Error('update failed'));
         };
@@ -388,10 +305,7 @@ lab.experiment('Accounts Plugin (My) Update', function () {
 
     lab.test('it updates a document successfully', function (done) {
 
-        stub.Account.findByIdAndUpdate = function () {
-
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(null, {});
         };
@@ -407,26 +321,77 @@ lab.experiment('Accounts Plugin (My) Update', function () {
 });
 
 
-lab.experiment('Accounts Plugin Link User', function () {
+lab.experiment('Admins Plugin Update Groups', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'PUT',
-            url: '/accounts/93EP150D35/user',
+            url: '/admins/93EP150D35/groups',
+            payload: {
+                groups: { sales: 'Sales' }
+            },
+            credentials: authenticatedUser
+        };
+
+        done();
+    });
+
+
+    lab.test('it returns an error when update fails', function (done) {
+
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(Error('update failed'));
+        };
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(500);
+
+            done();
+        });
+    });
+
+
+    lab.test('it updates a document successfully', function (done) {
+
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, {});
+        };
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
+
+            done();
+        });
+    });
+});
+
+
+lab.experiment('Admins Plugin Link User', function () {
+
+    lab.beforeEach(function (done) {
+
+        request = {
+            method: 'PUT',
+            url: '/admins/93EP150D35/user',
             payload: {
                 username: 'ren'
             },
-            credentials: authenticatedAdmin
+            credentials: authenticatedUser
         };
 
         done();
     });
 
 
-    lab.test('it returns an error when (Account) find by id fails', function (done) {
+    lab.test('it returns an error when (Admin) find by id fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(Error('find by id failed'));
         };
@@ -440,9 +405,9 @@ lab.experiment('Accounts Plugin Link User', function () {
     });
 
 
-    lab.test('it returns not found when (Account) find by id misses', function (done) {
+    lab.test('it returns not found when (Admin) find by id misses', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback();
         };
@@ -458,7 +423,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
     lab.test('it returns an error when (User) find by username fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, {});
         };
@@ -479,7 +444,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
     lab.test('it returns not found when (User) find by username misses', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, {});
         };
@@ -498,9 +463,9 @@ lab.experiment('Accounts Plugin Link User', function () {
     });
 
 
-    lab.test('it returns conflict when an account role already exists', function (done) {
+    lab.test('it returns conflict when an admin role already exists', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, {});
         };
@@ -509,7 +474,7 @@ lab.experiment('Accounts Plugin Link User', function () {
 
             var user = {
                 roles: {
-                    account: {
+                    admin: {
                         id: '535H0W35',
                         name: 'Stimpson J Cat'
                     }
@@ -528,11 +493,11 @@ lab.experiment('Accounts Plugin Link User', function () {
     });
 
 
-    lab.test('it returns conflict when the account is linked to another user', function (done) {
+    lab.test('it returns conflict when the admin is linked to another user', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            var account = {
+            var admin = {
                 _id: 'DUD3N0T1T',
                 user: {
                     id: '535H0W35',
@@ -540,7 +505,7 @@ lab.experiment('Accounts Plugin Link User', function () {
                 }
             };
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findByUsername = function (id, callback) {
@@ -548,7 +513,7 @@ lab.experiment('Accounts Plugin Link User', function () {
             var user = {
                 _id: 'N0T1TDUD3',
                 roles: {
-                    account: {
+                    admin: {
                         id: '93EP150D35',
                         name: 'Ren Höek'
                     }
@@ -569,9 +534,9 @@ lab.experiment('Accounts Plugin Link User', function () {
 
     lab.test('it returns an error when find by id and update fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            var account = {
+            var admin = {
                 _id: '93EP150D35',
                 name: {
                     first: 'Ren',
@@ -579,7 +544,7 @@ lab.experiment('Accounts Plugin Link User', function () {
                 }
             };
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findByUsername = function (id, callback) {
@@ -592,7 +557,7 @@ lab.experiment('Accounts Plugin Link User', function () {
             callback(null, user);
         };
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(Error('find by id and update failed'));
         };
@@ -611,9 +576,9 @@ lab.experiment('Accounts Plugin Link User', function () {
     });
 
 
-    lab.test('it successfuly links an account and user', function (done) {
+    lab.test('it successfuly links an admin and user', function (done) {
 
-        var account = {
+        var admin = {
             _id: '93EP150D35',
             name: {
                 first: 'Ren',
@@ -626,9 +591,9 @@ lab.experiment('Accounts Plugin Link User', function () {
             roles: {}
         };
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findByUsername = function (id, callback) {
@@ -636,9 +601,9 @@ lab.experiment('Accounts Plugin Link User', function () {
             callback(null, user);
         };
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findByIdAndUpdate = function (id, update, callback) {
@@ -656,149 +621,23 @@ lab.experiment('Accounts Plugin Link User', function () {
 });
 
 
-lab.experiment('Accounts Plugin Add Note', function () {
-
-    lab.beforeEach(function (done) {
-
-        request = {
-            method: 'POST',
-            url: '/accounts/93EP150D35/notes',
-            payload: {
-                data: 'This is a wonderful note.'
-            },
-            credentials: authenticatedAdmin
-        };
-
-        done();
-    });
-
-
-    lab.test('it returns an error when find by id and update fails', function (done) {
-
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(Error('find by id and update failed'));
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(500);
-
-            done();
-        });
-    });
-
-
-    lab.test('it successfully adds a note', function (done) {
-
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, {});
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(200);
-
-            done();
-        });
-    });
-});
-
-
-lab.experiment('Accounts Plugin Update Status', function () {
-
-    lab.beforeEach(function (done) {
-
-        request = {
-            method: 'POST',
-            url: '/accounts/93EP150D35/status',
-            payload: {
-                status: 'account-happy'
-            },
-            credentials: authenticatedAdmin
-        };
-
-        done();
-    });
-
-
-    lab.test('it returns an error when find by id (Status) fails', function (done) {
-
-        stub.Status.findById = function (id, callback) {
-
-            callback(Error('find by id failed'));
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(500);
-
-            done();
-        });
-    });
-
-
-    lab.test('it returns an error when find by id and update fails', function (done) {
-
-        stub.Status.findById = function (id, callback) {
-
-            callback(null, { _id: 'account-happy', name: 'Happy' });
-        };
-
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(Error('find by id and update failed'));
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(500);
-
-            done();
-        });
-    });
-
-
-    lab.test('it successfully updates the status', function (done) {
-
-        stub.Status.findById = function (id, callback) {
-
-            callback(null, { _id: 'account-happy', name: 'Happy' });
-        };
-
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, {});
-        };
-
-        server.inject(request, function (response) {
-
-            Code.expect(response.statusCode).to.equal(200);
-
-            done();
-        });
-    });
-});
-
-
-lab.experiment('Accounts Plugin Unlink User', function () {
+lab.experiment('Admins Plugin Unlink User', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'DELETE',
-            url: '/accounts/93EP150D35/user',
-            credentials: authenticatedAdmin
+            url: '/admins/93EP150D35/user',
+            credentials: authenticatedUser
         };
 
         done();
     });
 
 
-    lab.test('it returns an error when (Account) find by id fails', function (done) {
+    lab.test('it returns an error when (Admin) find by id fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(Error('find by id failed'));
         };
@@ -812,9 +651,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
     });
 
 
-    lab.test('it returns not found when (Account) find by id misses', function (done) {
+    lab.test('it returns not found when (Admin) find by id misses', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback();
         };
@@ -828,9 +667,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
     });
 
 
-    lab.test('it returns early account is void of a user', function (done) {
+    lab.test('it returns early admin is void of a user', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, {});
         };
@@ -844,9 +683,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
     });
 
 
-    lab.test('it returns early account is void of a user.id', function (done) {
+    lab.test('it returns early admin is void of a user.id', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
             callback(null, { user: {} });
         };
@@ -862,16 +701,16 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
     lab.test('it returns an error when (User) find by id fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            var account = {
+            var admin = {
                 user: {
                     id: '93EP150D35',
                     name: 'ren'
                 }
             };
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findById = function (id, callback) {
@@ -890,16 +729,16 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
     lab.test('it returns not found when (User) find by username misses', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            var account = {
+            var admin = {
                 user: {
                     id: '93EP150D35',
                     name: 'ren'
                 }
             };
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findById = function (id, callback) {
@@ -918,9 +757,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 
     lab.test('it returns an error when find by id and update fails', function (done) {
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            var account = {
+            var admin = {
                 _id: '93EP150D35',
                 user: {
                     id: '535H0W35',
@@ -928,7 +767,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
                 }
             };
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findById = function (id, callback) {
@@ -936,7 +775,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
             var user = {
                 _id: '535H0W35',
                 roles: {
-                    account: {
+                    admin: {
                         id: '93EP150D35',
                         name: 'Ren Höek'
                     }
@@ -946,7 +785,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
             callback(null, user);
         };
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
             callback(Error('find by id and update failed'));
         };
@@ -965,18 +804,18 @@ lab.experiment('Accounts Plugin Unlink User', function () {
     });
 
 
-    lab.test('it successfully unlinks an account from a user', function (done) {
+    lab.test('it successfully unlinks an admin from a user', function (done) {
 
         var user = {
             _id: '535H0W35',
             roles: {
-                account: {
+                admin: {
                     id: '93EP150D35',
                     name: 'Ren Höek'
                 }
             }
         };
-        var account = {
+        var admin = {
             _id: '93EP150D35',
             user: {
                 id: '535H0W35',
@@ -984,9 +823,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
             }
         };
 
-        stub.Account.findById = function (id, callback) {
+        stub.Admin.findById = function (id, callback) {
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findById = function (id, callback) {
@@ -994,9 +833,9 @@ lab.experiment('Accounts Plugin Unlink User', function () {
             callback(null, user);
         };
 
-        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+        stub.Admin.findByIdAndUpdate = function (id, update, callback) {
 
-            callback(null, account);
+            callback(null, admin);
         };
 
         stub.User.findByIdAndUpdate = function (id, update, callback) {
@@ -1014,14 +853,14 @@ lab.experiment('Accounts Plugin Unlink User', function () {
 });
 
 
-lab.experiment('Accounts Plugin Delete', function () {
+lab.experiment('Admins Plugin Delete', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'DELETE',
-            url: '/accounts/93EP150D35',
-            credentials: authenticatedAdmin
+            url: '/admins/93EP150D35',
+            credentials: authenticatedUser
         };
 
         done();
@@ -1030,7 +869,7 @@ lab.experiment('Accounts Plugin Delete', function () {
 
     lab.test('it returns an error when remove by id fails', function (done) {
 
-        stub.Account.findByIdAndRemove = function (id, callback) {
+        stub.Admin.findByIdAndRemove = function (id, callback) {
 
             callback(Error('remove by id failed'));
         };
@@ -1046,7 +885,7 @@ lab.experiment('Accounts Plugin Delete', function () {
 
     lab.test('it returns a not found when remove by id misses', function (done) {
 
-        stub.Account.findByIdAndRemove = function (id, callback) {
+        stub.Admin.findByIdAndRemove = function (id, callback) {
 
             callback(null, 0);
         };
@@ -1063,7 +902,7 @@ lab.experiment('Accounts Plugin Delete', function () {
 
     lab.test('it removes a document successfully', function (done) {
 
-        stub.Account.findByIdAndRemove = function (id, callback) {
+        stub.Admin.findByIdAndRemove = function (id, callback) {
 
             callback(null, 1);
         };

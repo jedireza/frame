@@ -3,7 +3,7 @@ var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
-var homePlugin = require('../../../plugins/web/index');
+var homePlugin = require('../../../server/web/index');
 var server, request;
 
 
@@ -14,7 +14,7 @@ lab.beforeEach(function (done) {
     server.connection({ port: config.get('/port/web') });
     server.views({
         engines: { jade: require('jade') },
-        path: './plugins/web'
+        path: './server/web'
     });
     server.register(plugins, function (err) {
 

@@ -7,7 +7,7 @@ var proxyquire = require('proxyquire');
 var stub = {
     BaseModel: {}
 };
-var modelsPlugin = proxyquire('../../plugins/models', {
+var modelsPlugin = proxyquire('../../server/models', {
     '../models/base': stub.BaseModel
 });
 

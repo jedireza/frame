@@ -5,8 +5,8 @@ var config = require('../../../config');
 var Hapi = require('hapi');
 var hapiAuthBasic = require('hapi-auth-basic');
 var proxyquire = require('proxyquire');
-var signupPlugin = require('../../../plugins/api/signup');
-var mailerPlugin = require('../../../plugins/mailer');
+var signupPlugin = require('../../../server/api/signup');
+var mailerPlugin = require('../../../server/mailer');
 var stub, modelsPlugin, server, request;
 
 
@@ -18,7 +18,7 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../plugins/models', {
+    modelsPlugin = proxyquire('../../../server/models', {
         '../models/account': stub.Account,
         '../models/session': stub.Session,
         '../models/user': stub.User,

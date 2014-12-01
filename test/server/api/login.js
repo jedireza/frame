@@ -8,9 +8,9 @@ var Session = require('../../../models/session');
 var User = require('../../../models/user');
 var hapiAuthBasic = require('hapi-auth-basic');
 var proxyquire = require('proxyquire');
-var authPlugin = require('../../../plugins/auth');
-var mailerPlugin = require('../../../plugins/mailer');
-var loginPlugin = require('../../../plugins/api/login');
+var authPlugin = require('../../../server/auth');
+var mailerPlugin = require('../../../server/mailer');
+var loginPlugin = require('../../../server/api/login');
 var bcrypt = require('bcrypt');
 var stub, modelsPlugin, server, request;
 
@@ -23,7 +23,7 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../plugins/models', {
+    modelsPlugin = proxyquire('../../../server/models', {
         '../models/auth-attempt': stub.AuthAttempt,
         '../models/session': stub.Session,
         '../models/user': stub.User

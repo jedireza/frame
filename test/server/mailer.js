@@ -22,7 +22,7 @@ var stub = {
         }
     }
 };
-var mailerPlugin = proxyquire('../../plugins/mailer', {
+var mailerPlugin = proxyquire('../../server/mailer', {
     'fs': stub.fs,
     'nodemailer': stub.nodemailer
 });

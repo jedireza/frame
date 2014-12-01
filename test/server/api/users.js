@@ -5,9 +5,9 @@ var config = require('../../../config');
 var Hapi = require('hapi');
 var hapiAuthBasic = require('hapi-auth-basic');
 var proxyquire = require('proxyquire');
-var authPlugin = require('../../../plugins/auth');
-var userPlugin = require('../../../plugins/api/users');
-var authenticatedUser = require('../../fixtures/credentials-admin');
+var authPlugin = require('../../../server/auth');
+var userPlugin = require('../../../server/api/users');
+var authenticatedUser = require('../fixtures/credentials-admin');
 var stub, modelsPlugin, server, request;
 
 
@@ -17,7 +17,7 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../plugins/models', {
+    modelsPlugin = proxyquire('../../../server/models', {
         '../models/user': stub.User
     });
 

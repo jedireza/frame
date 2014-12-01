@@ -3,7 +3,7 @@ var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
-var indexPlugin = require('../../../plugins/api/index');
+var indexPlugin = require('../../../server/api/index');
 var server, request;
 
 

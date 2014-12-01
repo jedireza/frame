@@ -5,23 +5,23 @@ var config = require('../../../config');
 var Hapi = require('hapi');
 var hapiAuthBasic = require('hapi-auth-basic');
 var proxyquire = require('proxyquire');
-var authPlugin = require('../../../plugins/auth');
-var statusesPlugin = require('../../../plugins/api/statuses');
-var authenticatedUser = require('../../fixtures/credentials-admin');
+var authPlugin = require('../../../server/auth');
+var adminGroupsPlugin = require('../../../server/api/admin-groups');
+var authenticatedUser = require('../fixtures/credentials-admin');
 var stub, modelsPlugin, server, request;
 
 
 lab.beforeEach(function (done) {
 
     stub = {
-        Status: {}
+        AdminGroup: {}
     };
 
-    modelsPlugin = proxyquire('../../../plugins/models', {
-        '../models/status': stub.Status
+    modelsPlugin = proxyquire('../../../server/models', {
+        '../models/admin-group': stub.AdminGroup
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, statusesPlugin ];
+    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, adminGroupsPlugin ];
     server = new Hapi.Server();
     server.connection({ port: config.get('/port/web') });
     server.register(plugins, function (err) {
@@ -43,13 +43,13 @@ lab.afterEach(function (done) {
 });
 
 
-lab.experiment('Statuses Plugin Result List', function () {
+lab.experiment('Admin Groups Plugin Result List', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'GET',
-            url: '/statuses',
+            url: '/admin-groups',
             credentials: authenticatedUser
         };
 
@@ -59,7 +59,7 @@ lab.experiment('Statuses Plugin Result List', function () {
 
     lab.test('it returns an error when paged find fails', function (done) {
 
-        stub.Status.pagedFind = function () {
+        stub.AdminGroup.pagedFind = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -78,7 +78,7 @@ lab.experiment('Statuses Plugin Result List', function () {
 
     lab.test('it returns an array of documents successfully', function (done) {
 
-        stub.Status.pagedFind = function () {
+        stub.AdminGroup.pagedFind = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -98,13 +98,13 @@ lab.experiment('Statuses Plugin Result List', function () {
 });
 
 
-lab.experiment('Statuses Plugin Read', function () {
+lab.experiment('Admin Groups Plugin Read', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'GET',
-            url: '/statuses/93EP150D35',
+            url: '/admin-groups/93EP150D35',
             credentials: authenticatedUser
         };
 
@@ -114,7 +114,7 @@ lab.experiment('Statuses Plugin Read', function () {
 
     lab.test('it returns an error when find by id fails', function (done) {
 
-        stub.Status.findById = function (id, callback) {
+        stub.AdminGroup.findById = function (id, callback) {
 
             callback(Error('find by id failed'));
         };
@@ -130,7 +130,7 @@ lab.experiment('Statuses Plugin Read', function () {
 
     lab.test('it returns a not found when find by id misses', function (done) {
 
-        stub.Status.findById = function (id, callback) {
+        stub.AdminGroup.findById = function (id, callback) {
 
             callback();
         };
@@ -147,7 +147,7 @@ lab.experiment('Statuses Plugin Read', function () {
 
     lab.test('it returns a document successfully', function (done) {
 
-        stub.Status.findById = function (id, callback) {
+        stub.AdminGroup.findById = function (id, callback) {
 
             callback(null, { _id: '93EP150D35' });
         };
@@ -163,16 +163,15 @@ lab.experiment('Statuses Plugin Read', function () {
 });
 
 
-lab.experiment('Statuses Plugin Create', function () {
+lab.experiment('Admin Groups Plugin Create', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'POST',
-            url: '/statuses',
+            url: '/admin-groups',
             payload: {
-                pivot: 'Account',
-                name: 'Happy'
+                name: 'Sales'
             },
             credentials: authenticatedUser
         };
@@ -183,7 +182,7 @@ lab.experiment('Statuses Plugin Create', function () {
 
     lab.test('it returns an error when create fails', function (done) {
 
-        stub.Status.create = function (pivot, name, callback) {
+        stub.AdminGroup.create = function (name, callback) {
 
             callback(Error('create failed'));
         };
@@ -199,7 +198,7 @@ lab.experiment('Statuses Plugin Create', function () {
 
     lab.test('it creates a document successfully', function (done) {
 
-        stub.Status.create = function (pivot, name, callback) {
+        stub.AdminGroup.create = function (name, callback) {
 
             callback(null, {});
         };
@@ -215,15 +214,15 @@ lab.experiment('Statuses Plugin Create', function () {
 });
 
 
-lab.experiment('Statuses Plugin Update', function () {
+lab.experiment('Admin Groups Plugin Update', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'PUT',
-            url: '/statuses/account-happy',
+            url: '/admin-groups/sales',
             payload: {
-                name: 'Happy'
+                name: 'Salez'
             },
             credentials: authenticatedUser
         };
@@ -234,7 +233,7 @@ lab.experiment('Statuses Plugin Update', function () {
 
     lab.test('it returns an error when update fails', function (done) {
 
-        stub.Status.findByIdAndUpdate = function (id, update, callback) {
+        stub.AdminGroup.findByIdAndUpdate = function (id, update, callback) {
 
             callback(Error('update failed'));
         };
@@ -250,7 +249,7 @@ lab.experiment('Statuses Plugin Update', function () {
 
     lab.test('it updates a document successfully', function (done) {
 
-        stub.Status.findByIdAndUpdate = function (id, update, callback) {
+        stub.AdminGroup.findByIdAndUpdate = function (id, update, callback) {
 
             callback(null, {});
         };
@@ -266,13 +265,64 @@ lab.experiment('Statuses Plugin Update', function () {
 });
 
 
-lab.experiment('Statuses Plugin Delete', function () {
+lab.experiment('Admin Groups Plugin Update Permissions', function () {
+
+    lab.beforeEach(function (done) {
+
+        request = {
+            method: 'PUT',
+            url: '/admin-groups/sales/permissions',
+            payload: {
+                permissions: { SPACE_RACE: true }
+            },
+            credentials: authenticatedUser
+        };
+
+        done();
+    });
+
+
+    lab.test('it returns an error when update fails', function (done) {
+
+        stub.AdminGroup.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(Error('update failed'));
+        };
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(500);
+
+            done();
+        });
+    });
+
+
+    lab.test('it updates a document successfully', function (done) {
+
+        stub.AdminGroup.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, {});
+        };
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
+
+            done();
+        });
+    });
+});
+
+
+lab.experiment('Admin Groups Plugin Delete', function () {
 
     lab.beforeEach(function (done) {
 
         request = {
             method: 'DELETE',
-            url: '/statuses/93EP150D35',
+            url: '/admin-groups/93EP150D35',
             credentials: authenticatedUser
         };
 
@@ -282,7 +332,7 @@ lab.experiment('Statuses Plugin Delete', function () {
 
     lab.test('it returns an error when remove by id fails', function (done) {
 
-        stub.Status.findByIdAndRemove = function (id, callback) {
+        stub.AdminGroup.findByIdAndRemove = function (id, callback) {
 
             callback(Error('remove by id failed'));
         };
@@ -298,7 +348,7 @@ lab.experiment('Statuses Plugin Delete', function () {
 
     lab.test('it returns a not found when remove by id misses', function (done) {
 
-        stub.Status.findByIdAndRemove = function (id, callback) {
+        stub.AdminGroup.findByIdAndRemove = function (id, callback) {
 
             callback(null, 0);
         };
@@ -315,7 +365,7 @@ lab.experiment('Statuses Plugin Delete', function () {
 
     lab.test('it removes a document successfully', function (done) {
 
-        stub.Status.findByIdAndRemove = function (id, callback) {
+        stub.AdminGroup.findByIdAndRemove = function (id, callback) {
 
             callback(null, 1);
         };

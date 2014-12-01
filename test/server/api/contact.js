@@ -3,8 +3,8 @@ var Code = require('code');
 var lab = exports.lab = Lab.script();
 var config = require('../../../config');
 var Hapi = require('hapi');
-var mailerPlugin = require('../../../plugins/mailer');
-var contactPlugin = require('../../../plugins/api/contact');
+var mailerPlugin = require('../../../server/mailer');
+var contactPlugin = require('../../../server/api/contact');
 var server, request;
 
 

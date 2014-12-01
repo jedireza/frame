@@ -6,7 +6,7 @@ var composer = require('../index');
 
 lab.experiment('App', function () {
 
-    lab.test('it composes the server pack', function (done) {
+    lab.test('it composes a server', function (done) {
 
         composer(function (err, composedPack) {
 
