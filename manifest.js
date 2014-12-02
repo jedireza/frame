@@ -29,8 +29,8 @@ var manifest = {
             engines: { jade: 'jade' },
             path: './server/web'
         },
-        './server/auth': {},
         './server/models': {},
+        './server/auth': {},
         './server/mailer': {},
         './server/api/accounts': { basePath: '/api' },
         './server/api/admin-groups': { basePath: '/api' },

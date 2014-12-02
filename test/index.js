@@ -8,9 +8,9 @@ lab.experiment('App', function () {
 
     lab.test('it composes a server', function (done) {
 
-        composer(function (err, composedPack) {
+        composer(function (err, composedServer) {
 
-            Code.expect(composedPack).to.be.an.object();
+            Code.expect(composedServer).to.be.an.object();
 
             done(err);
         });

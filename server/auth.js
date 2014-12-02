@@ -3,13 +3,13 @@ var async = require('async');
 
 exports.register = function (server, options, next) {
 
-    server.connections.forEach(function (server) {
+    var Session = server.plugins.models.Session;
+    var User = server.plugins.models.User;
 
-        server.auth.strategy('simple', 'basic', {
+    server.connections.forEach(function (connection) {
+
+        connection.auth.strategy('simple', 'basic', {
             validateFunc: function (username, password, callback) {
-
-                var Session = server.plugins.models.Session;
-                var User = server.plugins.models.User;
 
                 async.auto({
                     session: function (done) {
