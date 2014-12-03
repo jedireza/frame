@@ -20,7 +20,7 @@
     "extend-object": "^1.0.0",
     "glue": "^2.0.0-rc2",
     "handlebars": "^2.0.0",
-    "hapi": "^8.0.0-rc7",
+    "hapi": "^8.0.0-rc8",
     "hapi-auth-basic": "^2.0.0-rc1",
     "hoek": "^2.4.1",
     "jade": "^1.5.0",
