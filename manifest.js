@@ -25,6 +25,7 @@ var manifest = {
     }],
     plugins: {
         'hapi-auth-basic': {},
+        'lout': {},
         'visionary': {
             engines: { jade: 'jade' },
             path: './server/web'
