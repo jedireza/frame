@@ -1,12 +1,12 @@
 var Joi = require('joi');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var BaseModel = require('./base');
 
 
 var StatusEntry = BaseModel.extend({
     constructor: function (attrs) {
 
-        Extend(this, attrs);
+        ObjectAssign(this, attrs);
     }
 });
 

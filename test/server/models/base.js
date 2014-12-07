@@ -2,7 +2,7 @@ var Async = require('async');
 var Joi = require('joi');
 var Lab = require('lab');
 var Code = require('code');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var Proxyquire = require('proxyquire');
 
 
@@ -66,7 +66,7 @@ lab.experiment('BaseModel Validation', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -85,7 +85,7 @@ lab.experiment('BaseModel Validation', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -109,7 +109,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -130,7 +130,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -151,7 +151,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -182,7 +182,7 @@ lab.experiment('BaseModel Indexes', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -324,7 +324,7 @@ lab.experiment('BaseModel Paged Find', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 
@@ -472,7 +472,7 @@ lab.experiment('BaseModel Proxied Methods', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                Extend(this, attrs);
+                ObjectAssign(this, attrs);
             }
         });
 

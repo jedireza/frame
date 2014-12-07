@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Async = require('async');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var BaseModel = require('./base');
 var AdminGroup = require('./admin-group');
 
@@ -8,7 +8,7 @@ var AdminGroup = require('./admin-group');
 var Admin = BaseModel.extend({
     constructor: function (attrs) {
 
-        Extend(this, attrs);
+        ObjectAssign(this, attrs);
 
         Object.defineProperty(this, '_groups', {
             writable: true,

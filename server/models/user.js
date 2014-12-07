@@ -1,7 +1,7 @@
 var Joi = require('joi');
 var Async = require('async');
 var Bcrypt = require('bcrypt');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var BaseModel = require('./base');
 var Account = require('./account');
 var Admin = require('./admin');
@@ -10,7 +10,7 @@ var Admin = require('./admin');
 var User = BaseModel.extend({
     constructor: function (attrs) {
 
-        Extend(this, attrs);
+        ObjectAssign(this, attrs);
 
         Object.defineProperty(this, '_roles', {
             writable: true,

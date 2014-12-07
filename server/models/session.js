@@ -2,14 +2,14 @@ var Joi = require('joi');
 var Uuid = require('node-uuid');
 var Async = require('async');
 var Bcrypt = require('bcrypt');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var BaseModel = require('./base');
 
 
 var Session = BaseModel.extend({
     constructor: function (attrs) {
 
-        Extend(this, attrs);
+        ObjectAssign(this, attrs);
     }
 });
 

@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Async = require('async');
-var Extend = require('extend-object');
+var ObjectAssign = require('object-assign');
 var BaseModel = require('./base');
 var Config = require('../../config');
 
@@ -8,7 +8,7 @@ var Config = require('../../config');
 var AuthAttempt = BaseModel.extend({
     constructor: function (attrs) {
 
-        Extend(this, attrs);
+        ObjectAssign(this, attrs);
     }
 });
 
