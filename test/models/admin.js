@@ -1,12 +1,14 @@
-var async = require('async');
+var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Proxyquire = require('proxyquire');
+
+
 var lab = exports.lab = Lab.script();
-var proxyquire = require('proxyquire');
 var stub = {
     AdminGroup: {}
 };
-var Admin = proxyquire('../../models/admin', {
+var Admin = Proxyquire('../../models/admin', {
     './admin-group': stub.AdminGroup
 });
 var AdminGroup = require('../../models/admin-group');
@@ -84,7 +86,7 @@ lab.experiment('Admin Class Methods', function () {
 
     lab.test('it returns a result when finding by username', function (done) {
 
-        async.auto({
+        Async.auto({
             admin: function (cb) {
 
                 Admin.create('Ren Höek', cb);
@@ -376,7 +378,7 @@ lab.experiment('Admin Instance Methods', function () {
             })
         };
 
-        async.auto({
+        Async.auto({
             test1: function (cb) {
 
                 admin.hasPermissionTo('SPACE_MADNESS', cb);

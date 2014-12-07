@@ -1,12 +1,14 @@
-var async = require('async');
+var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Proxyquire = require('proxyquire');
+
+
 var lab = exports.lab = Lab.script();
-var proxyquire = require('proxyquire');
 var stub = {
     bcrypt: {}
 };
-var Session = proxyquire('../../models/session', { bcrypt: stub.bcrypt });
+var Session = Proxyquire('../../models/session', { bcrypt: stub.bcrypt });
 
 
 lab.experiment('Session Class Methods', function () {
@@ -101,7 +103,7 @@ lab.experiment('Session Class Methods', function () {
 
     lab.test('it returns a result when finding by credentials', function (done) {
 
-        async.auto({
+        Async.auto({
             session: function (cb) {
 
                 Session.create('ren', function (err, result) {

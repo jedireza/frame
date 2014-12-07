@@ -1,7 +1,9 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
 var AdminGroup = require('../../models/admin-group');
+
+
+var lab = exports.lab = Lab.script();
 
 
 lab.experiment('AdminGroup Class Methods', function () {

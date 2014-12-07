@@ -1,15 +1,17 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../config');
+var Config = require('../../config');
 var Hapi = require('hapi');
 var Session = require('../../models/session');
 var User = require('../../models/user');
 var Admin = require('../../models/admin');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../server/auth');
-var stub, modelsPlugin, server;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../server/auth');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server;
 
 
 lab.beforeEach(function (done) {
@@ -19,14 +21,14 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../server/models', {
+    ModelsPlugin = Proxyquire('../../server/models', {
         '../models/session': stub.Session,
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -354,7 +356,7 @@ lab.experiment('Auth Plugin', function () {
                     scope: 'admin'
                 },
                 pre: [
-                    authPlugin.preware.ensureAdminGroup('root')
+                    AuthPlugin.preware.ensureAdminGroup('root')
                 ]
             },
             handler: function (request, reply) {
@@ -426,7 +428,7 @@ lab.experiment('Auth Plugin', function () {
                     scope: 'admin'
                 },
                 pre: [
-                    authPlugin.preware.ensureAdminGroup(['sales', 'root'])
+                    AuthPlugin.preware.ensureAdminGroup(['sales', 'root'])
                 ]
             },
             handler: function (request, reply) {

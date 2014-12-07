@@ -1,30 +1,30 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var async = require('async');
-var mongodb = require('mongodb');
-var classExtend = require('ampersand-class-extend');
-var config = require('../config');
+var Async = require('async');
+var Mongodb = require('mongodb');
+var ClassExtend = require('ampersand-class-extend');
+var Config = require('../config');
 
 
 var BaseModel = function () {
 };
 
 
-BaseModel.extend = classExtend;
+BaseModel.extend = ClassExtend;
 
 
-BaseModel._idClass = mongodb.ObjectID;
+BaseModel._idClass = Mongodb.ObjectID;
 
 
-BaseModel.ObjectId = BaseModel.ObjectID = mongodb.ObjectID;
+BaseModel.ObjectId = BaseModel.ObjectID = Mongodb.ObjectID;
 
 
 BaseModel.connect = function (callback) {
 
-    var url = config.get('/mongodb/url');
-    var settings = config.get('/mongodb/settings');
+    var url = Config.get('/mongodb/url');
+    var settings = Config.get('/mongodb/settings');
 
-    mongodb.MongoClient.connect(url, settings, function (err, db) {
+    Mongodb.MongoClient.connect(url, settings, function (err, db) {
 
         if (err) {
             return callback(err);
@@ -44,7 +44,7 @@ BaseModel.disconnect = function () {
 
 BaseModel.ensureIndexes = function (callback) {
 
-    if (!config.get('/mongodb/autoIndex')) {
+    if (!Config.get('/mongodb/autoIndex')) {
         return callback && callback();
     }
 
@@ -62,7 +62,7 @@ BaseModel.ensureIndexes = function (callback) {
         };
     });
 
-    async.parallel(tasks, callback);
+    Async.parallel(tasks, callback);
 };
 
 
@@ -141,7 +141,7 @@ BaseModel.pagedFind = function (query, fields, sort, limit, page, callback) {
     fields = this.fieldsAdapter(fields);
     sort = this.sortAdapter(sort);
 
-    async.auto({
+    Async.auto({
         count: function (done) {
 
             self.count(query, done);

@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var authPlugin = require('../auth');
+var AuthPlugin = require('../auth');
 
 
 exports.register = function (server, options, next) {
@@ -25,7 +25,7 @@ exports.register = function (server, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {
@@ -58,7 +58,7 @@ exports.register = function (server, options, next) {
                 scope: 'admin'
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {
@@ -96,7 +96,7 @@ exports.register = function (server, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {
@@ -131,7 +131,7 @@ exports.register = function (server, options, next) {
                 }
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {
@@ -165,7 +165,7 @@ exports.register = function (server, options, next) {
                 scope: 'admin'
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {

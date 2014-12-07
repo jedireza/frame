@@ -1,15 +1,17 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var accountPlugin = require('../../../server/api/accounts');
-var authenticatedAdmin = require('../fixtures/credentials-admin');
-var authenticatedAccount = require('../fixtures/credentials-account');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var AccountPlugin = require('../../../server/api/accounts');
+var AuthenticatedAdmin = require('../fixtures/credentials-admin');
+var AuthenticatedAccount = require('../fixtures/credentials-account');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -20,15 +22,15 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/account': stub.Account,
         '../models/status': stub.Status,
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, accountPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, AccountPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -55,7 +57,7 @@ lab.experiment('Accounts Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/accounts',
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -110,7 +112,7 @@ lab.experiment('Accounts Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/accounts/93EP150D35',
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -175,7 +177,7 @@ lab.experiment('Accounts Plugin (My) Read', function () {
         request = {
             method: 'GET',
             url: '/accounts/my',
-            credentials: authenticatedAccount
+            credentials: AuthenticatedAccount
         };
 
         done();
@@ -252,7 +254,7 @@ lab.experiment('Accounts Plugin Create', function () {
             payload: {
                 name: 'Muddy Mudskipper'
             },
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -306,7 +308,7 @@ lab.experiment('Accounts Plugin Update', function () {
                     last: 'Mudskipper'
                 }
             },
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -360,7 +362,7 @@ lab.experiment('Accounts Plugin (My) Update', function () {
                     last: 'Skipper'
                 }
             },
-            credentials: authenticatedAccount
+            credentials: AuthenticatedAccount
         };
 
         done();
@@ -417,7 +419,7 @@ lab.experiment('Accounts Plugin Link User', function () {
             payload: {
                 username: 'ren'
             },
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -666,7 +668,7 @@ lab.experiment('Accounts Plugin Add Note', function () {
             payload: {
                 data: 'This is a wonderful note.'
             },
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -716,7 +718,7 @@ lab.experiment('Accounts Plugin Update Status', function () {
             payload: {
                 status: 'account-happy'
             },
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -789,7 +791,7 @@ lab.experiment('Accounts Plugin Unlink User', function () {
         request = {
             method: 'DELETE',
             url: '/accounts/93EP150D35/user',
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();
@@ -1021,7 +1023,7 @@ lab.experiment('Accounts Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/accounts/93EP150D35',
-            credentials: authenticatedAdmin
+            credentials: AuthenticatedAdmin
         };
 
         done();

@@ -1,13 +1,13 @@
 var Joi = require('joi');
-var extend = require('extend-object');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
-var slug = require('slug');
+var Slug = require('slug');
 
 
 var AdminGroup = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
     },
 
 
@@ -38,7 +38,7 @@ AdminGroup.schema = Joi.object().keys({
 AdminGroup.create = function (name, callback) {
 
     var document = {
-        _id: slug(name).toLowerCase(),
+        _id: Slug(name).toLowerCase(),
         name: name
     };
 

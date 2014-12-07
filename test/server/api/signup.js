@@ -1,13 +1,15 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var signupPlugin = require('../../../server/api/signup');
-var mailerPlugin = require('../../../server/mailer');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var SignupPlugin = require('../../../server/api/signup');
+var MailerPlugin = require('../../../server/mailer');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -18,15 +20,15 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/account': stub.Account,
         '../models/session': stub.Session,
         '../models/user': stub.User,
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, mailerPlugin, signupPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, MailerPlugin, SignupPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {

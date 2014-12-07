@@ -1,7 +1,9 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
 var Status = require('../../models/status');
+
+
+var lab = exports.lab = Lab.script();
 
 
 lab.experiment('Status Class Methods', function () {

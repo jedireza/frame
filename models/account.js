@@ -1,5 +1,5 @@
 var Joi = require('joi');
-var extend = require('extend-object');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
 var StatusEntry = require('./status-entry');
 var NoteEntry = require('./note-entry');
@@ -8,7 +8,7 @@ var NoteEntry = require('./note-entry');
 var Account = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
     }
 });
 

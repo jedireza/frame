@@ -1,7 +1,7 @@
 var Joi = require('joi');
-var async = require('async');
-var bcrypt = require('bcrypt');
-var extend = require('extend-object');
+var Async = require('async');
+var Bcrypt = require('bcrypt');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
 var Account = require('./account');
 var Admin = require('./admin');
@@ -10,7 +10,7 @@ var Admin = require('./admin');
 var User = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
 
         Object.defineProperty(this, '_roles', {
             writable: true,
@@ -57,7 +57,7 @@ var User = BaseModel.extend({
             };
         }
 
-        async.auto(tasks, function (err, results) {
+        Async.auto(tasks, function (err, results) {
 
             if (err) {
                 return callback(err);
@@ -106,14 +106,14 @@ User.indexes = [
 
 User.generatePasswordHash = function (password, callback) {
 
-    async.auto({
+    Async.auto({
         salt: function (done) {
 
-            bcrypt.genSalt(10, done);
+            Bcrypt.genSalt(10, done);
         },
         hash: ['salt', function (done, results) {
 
-            bcrypt.hash(password, results.salt, done);
+            Bcrypt.hash(password, results.salt, done);
         }]
     }, function (err, results) {
 
@@ -132,7 +132,7 @@ User.create = function (username, password, email, callback) {
 
     var self = this;
 
-    async.auto({
+    Async.auto({
         passwordHash: this.generatePasswordHash.bind(this, password),
         newUser: ['passwordHash', function (done, results) {
 
@@ -163,7 +163,7 @@ User.findByCredentials = function (username, password, callback) {
 
     var self = this;
 
-    async.auto({
+    Async.auto({
         user: function (done) {
 
             var query = {
@@ -186,7 +186,7 @@ User.findByCredentials = function (username, password, callback) {
             }
 
             var source = results.user.password;
-            bcrypt.compare(password, source, done);
+            Bcrypt.compare(password, source, done);
         }]
     }, function (err, results) {
 

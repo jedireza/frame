@@ -1,14 +1,16 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var statusesPlugin = require('../../../server/api/statuses');
-var authenticatedUser = require('../fixtures/credentials-admin');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var StatusesPlugin = require('../../../server/api/statuses');
+var AuthenticatedUser = require('../fixtures/credentials-admin');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -17,13 +19,13 @@ lab.beforeEach(function (done) {
         Status: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/status': stub.Status
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, statusesPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, StatusesPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -50,7 +52,7 @@ lab.experiment('Statuses Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/statuses',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -105,7 +107,7 @@ lab.experiment('Statuses Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/statuses/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -174,7 +176,7 @@ lab.experiment('Statuses Plugin Create', function () {
                 pivot: 'Account',
                 name: 'Happy'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -225,7 +227,7 @@ lab.experiment('Statuses Plugin Update', function () {
             payload: {
                 name: 'Happy'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -273,7 +275,7 @@ lab.experiment('Statuses Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/statuses/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();

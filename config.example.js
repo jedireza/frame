@@ -1,4 +1,6 @@
 var Confidence = require('confidence');
+
+
 var criteria = {
     env: process.env.NODE_ENV
 };

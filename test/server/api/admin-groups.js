@@ -1,14 +1,16 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var adminGroupsPlugin = require('../../../server/api/admin-groups');
-var authenticatedUser = require('../fixtures/credentials-admin');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var AdminGroupsPlugin = require('../../../server/api/admin-groups');
+var AuthenticatedUser = require('../fixtures/credentials-admin');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -17,13 +19,13 @@ lab.beforeEach(function (done) {
         AdminGroup: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/admin-group': stub.AdminGroup
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, adminGroupsPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, AdminGroupsPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -50,7 +52,7 @@ lab.experiment('Admin Groups Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/admin-groups',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -105,7 +107,7 @@ lab.experiment('Admin Groups Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/admin-groups/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -173,7 +175,7 @@ lab.experiment('Admin Groups Plugin Create', function () {
             payload: {
                 name: 'Sales'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -224,7 +226,7 @@ lab.experiment('Admin Groups Plugin Update', function () {
             payload: {
                 name: 'Salez'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -275,7 +277,7 @@ lab.experiment('Admin Groups Plugin Update Permissions', function () {
             payload: {
                 permissions: { SPACE_RACE: true }
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -323,7 +325,7 @@ lab.experiment('Admin Groups Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/admin-groups/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();

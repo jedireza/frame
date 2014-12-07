@@ -1,14 +1,14 @@
 var Joi = require('joi');
-var async = require('async');
-var extend = require('extend-object');
+var Async = require('async');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
-var config = require('../config');
+var Config = require('../config');
 
 
 var AuthAttempt = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
     }
 });
 
@@ -53,7 +53,7 @@ AuthAttempt.abuseDetected = function (ip, username, callback) {
 
     var self = this;
 
-    async.auto({
+    Async.auto({
         abusiveIpCount: function (done) {
 
             var query = { ip: ip };
@@ -74,7 +74,7 @@ AuthAttempt.abuseDetected = function (ip, username, callback) {
             return callback(err);
         }
 
-        var authAttemptsConfig = config.get('/authAttempts');
+        var authAttemptsConfig = Config.get('/authAttempts');
         var ipLimitReached = results.abusiveIpCount >= authAttemptsConfig.forIp;
         var ipUserLimitReached = results.abusiveIpUserCount >= authAttemptsConfig.forIpAndUser;
 

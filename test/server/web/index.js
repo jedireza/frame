@@ -1,17 +1,19 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var homePlugin = require('../../../server/web/index');
+var HomePlugin = require('../../../server/web/index');
+
+
+var lab = exports.lab = Lab.script();
 var server, request;
 
 
 lab.beforeEach(function (done) {
 
-    var plugins = [ homePlugin ];
+    var plugins = [ HomePlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.views({
         engines: { jade: require('jade') },
         path: './server/web'

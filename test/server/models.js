@@ -1,13 +1,15 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../config');
+var Config = require('../../config');
 var Hapi = require('hapi');
-var proxyquire = require('proxyquire');
+var Proxyquire = require('proxyquire');
+
+
+var lab = exports.lab = Lab.script();
 var stub = {
     BaseModel: {}
 };
-var modelsPlugin = proxyquire('../../server/models', {
+var ModelsPlugin = Proxyquire('../../server/models', {
     '../models/base': stub.BaseModel
 });
 
@@ -23,8 +25,8 @@ lab.experiment('Models Plugin', function () {
         };
 
         var server = new Hapi.Server();
-        server.connection({ port: config.get('/port/web') });
-        server.register(modelsPlugin, function (err) {
+        server.connection({ port: Config.get('/port/web') });
+        server.register(ModelsPlugin, function (err) {
 
             Code.expect(err).to.be.an.object();
 
@@ -38,8 +40,8 @@ lab.experiment('Models Plugin', function () {
     lab.test('it successfuly connects to the db and exposes models', function (done) {
 
         var server = new Hapi.Server();
-        server.connection({ port: config.get('/port/web') });
-        server.register(modelsPlugin, function (err) {
+        server.connection({ port: Config.get('/port/web') });
+        server.register(ModelsPlugin, function (err) {
 
             if (err) {
                 return done(err);

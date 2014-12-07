@@ -1,18 +1,20 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
 var AuthAttempt = require('../../../models/auth-attempt');
 var Session = require('../../../models/session');
 var User = require('../../../models/user');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var mailerPlugin = require('../../../server/mailer');
-var loginPlugin = require('../../../server/api/login');
-var bcrypt = require('bcrypt');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var MailerPlugin = require('../../../server/mailer');
+var LoginPlugin = require('../../../server/api/login');
+var Bcrypt = require('bcrypt');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -23,15 +25,15 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/auth-attempt': stub.AuthAttempt,
         '../models/session': stub.Session,
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, mailerPlugin, loginPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, MailerPlugin, LoginPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -410,8 +412,8 @@ lab.experiment('Login Plugin Reset Password', function () {
             callback(null, user);
         };
 
-        var realBcryptCompare = bcrypt.compare;
-        bcrypt.compare = function (key, token, callback) {
+        var realBcryptCompare = Bcrypt.compare;
+        Bcrypt.compare = function (key, token, callback) {
 
             callback(Error('compare failed'));
         };
@@ -420,7 +422,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
             Code.expect(response.statusCode).to.equal(500);
 
-            bcrypt.compare = realBcryptCompare;
+            Bcrypt.compare = realBcryptCompare;
 
             done();
         });
@@ -441,8 +443,8 @@ lab.experiment('Login Plugin Reset Password', function () {
             callback(null, user);
         };
 
-        var realBcryptCompare = bcrypt.compare;
-        bcrypt.compare = function (key, token, callback) {
+        var realBcryptCompare = Bcrypt.compare;
+        Bcrypt.compare = function (key, token, callback) {
 
             callback(null, false);
         };
@@ -451,7 +453,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
             Code.expect(response.statusCode).to.equal(400);
 
-            bcrypt.compare = realBcryptCompare;
+            Bcrypt.compare = realBcryptCompare;
 
             done();
         });
@@ -472,8 +474,8 @@ lab.experiment('Login Plugin Reset Password', function () {
             callback(null, user);
         };
 
-        var realBcryptCompare = bcrypt.compare;
-        bcrypt.compare = function (key, token, callback) {
+        var realBcryptCompare = Bcrypt.compare;
+        Bcrypt.compare = function (key, token, callback) {
 
             callback(null, true);
         };
@@ -487,7 +489,7 @@ lab.experiment('Login Plugin Reset Password', function () {
 
             Code.expect(response.statusCode).to.equal(200);
 
-            bcrypt.compare = realBcryptCompare;
+            Bcrypt.compare = realBcryptCompare;
 
             done();
         });

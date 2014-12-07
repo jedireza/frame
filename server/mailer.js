@@ -1,13 +1,13 @@
 var Hoek = require('hoek');
-var fs = require('fs');
-var handlebars = require('handlebars');
-var nodemailer = require('nodemailer');
-var markdown = require('nodemailer-markdown').markdown;
-var config = require('../config');
+var Fs = require('fs');
+var Handlebars = require('handlebars');
+var Nodemailer = require('nodemailer');
+var Markdown = require('nodemailer-markdown').markdown;
+var Config = require('../config');
 
 
-var transport = nodemailer.createTransport(config.get('/nodemailer'));
-    transport.use('compile', markdown({ useEmbeddedImages: true }));
+var transport = Nodemailer.createTransport(Config.get('/nodemailer'));
+    transport.use('compile', Markdown({ useEmbeddedImages: true }));
 
 
 var templateCache = {};
@@ -22,13 +22,13 @@ var renderTemplate = function (signature, context, callback) {
     var filePath = __dirname + '/emails/' + signature + '.hbs.md';
     var options = { encoding: 'utf-8' };
 
-    fs.readFile(filePath, options, function (err, source) {
+    Fs.readFile(filePath, options, function (err, source) {
 
         if (err) {
             return callback(err);
         }
 
-        templateCache[signature] = handlebars.compile(source);
+        templateCache[signature] = Handlebars.compile(source);
         callback(null, templateCache[signature](context));
     });
 };
@@ -43,7 +43,7 @@ var sendEmail = exports.sendEmail = function(options, template, context, callbac
         }
 
         options = Hoek.applyToDefaults(options, {
-            from: config.get('/system/fromAddress'),
+            from: Config.get('/system/fromAddress'),
             markdown: content
         });
 

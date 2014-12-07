@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var config = require('../../config');
+var Config = require('../../config');
 
 
 exports.register = function (server, options, next) {
@@ -24,8 +24,8 @@ exports.register = function (server, options, next) {
 
             var mailer = request.server.plugins.mailer;
             var options = {
-                subject: config.get('/projectName') + ' contact form',
-                to: config.get('/system/toAddress'),
+                subject: Config.get('/projectName') + ' contact form',
+                to: Config.get('/system/toAddress'),
                 replyTo: {
                     name: request.payload.name,
                     address: request.payload.email

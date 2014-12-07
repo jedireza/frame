@@ -1,8 +1,8 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var async = require('async');
-var bcrypt = require('bcrypt');
-var config = require('../../config');
+var Async = require('async');
+var Bcrypt = require('bcrypt');
+var Config = require('../../config');
 
 
 exports.register = function (server, options, next) {
@@ -158,7 +158,7 @@ exports.register = function (server, options, next) {
             var User = request.server.plugins.models.User;
             var mailer = request.server.plugins.mailer;
 
-            async.auto({
+            Async.auto({
                 keyHash: function (done) {
 
                     Session.generateKeyHash(done);
@@ -180,7 +180,7 @@ exports.register = function (server, options, next) {
                 email: ['user', function (done, results) {
 
                     var options = {
-                        subject: 'Reset your ' + config.get('/projectName')    + ' password',
+                        subject: 'Reset your ' + Config.get('/projectName')    + ' password',
                         to: request.payload.email
                     };
                     var template = 'forgot-password';
@@ -242,12 +242,12 @@ exports.register = function (server, options, next) {
 
             var User = request.server.plugins.models.User;
 
-            async.auto({
+            Async.auto({
                 keyMatch: function (done) {
 
                     var key = request.payload.key;
                     var token = request.pre.user.resetPassword.token;
-                    bcrypt.compare(key, token, done);
+                    Bcrypt.compare(key, token, done);
                 },
                 passwordHash: ['keyMatch', function (done, results) {
 

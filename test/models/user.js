@@ -1,14 +1,16 @@
-var async = require('async');
+var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Proxyquire = require('proxyquire');
+
+
 var lab = exports.lab = Lab.script();
-var proxyquire = require('proxyquire');
 var stub = {
     Account: {},
     Admin: {},
     bcrypt: {}
 };
-var User = proxyquire('../../models/user', {
+var User = Proxyquire('../../models/user', {
     './account': stub.Account,
     './admin': stub.Admin,
     bcrypt: stub.bcrypt
@@ -110,7 +112,7 @@ lab.experiment('User Class Methods', function () {
 
     lab.test('it returns a result when finding by login', function (done) {
 
-        async.auto({
+        Async.auto({
             user: function (cb) {
 
                 User.create('stimpy', 'thebigshot', 'stimpy@ren.show', function (err, result) {
@@ -226,7 +228,7 @@ lab.experiment('User Class Methods', function () {
 
     lab.test('it returns a result when finding by username', function (done) {
 
-        async.auto({
+        Async.auto({
             user: function (cb) {
 
                 User.create('horseman', 'eathay', 'horse@man.show', function (err, result) {

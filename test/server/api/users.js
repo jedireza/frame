@@ -1,14 +1,16 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var userPlugin = require('../../../server/api/users');
-var authenticatedUser = require('../fixtures/credentials-admin');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var UserPlugin = require('../../../server/api/users');
+var AuthenticatedUser = require('../fixtures/credentials-admin');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -17,13 +19,13 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, userPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, UserPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -50,7 +52,7 @@ lab.experiment('User Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/users',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -128,7 +130,7 @@ lab.experiment('Users Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/users/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -193,7 +195,7 @@ lab.experiment('Users Plugin (My) Read', function () {
         request = {
             method: 'GET',
             url: '/users/my',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -272,7 +274,7 @@ lab.experiment('Users Plugin Create', function () {
                 password: 'dirtandwater',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -419,7 +421,7 @@ lab.experiment('Users Plugin Update', function () {
                 username: 'muddy',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -565,7 +567,7 @@ lab.experiment('Users Plugin (My) Update', function () {
                 username: 'muddy',
                 email: 'mrmud@mudmail.mud'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -716,7 +718,7 @@ lab.experiment('Users Plugin Set Password', function () {
             payload: {
                 password: 'fromdirt'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -792,7 +794,7 @@ lab.experiment('Users Plugin (My) Set Password', function () {
             payload: {
                 password: 'fromdirt'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -871,7 +873,7 @@ lab.experiment('Users Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/users/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();

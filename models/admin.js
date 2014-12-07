@@ -1,6 +1,6 @@
 var Joi = require('joi');
-var async = require('async');
-var extend = require('extend-object');
+var Async = require('async');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
 var AdminGroup = require('./admin-group');
 
@@ -8,7 +8,7 @@ var AdminGroup = require('./admin-group');
 var Admin = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
 
         Object.defineProperty(this, '_groups', {
             writable: true,
@@ -49,7 +49,7 @@ var Admin = BaseModel.extend({
             };
         });
 
-        async.auto(tasks, function (err, results) {
+        Async.auto(tasks, function (err, results) {
 
             if (err) {
                 return callback(err);

@@ -1,9 +1,11 @@
-var async = require('async');
+var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
 var AuthAttempt = require('../../models/auth-attempt');
-var config = require('../../config');
+var Config = require('../../config');
+
+
+var lab = exports.lab = Lab.script();
 
 
 lab.experiment('AuthAttempt Class Methods', function () {
@@ -77,7 +79,7 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
     lab.test('it returns true when abuse is detected for user + ip combo', function (done) {
 
-        var authAttemptsConfig = config.get('/authAttempts');
+        var authAttemptsConfig = Config.get('/authAttempts');
         var authSpam = [];
 
         for (var i = 0 ; i < authAttemptsConfig.forIpAndUser ; i++) {
@@ -93,7 +95,7 @@ lab.experiment('AuthAttempt Class Methods', function () {
             });
         }
 
-        async.parallel(authSpam, function () {
+        Async.parallel(authSpam, function () {
 
             AuthAttempt.abuseDetected('127.0.0.1', 'stimpy', function (err, result) {
 
@@ -108,7 +110,7 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
     lab.test('it returns true when abuse is detected for an ip and multiple users', function (done) {
 
-        var authAttemptsConfig = config.get('/authAttempts');
+        var authAttemptsConfig = Config.get('/authAttempts');
         var authSpam = [];
 
         for (var i = 0 ; i < authAttemptsConfig.forIp ; i++) {
@@ -125,7 +127,7 @@ lab.experiment('AuthAttempt Class Methods', function () {
             });
         }
 
-        async.parallel(authSpam, function () {
+        Async.parallel(authSpam, function () {
 
             AuthAttempt.abuseDetected('127.0.0.2', 'yak', function (err, result) {
 

@@ -1,8 +1,10 @@
-var async = require('async');
+var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
 var Account = require('../../models/account');
+
+
+var lab = exports.lab = Lab.script();
 
 
 lab.experiment('Account Class Methods', function () {
@@ -76,7 +78,7 @@ lab.experiment('Account Class Methods', function () {
 
     lab.test('it returns a result when finding by username', function (done) {
 
-        async.auto({
+        Async.auto({
             account: function (cb) {
 
                 Account.create('Stimpson J Cat', cb);

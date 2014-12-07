@@ -1,18 +1,20 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var mailerPlugin = require('../../../server/mailer');
-var contactPlugin = require('../../../server/api/contact');
+var MailerPlugin = require('../../../server/mailer');
+var ContactPlugin = require('../../../server/api/contact');
+
+
+var lab = exports.lab = Lab.script();
 var server, request;
 
 
 lab.beforeEach(function (done) {
 
-    var plugins = [ mailerPlugin, contactPlugin ];
+    var plugins = [ MailerPlugin, ContactPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {

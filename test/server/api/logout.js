@@ -1,14 +1,16 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var logoutPlugin = require('../../../server/api/logout');
-var authenticatedUser = require('../fixtures/credentials-admin');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var LogoutPlugin = require('../../../server/api/logout');
+var AuthenticatedUser = require('../fixtures/credentials-admin');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -17,13 +19,13 @@ lab.beforeEach(function (done) {
         Session: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/session': stub.Session
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, logoutPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, LogoutPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -50,7 +52,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
         request = {
             method: 'DELETE',
             url: '/logout',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();

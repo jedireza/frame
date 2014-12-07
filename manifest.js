@@ -1,5 +1,5 @@
 var Confidence = require('confidence');
-var config = require('./config');
+var Config = require('./config');
 
 
 var criteria = {
@@ -20,7 +20,7 @@ var manifest = {
         }
     },
     connections: [{
-        port: config.get('/port/web'),
+        port: Config.get('/port/web'),
         labels: ['web']
     }],
     plugins: {

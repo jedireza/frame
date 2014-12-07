@@ -1,13 +1,13 @@
 var Joi = require('joi');
-var extend = require('extend-object');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
-var slug = require('slug');
+var Slug = require('slug');
 
 
 var Status = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
     }
 });
 
@@ -34,7 +34,7 @@ Status.indexes = [
 Status.create = function (pivot, name, callback) {
 
     var document = {
-        _id: slug(pivot + ' ' + name).toLowerCase(),
+        _id: Slug(pivot + ' ' + name).toLowerCase(),
         pivot: pivot,
         name: name
     };

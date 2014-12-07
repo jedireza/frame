@@ -1,14 +1,16 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../../config');
+var Config = require('../../../config');
 var Hapi = require('hapi');
-var hapiAuthBasic = require('hapi-auth-basic');
-var proxyquire = require('proxyquire');
-var authPlugin = require('../../../server/auth');
-var adminPlugin = require('../../../server/api/admins');
-var authenticatedUser = require('../fixtures/credentials-admin');
-var stub, modelsPlugin, server, request;
+var HapiAuthBasic = require('hapi-auth-basic');
+var Proxyquire = require('proxyquire');
+var AuthPlugin = require('../../../server/auth');
+var AdminPlugin = require('../../../server/api/admins');
+var AuthenticatedUser = require('../fixtures/credentials-admin');
+
+
+var lab = exports.lab = Lab.script();
+var ModelsPlugin, stub, server, request;
 
 
 lab.beforeEach(function (done) {
@@ -18,14 +20,14 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    modelsPlugin = proxyquire('../../../server/models', {
+    ModelsPlugin = Proxyquire('../../../server/models', {
         '../models/admin': stub.Admin,
         '../models/user': stub.User
     });
 
-    var plugins = [ hapiAuthBasic, modelsPlugin, authPlugin, adminPlugin ];
+    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, AdminPlugin ];
     server = new Hapi.Server();
-    server.connection({ port: config.get('/port/web') });
+    server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
 
         if (err) {
@@ -52,7 +54,7 @@ lab.experiment('Admins Plugin Result List', function () {
         request = {
             method: 'GET',
             url: '/admins',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -107,7 +109,7 @@ lab.experiment('Admins Plugin Read', function () {
         request = {
             method: 'GET',
             url: '/admins/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -175,7 +177,7 @@ lab.experiment('Admins Plugin Create', function () {
             payload: {
                 name: 'Toast Man'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -229,7 +231,7 @@ lab.experiment('Admins Plugin Update', function () {
                     last: 'Höek'
                 }
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -280,7 +282,7 @@ lab.experiment('Admins Plugin Update Permissions', function () {
             payload: {
                 permissions: { SPACE_RACE: true }
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -331,7 +333,7 @@ lab.experiment('Admins Plugin Update Groups', function () {
             payload: {
                 groups: { sales: 'Sales' }
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -382,7 +384,7 @@ lab.experiment('Admins Plugin Link User', function () {
             payload: {
                 username: 'ren'
             },
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -628,7 +630,7 @@ lab.experiment('Admins Plugin Unlink User', function () {
         request = {
             method: 'DELETE',
             url: '/admins/93EP150D35/user',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();
@@ -860,7 +862,7 @@ lab.experiment('Admins Plugin Delete', function () {
         request = {
             method: 'DELETE',
             url: '/admins/93EP150D35',
-            credentials: authenticatedUser
+            credentials: AuthenticatedUser
         };
 
         done();

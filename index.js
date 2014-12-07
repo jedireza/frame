@@ -1,5 +1,5 @@
 var Glue = require('glue');
-var manifest = require('./manifest');
+var Manifest = require('./manifest');
 
 
 var composeOptions = {
@@ -7,4 +7,4 @@ var composeOptions = {
 };
 
 
-module.exports = Glue.compose.bind(Glue, manifest.get('/'), composeOptions);
+module.exports = Glue.compose.bind(Glue, Manifest.get('/'), composeOptions);

@@ -1,15 +1,15 @@
 var Joi = require('joi');
-var uuid = require('node-uuid');
-var async = require('async');
-var bcrypt = require('bcrypt');
-var extend = require('extend-object');
+var Uuid = require('node-uuid');
+var Async = require('async');
+var Bcrypt = require('bcrypt');
+var Extend = require('extend-object');
 var BaseModel = require('./base');
 
 
 var Session = BaseModel.extend({
     constructor: function (attrs) {
 
-        extend(this, attrs);
+        Extend(this, attrs);
     }
 });
 
@@ -32,16 +32,16 @@ Session.indexes = [
 
 Session.generateKeyHash = function (callback) {
 
-    var key = uuid.v4();
+    var key = Uuid.v4();
 
-    async.auto({
+    Async.auto({
         salt: function (done) {
 
-            bcrypt.genSalt(10, done);
+            Bcrypt.genSalt(10, done);
         },
         hash: ['salt', function (done, results) {
 
-            bcrypt.hash(key, results.salt, done);
+            Bcrypt.hash(key, results.salt, done);
         }]
     }, function (err, results) {
 
@@ -61,7 +61,7 @@ Session.create = function (username, callback) {
 
     var self = this;
 
-    async.auto({
+    Async.auto({
         keyHash: this.generateKeyHash.bind(this),
         newSession: ['keyHash', function (done, results) {
 
@@ -99,7 +99,7 @@ Session.findByCredentials = function (username, key, callback) {
 
     var self = this;
 
-    async.auto({
+    Async.auto({
         session: function (done) {
 
             var query = { username: username };
@@ -112,7 +112,7 @@ Session.findByCredentials = function (username, key, callback) {
             }
 
             var source = results.session.key;
-            bcrypt.compare(key, source, done);
+            Bcrypt.compare(key, source, done);
         }]
     }, function (err, results) {
 

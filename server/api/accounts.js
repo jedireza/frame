@@ -1,7 +1,7 @@
-var async = require('async');
+var Async = require('async');
 var Joi = require('joi');
 var Hoek = require('hoek');
-var authPlugin = require('../auth');
+var AuthPlugin = require('../auth');
 
 
 exports.register = function (server, options, next) {
@@ -303,7 +303,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            async.auto({
+            Async.auto({
                 account: function (done) {
 
                     var Account = request.server.plugins.models.Account;
@@ -400,7 +400,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            async.auto({
+            Async.auto({
                 account: function (done) {
 
                     var Account = request.server.plugins.models.Account;
@@ -553,7 +553,7 @@ exports.register = function (server, options, next) {
                 scope: 'admin'
             },
             pre: [
-                authPlugin.preware.ensureAdminGroup('root')
+                AuthPlugin.preware.ensureAdminGroup('root')
             ]
         },
         handler: function (request, reply) {

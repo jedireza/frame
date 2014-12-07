@@ -1,7 +1,9 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
 var NoteEntry = require('../../models/note-entry');
+
+
+var lab = exports.lab = Lab.script();
 
 
 lab.experiment('Status Entry Class', function () {

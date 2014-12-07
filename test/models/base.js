@@ -1,15 +1,17 @@
-var async = require('async');
+var Async = require('async');
 var Joi = require('joi');
 var Lab = require('lab');
 var Code = require('code');
+var Extend = require('extend-object');
+var Proxyquire = require('proxyquire');
+
+
 var lab = exports.lab = Lab.script();
-var extend = require('extend-object');
-var proxyquire = require('proxyquire');
 var stub = {
     mongodb: {},
     config: {}
 };
-var BaseModel = proxyquire('../../models/base', {
+var BaseModel = Proxyquire('../../models/base', {
     mongodb: stub.mongodb,
     '../config': stub.config
 });
@@ -64,7 +66,7 @@ lab.experiment('BaseModel Validation', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -83,7 +85,7 @@ lab.experiment('BaseModel Validation', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -107,7 +109,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -128,7 +130,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -149,7 +151,7 @@ lab.experiment('BaseModel Result Factory', function () {
         var SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -180,7 +182,7 @@ lab.experiment('BaseModel Indexes', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -322,7 +324,7 @@ lab.experiment('BaseModel Paged Find', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 
@@ -373,7 +375,7 @@ lab.experiment('BaseModel Paged Find', function () {
 
     lab.test('it returns paged results', function (done) {
 
-        async.auto({
+        Async.auto({
             setup: function (cb) {
 
                 var testData = [{name: 'Ren'}, {name: 'Stimpy'}, {name: 'Yak'}];
@@ -401,7 +403,7 @@ lab.experiment('BaseModel Paged Find', function () {
 
     lab.test('it returns paged results where end item is less than total', function (done) {
 
-        async.auto({
+        Async.auto({
             setup: function (cb) {
 
                 var testData = [{name: 'Ren'}, {name: 'Stimpy'}, {name: 'Yak'}];
@@ -429,7 +431,7 @@ lab.experiment('BaseModel Paged Find', function () {
 
     lab.test('it returns paged results where begin item is less than total', function (done) {
 
-        async.auto({
+        Async.auto({
             setup: function (cb) {
 
                 var testData = [
@@ -470,7 +472,7 @@ lab.experiment('BaseModel Proxied Methods', function () {
         SubModel = BaseModel.extend({
             constructor: function (attrs) {
 
-                extend(this, attrs);
+                Extend(this, attrs);
             }
         });
 

@@ -1,9 +1,11 @@
 var Lab = require('lab');
 var Code = require('code');
-var lab = exports.lab = Lab.script();
-var config = require('../../config');
+var Config = require('../../config');
 var Hapi = require('hapi');
-var proxyquire = require('proxyquire');
+var Proxyquire = require('proxyquire');
+
+
+var lab = exports.lab = Lab.script();
 var stub = {
     fs: {},
     nodemailer: {
@@ -22,7 +24,7 @@ var stub = {
         }
     }
 };
-var mailerPlugin = proxyquire('../../server/mailer', {
+var MailerPlugin = Proxyquire('../../server/mailer', {
     'fs': stub.fs,
     'nodemailer': stub.nodemailer
 });
@@ -36,8 +38,8 @@ lab.experiment('Mailer Plugin', function () {
     lab.before(function (done) {
 
         server = new Hapi.Server();
-        server.connection({ port: config.get('/port/web') });
-        server.register(mailerPlugin, function (err) {
+        server.connection({ port: Config.get('/port/web') });
+        server.register(MailerPlugin, function (err) {
 
             if (err) {
                 return done(err);

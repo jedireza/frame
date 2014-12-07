@@ -1,7 +1,7 @@
-var composer = require('./index');
+var Composer = require('./index');
 
 
-composer(function (err, server) {
+Composer(function (err, server) {
 
     if (err) {
         throw err;

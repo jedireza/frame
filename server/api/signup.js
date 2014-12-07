@@ -1,7 +1,7 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var async = require('async');
-var config = require('../../config');
+var Async = require('async');
+var Config = require('../../config');
 
 
 exports.register = function (server, options, next) {
@@ -82,7 +82,7 @@ exports.register = function (server, options, next) {
             var Session = request.server.plugins.models.Session;
             var mailer = request.server.plugins.mailer;
 
-            async.auto({
+            Async.auto({
                 user: function (done) {
 
                     var username = request.payload.username;
@@ -130,7 +130,7 @@ exports.register = function (server, options, next) {
                 welcome: ['linkUser', 'linkAccount', function (done, results) {
 
                     var options = {
-                        subject: 'Your ' + config.get('/projectName')    + ' account',
+                        subject: 'Your ' + Config.get('/projectName')    + ' account',
                         to: {
                             name: request.payload.name,
                             address: request.payload.email

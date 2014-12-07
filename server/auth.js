@@ -1,4 +1,4 @@
-var async = require('async');
+var Async = require('async');
 
 
 exports.register = function (server, options, next) {
@@ -11,7 +11,7 @@ exports.register = function (server, options, next) {
         connection.auth.strategy('simple', 'basic', {
             validateFunc: function (username, password, callback) {
 
-                async.auto({
+                Async.auto({
                     session: function (done) {
 
                         Session.findByCredentials(username, password, done);
