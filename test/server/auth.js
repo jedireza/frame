@@ -2,9 +2,9 @@ var Lab = require('lab');
 var Code = require('code');
 var Config = require('../../config');
 var Hapi = require('hapi');
-var Session = require('../../models/session');
-var User = require('../../models/user');
-var Admin = require('../../models/admin');
+var Session = require('../../server/models/session');
+var User = require('../../server/models/user');
+var Admin = require('../../server/models/admin');
 var HapiAuthBasic = require('hapi-auth-basic');
 var Proxyquire = require('proxyquire');
 var AuthPlugin = require('../../server/auth');
@@ -22,8 +22,8 @@ lab.beforeEach(function (done) {
     };
 
     ModelsPlugin = Proxyquire('../../server/models', {
-        '../models/session': stub.Session,
-        '../models/user': stub.User
+        './models/session': stub.Session,
+        './models/user': stub.User
     });
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin ];

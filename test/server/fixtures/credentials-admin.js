@@ -1,5 +1,5 @@
-var User = require('../../../models/user');
-var Admin = require('../../../models/admin');
+var User = require('../../../server/models/user');
+var Admin = require('../../../server/models/admin');
 
 
 var user = new User({

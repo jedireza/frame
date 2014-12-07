@@ -10,7 +10,7 @@ var stub = {
     BaseModel: {}
 };
 var ModelsPlugin = Proxyquire('../../server/models', {
-    '../models/base': stub.BaseModel
+    './models/base': stub.BaseModel
 });
 
 

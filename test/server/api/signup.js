@@ -21,9 +21,9 @@ lab.beforeEach(function (done) {
     };
 
     ModelsPlugin = Proxyquire('../../../server/models', {
-        '../models/account': stub.Account,
-        '../models/session': stub.Session,
-        '../models/user': stub.User,
+        './models/account': stub.Account,
+        './models/session': stub.Session,
+        './models/user': stub.User,
     });
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, MailerPlugin, SignupPlugin ];

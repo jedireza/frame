@@ -10,13 +10,13 @@ var stub = {
     Admin: {},
     bcrypt: {}
 };
-var User = Proxyquire('../../models/user', {
+var User = Proxyquire('../../../server/models/user', {
     './account': stub.Account,
     './admin': stub.Admin,
     bcrypt: stub.bcrypt
 });
-var Admin = require('../../models/admin');
-var Account = require('../../models/account');
+var Admin = require('../../../server/models/admin');
+var Account = require('../../../server/models/account');
 
 
 lab.experiment('User Class Methods', function () {

@@ -1,6 +1,6 @@
 var Lab = require('lab');
 var Code = require('code');
-var StatusEntry = require('../../models/status-entry');
+var NoteEntry = require('../../../server/models/note-entry');
 
 
 var lab = exports.lab = Lab.script();
@@ -10,9 +10,9 @@ lab.experiment('Status Entry Class', function () {
 
     lab.test('it instantiates an instance', function (done) {
 
-        var statusEntry = new StatusEntry({});
+        var noteEntry = new NoteEntry({});
 
-        Code.expect(statusEntry).to.be.an.instanceOf(StatusEntry);
+        Code.expect(noteEntry).to.be.an.instanceOf(NoteEntry);
 
         done();
     });

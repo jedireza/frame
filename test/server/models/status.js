@@ -1,6 +1,6 @@
 var Lab = require('lab');
 var Code = require('code');
-var Status = require('../../models/status');
+var Status = require('../../../server/models/status');
 
 
 var lab = exports.lab = Lab.script();

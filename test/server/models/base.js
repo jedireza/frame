@@ -11,9 +11,9 @@ var stub = {
     mongodb: {},
     config: {}
 };
-var BaseModel = Proxyquire('../../models/base', {
+var BaseModel = Proxyquire('../../../server/models/base', {
     mongodb: stub.mongodb,
-    '../config': stub.config
+    '../../config': stub.config
 });
 
 

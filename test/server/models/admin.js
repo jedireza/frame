@@ -8,10 +8,10 @@ var lab = exports.lab = Lab.script();
 var stub = {
     AdminGroup: {}
 };
-var Admin = Proxyquire('../../models/admin', {
+var Admin = Proxyquire('../../../server/models/admin', {
     './admin-group': stub.AdminGroup
 });
-var AdminGroup = require('../../models/admin-group');
+var AdminGroup = require('../../../server/models/admin-group');
 
 
 lab.experiment('Admin Class Methods', function () {

@@ -1,6 +1,6 @@
 var Lab = require('lab');
 var Code = require('code');
-var AdminGroup = require('../../models/admin-group');
+var AdminGroup = require('../../../server/models/admin-group');
 
 
 var lab = exports.lab = Lab.script();

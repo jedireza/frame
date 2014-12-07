@@ -8,7 +8,7 @@ var lab = exports.lab = Lab.script();
 var stub = {
     bcrypt: {}
 };
-var Session = Proxyquire('../../models/session', { bcrypt: stub.bcrypt });
+var Session = Proxyquire('../../../server/models/session', { bcrypt: stub.bcrypt });
 
 
 lab.experiment('Session Class Methods', function () {

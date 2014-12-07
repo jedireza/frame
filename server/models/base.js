@@ -3,7 +3,7 @@ var Hoek = require('hoek');
 var Async = require('async');
 var Mongodb = require('mongodb');
 var ClassExtend = require('ampersand-class-extend');
-var Config = require('../config');
+var Config = require('../../config');
 
 
 var BaseModel = function () {

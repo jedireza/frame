@@ -1,8 +1,8 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
-var AuthAttempt = require('../../models/auth-attempt');
-var Config = require('../../config');
+var AuthAttempt = require('../../../server/models/auth-attempt');
+var Config = require('../../../config');
 
 
 var lab = exports.lab = Lab.script();

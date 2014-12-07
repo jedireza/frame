@@ -1,7 +1,7 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
-var Account = require('../../models/account');
+var Account = require('../../../server/models/account');
 
 
 var lab = exports.lab = Lab.script();

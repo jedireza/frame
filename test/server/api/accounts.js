@@ -23,9 +23,9 @@ lab.beforeEach(function (done) {
     };
 
     ModelsPlugin = Proxyquire('../../../server/models', {
-        '../models/account': stub.Account,
-        '../models/status': stub.Status,
-        '../models/user': stub.User
+        './models/account': stub.Account,
+        './models/status': stub.Status,
+        './models/user': stub.User
     });
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, AccountPlugin ];

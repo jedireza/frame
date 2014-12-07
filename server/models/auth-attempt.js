@@ -2,7 +2,7 @@ var Joi = require('joi');
 var Async = require('async');
 var Extend = require('extend-object');
 var BaseModel = require('./base');
-var Config = require('../config');
+var Config = require('../../config');
 
 
 var AuthAttempt = BaseModel.extend({
