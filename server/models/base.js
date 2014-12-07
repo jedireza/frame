@@ -6,16 +6,9 @@ var ClassExtend = require('ampersand-class-extend');
 var Config = require('../../config');
 
 
-var BaseModel = function () {
-};
-
-
+var BaseModel = function () {};
 BaseModel.extend = ClassExtend;
-
-
 BaseModel._idClass = Mongodb.ObjectID;
-
-
 BaseModel.ObjectId = BaseModel.ObjectID = Mongodb.ObjectID;
 
 
