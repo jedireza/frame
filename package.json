@@ -17,7 +17,7 @@
     "bcrypt": "^0.8.0",
     "boom": "^2.5.1",
     "confidence": "^1.0.0",
-    "glue": "^2.0.0-rc3",
+    "glue": "^2.0.0-rc4",
     "handlebars": "^2.0.0",
     "hapi": "^8.0.0",
     "hapi-auth-basic": "^2.0.0",
