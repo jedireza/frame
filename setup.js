@@ -8,7 +8,7 @@ var Handlebars = require('handlebars');
 
 
 if (process.env.NODE_ENV === 'test') {
-    var configTemplatePath = Path.resolve(__dirname, 'config.example.js');
+    var configTemplatePath = Path.resolve(__dirname, 'config.example');
     var configPath = Path.resolve(__dirname, 'config.js');
     var options = { encoding: 'utf-8' };
     var source = Fs.readFileSync(configTemplatePath, options);
@@ -93,7 +93,7 @@ Async.auto({
     }],
     createConfig: ['smtpPassword', function (done, results) {
 
-        var configTemplatePath = Path.resolve(__dirname, 'config.example.js');
+        var configTemplatePath = Path.resolve(__dirname, 'config.example');
         var configPath = Path.resolve(__dirname, 'config.js');
         var options = { encoding: 'utf-8' };
 
@@ -180,7 +180,7 @@ Async.auto({
                 };
 
                 Admin.findByIdAndUpdate(id, update, done);
-            }],
+            }]
         }, function (err, dbResults) {
 
             if (err) {

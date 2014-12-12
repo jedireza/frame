@@ -11,7 +11,7 @@ var AuthenticatedAccount = require('../fixtures/credentials-account');
 
 
 var lab = exports.lab = Lab.script();
-var ModelsPlugin, stub, server, request;
+var ModelsPlugin, request, server, stub;
 
 
 lab.beforeEach(function (done) {

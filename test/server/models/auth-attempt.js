@@ -81,18 +81,19 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         var authAttemptsConfig = Config.get('/authAttempts');
         var authSpam = [];
+        var authRequest = function (cb) {
+
+            AuthAttempt.create('127.0.0.1', 'stimpy', function (err, result) {
+
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.be.an.object();
+
+                cb();
+            });
+        };
 
         for (var i = 0 ; i < authAttemptsConfig.forIpAndUser ; i++) {
-            authSpam.push(function (cb) {
-
-                AuthAttempt.create('127.0.0.1', 'stimpy', function (err, result) {
-
-                    Code.expect(err).to.not.exist();
-                    Code.expect(result).to.be.an.object();
-
-                    cb();
-                });
-            });
+            authSpam.push(authRequest);
         }
 
         Async.parallel(authSpam, function () {
@@ -112,19 +113,20 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
         var authAttemptsConfig = Config.get('/authAttempts');
         var authSpam = [];
+        var authRequest = function (cb) {
+
+            var randomUsername = 'mudskipper' + i;
+            AuthAttempt.create('127.0.0.2', randomUsername, function (err, result) {
+
+                Code.expect(err).to.not.exist();
+                Code.expect(result).to.be.an.object();
+
+                cb();
+            });
+        };
 
         for (var i = 0 ; i < authAttemptsConfig.forIp ; i++) {
-            authSpam.push(function (cb) {
-
-                var randomUsername = 'mudskipper' + i;
-                AuthAttempt.create('127.0.0.2', randomUsername, function (err, result) {
-
-                    Code.expect(err).to.not.exist();
-                    Code.expect(result).to.be.an.object();
-
-                    cb();
-                });
-            });
+            authSpam.push(authRequest);
         }
 
         Async.parallel(authSpam, function () {

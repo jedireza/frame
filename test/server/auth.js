@@ -11,7 +11,7 @@ var AuthPlugin = require('../../server/auth');
 
 
 var lab = exports.lab = Lab.script();
-var ModelsPlugin, stub, server;
+var ModelsPlugin, server, stub;
 
 
 lab.beforeEach(function (done) {

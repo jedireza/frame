@@ -37,7 +37,7 @@ exports.register = function (server, options, next) {
             var User = request.server.plugins.models.User;
             var query = {};
             if (request.query.username) {
-                query.username = new RegExp('^.*?'+ request.query.username +'.*$', 'i');
+                query.username = new RegExp('^.*?' + request.query.username + '.*$', 'i');
             }
             if (request.query.isActive) {
                 query.isActive = request.query.isActive === 'true';

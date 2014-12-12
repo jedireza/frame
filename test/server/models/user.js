@@ -308,7 +308,7 @@ lab.experiment('User Instance Methods', function () {
                     id: '953P150D35',
                     name: 'Ren Höek'
                 }
-            },
+            }
         });
 
         user._roles = {

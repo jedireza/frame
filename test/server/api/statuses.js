@@ -10,7 +10,7 @@ var AuthenticatedUser = require('../fixtures/credentials-admin');
 
 
 var lab = exports.lab = Lab.script();
-var ModelsPlugin, stub, server, request;
+var ModelsPlugin, request, server, stub;
 
 
 lab.beforeEach(function (done) {

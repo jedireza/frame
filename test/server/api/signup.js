@@ -9,7 +9,7 @@ var MailerPlugin = require('../../../server/mailer');
 
 
 var lab = exports.lab = Lab.script();
-var ModelsPlugin, stub, server, request;
+var ModelsPlugin, request, server, stub;
 
 
 lab.beforeEach(function (done) {
@@ -23,7 +23,7 @@ lab.beforeEach(function (done) {
     ModelsPlugin = Proxyquire('../../../server/models', {
         './models/account': stub.Account,
         './models/session': stub.Session,
-        './models/user': stub.User,
+        './models/user': stub.User
     });
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, MailerPlugin, SignupPlugin ];

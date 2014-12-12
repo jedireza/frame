@@ -6,7 +6,7 @@ var IndexPlugin = require('../../../server/api/index');
 
 
 var lab = exports.lab = Lab.script();
-var server, request;
+var request, server;
 
 
 lab.beforeEach(function (done) {

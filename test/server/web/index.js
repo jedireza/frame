@@ -6,7 +6,7 @@ var HomePlugin = require('../../../server/web/index');
 
 
 var lab = exports.lab = Lab.script();
-var server, request;
+var request, server;
 
 
 lab.beforeEach(function (done) {
