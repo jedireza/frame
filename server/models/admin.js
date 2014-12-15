@@ -15,8 +15,6 @@ var Admin = BaseModel.extend({
             enumerable: false
         });
     },
-
-
     isMemberOf: function (group) {
 
         if (!this.groups) {
@@ -25,8 +23,6 @@ var Admin = BaseModel.extend({
 
         return this.groups.hasOwnProperty(group);
     },
-
-
     hydrateGroups: function (callback) {
 
         if (!this.groups) {
@@ -60,8 +56,6 @@ var Admin = BaseModel.extend({
             callback(null, self._groups);
         });
     },
-
-
     hasPermissionTo: function (permission, callback) {
 
         if (this.permissions && this.permissions.hasOwnProperty(permission)) {

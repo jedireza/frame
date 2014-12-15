@@ -17,8 +17,6 @@ var User = BaseModel.extend({
             enumerable: false
         });
     },
-
-
     canPlayRole: function (role) {
 
         if (!this.roles) {
@@ -27,8 +25,6 @@ var User = BaseModel.extend({
 
         return this.roles.hasOwnProperty(role);
     },
-
-
     hydrateRoles: function (callback) {
 
         if (!this.roles) {
