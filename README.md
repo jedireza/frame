@@ -2,9 +2,9 @@
 
 A user system API for Node.js. Bring your own front-end.
 
-[![Dependency Status](https://david-dm.org/jedireza/frame.svg?theme=shields.io)](https://david-dm.org/jedireza/frame)
-[![devDependency Status](https://david-dm.org/jedireza/frame/dev-status.svg?theme=shields.io)](https://david-dm.org/jedireza/frame#info=devDependencies)
 [![Build Status](https://travis-ci.org/jedireza/frame.svg?branch=master)](https://travis-ci.org/jedireza/frame)
+[![Dependency Status](https://david-dm.org/jedireza/frame.svg?style=flat)](https://david-dm.org/jedireza/frame)
+[![devDependency Status](https://david-dm.org/jedireza/frame/dev-status.svg?style=flat)](https://david-dm.org/jedireza/frame#info=devDependencies)
 
 ## Technology
 
@@ -24,9 +24,12 @@ transport.
 | [https://hapiframe.herokuapp.com/](https://hapiframe.herokuapp.com/docs) | root     | root     |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
-developing APIs. See the wiki for details on [how to login](https://github.com/jedireza/frame/wiki/How-to-login).
+developing APIs. See the wiki for details on [how to
+login](https://github.com/jedireza/frame/wiki/How-to-login).
 
-__Note:__ The live demo has been modified so you cannot change the root user, the root user's linked admin role or the root admin group. This was done in order to keep the API ready to use at all times.
+__Note:__ The live demo has been modified so you cannot change the root user,
+the root user's linked admin role or the root admin group. This was done in
+order to keep the API ready to use at all times.
 
 
 ## Requirements
@@ -161,7 +164,7 @@ $ npm test
 # ..................................................
 # .............................
 
-# 279 tests complete
+# 249 tests complete
 # Test duration: 4628 ms
 # No global variable leaks detected
 # Coverage: 100.00%

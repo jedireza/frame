@@ -1,18 +1,18 @@
 #!/usr/bin/env node
+var Fs = require('fs');
+var Path = require('path');
+var Async = require('async');
+var Promptly = require('promptly');
+var Mongodb = require('mongodb');
+var Handlebars = require('handlebars');
 
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
-var promptly = require('promptly');
-var mongodb = require('mongodb');
-var handlebars = require('handlebars');
 
 if (process.env.NODE_ENV === 'test') {
-    var configTemplatePath = path.resolve(__dirname, 'config.example.js');
-    var configPath = path.resolve(__dirname, 'config.js');
+    var configTemplatePath = Path.resolve(__dirname, 'config.example');
+    var configPath = Path.resolve(__dirname, 'config.js');
     var options = { encoding: 'utf-8' };
-    var source = fs.readFileSync(configTemplatePath, options);
-    var configTemplate = handlebars.compile(source);
+    var source = Fs.readFileSync(configTemplatePath, options);
+    var configTemplate = Handlebars.compile(source);
     var context = {
         projectName: 'Frame',
         mongodbUrl: 'mongodb://localhost:27017/frame',
@@ -24,15 +24,15 @@ if (process.env.NODE_ENV === 'test') {
         smtpUsername: '',
         smtpPassword: ''
     };
-    fs.writeFileSync(configPath, configTemplate(context));
+    Fs.writeFileSync(configPath, configTemplate(context));
     console.log('Setup complete.');
     process.exit(0);
 }
 
-async.auto({
+Async.auto({
     projectName: function (done) {
 
-        promptly.prompt('Project name: (Frame)', { default: 'Frame' }, done);
+        Promptly.prompt('Project name: (Frame)', { default: 'Frame' }, done);
     },
     mongodbUrl: ['projectName', function (done, results) {
 
@@ -40,14 +40,14 @@ async.auto({
             default: 'mongodb://localhost:27017/frame'
         };
 
-        promptly.prompt('MongoDB URL: (mongodb://localhost:27017/frame)', options, done);
+        Promptly.prompt('MongoDB URL: (mongodb://localhost:27017/frame)', options, done);
     }],
     testMongo: ['rootPassword', function (done, results) {
 
-        mongodb.MongoClient.connect(results.mongodbUrl, {}, function (err, db) {
+        Mongodb.MongoClient.connect(results.mongodbUrl, {}, function (err, db) {
 
             if (err) {
-                console.error('Failed to connect to MongoDB.');
+                console.error('Failed to connect to Mongodb.');
                 return done(err);
             }
 
@@ -57,11 +57,11 @@ async.auto({
     }],
     rootEmail: ['mongodbUrl', function (done, results) {
 
-        promptly.prompt('Root user email:', done);
+        Promptly.prompt('Root user email:', done);
     }],
     rootPassword: ['rootEmail', function (done, results) {
 
-        promptly.password('Root user password:', { default: null }, done);
+        Promptly.password('Root user password:', { default: null }, done);
     }],
     systemEmail: ['rootPassword', function (done, results) {
 
@@ -69,15 +69,15 @@ async.auto({
             default: results.rootEmail
         };
 
-        promptly.prompt('System email: (' + results.rootEmail + ')', options, done);
+        Promptly.prompt('System email: (' + results.rootEmail + ')', options, done);
     }],
     smtpHost: ['systemEmail', function (done, results) {
 
-        promptly.prompt('SMTP host: (smtp.gmail.com)', { default: 'smtp.gmail.com' }, done);
+        Promptly.prompt('SMTP host: (smtp.gmail.com)', { default: 'smtp.gmail.com' }, done);
     }],
     smtpPort: ['smtpHost', function (done, results) {
 
-        promptly.prompt('SMTP port: (465)', { default: 465 }, done);
+        Promptly.prompt('SMTP port: (465)', { default: 465 }, done);
     }],
     smtpUsername: ['smtpPort', function (done, results) {
 
@@ -85,44 +85,44 @@ async.auto({
             default: results.systemEmail
         };
 
-        promptly.prompt('SMTP username: (' + results.systemEmail + ')', options, done);
+        Promptly.prompt('SMTP username: (' + results.systemEmail + ')', options, done);
     }],
     smtpPassword: ['smtpUsername', function (done, results) {
 
-        promptly.password('SMTP password:', done);
+        Promptly.password('SMTP password:', done);
     }],
     createConfig: ['smtpPassword', function (done, results) {
 
-        var configTemplatePath = path.resolve(__dirname, 'config.example.js');
-        var configPath = path.resolve(__dirname, 'config.js');
+        var configTemplatePath = Path.resolve(__dirname, 'config.example');
+        var configPath = Path.resolve(__dirname, 'config.js');
         var options = { encoding: 'utf-8' };
 
-        fs.readFile(configTemplatePath, options, function (err, source) {
+        Fs.readFile(configTemplatePath, options, function (err, source) {
 
             if (err) {
                 console.error('Failed to read config template.');
                 return done(err);
             }
 
-            var configTemplate = handlebars.compile(source);
-            fs.writeFile(configPath, configTemplate(results), done);
+            var configTemplate = Handlebars.compile(source);
+            Fs.writeFile(configPath, configTemplate(results), done);
         });
     }],
     setupRootUser: ['createConfig', function (done, results) {
 
-        var BaseModel = require('./models/base');
-        var User = require('./models/user');
-        var Admin = require('./models/admin');
-        var AdminGroup = require('./models/admin-group');
+        var BaseModel = require('hapi-mongo-models').BaseModel;
+        var User = require('./server/models/user');
+        var Admin = require('./server/models/admin');
+        var AdminGroup = require('./server/models/admin-group');
 
-        async.auto({
+        Async.auto({
             connect: function (done) {
 
                 BaseModel.connect(done);
             },
             clean: ['connect', function (done) {
 
-                async.parallel([
+                Async.parallel([
                     User.remove.bind(User, {}),
                     Admin.remove.bind(Admin, {}),
                     AdminGroup.remove.bind(AdminGroup, {})
@@ -180,7 +180,7 @@ async.auto({
                 };
 
                 Admin.findByIdAndUpdate(id, update, done);
-            }],
+            }]
         }, function (err, dbResults) {
 
             if (err) {

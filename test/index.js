@@ -1,16 +1,18 @@
 var Lab = require('lab');
 var Code = require('code');
+var Composer = require('../index');
+
+
 var lab = exports.lab = Lab.script();
-var composer = require('../index');
 
 
 lab.experiment('App', function () {
 
-    lab.test('it composes the server pack', function (done) {
+    lab.test('it composes a server', function (done) {
 
-        composer(function (err, composedPack) {
+        Composer(function (err, composedServer) {
 
-            Code.expect(composedPack).to.be.an.object();
+            Code.expect(composedServer).to.be.an.object();
 
             done(err);
         });
