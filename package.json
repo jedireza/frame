@@ -32,7 +32,7 @@
     "nodemailer-markdown": "^1.0.0",
     "object-assign": "^2.0.0",
     "slug": "^0.8.0",
-    "visionary": "^2.0.0-rc2"
+    "visionary": "^2.0.0"
   },
   "devDependencies": {
     "code": "^1.2.0",
