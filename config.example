@@ -30,13 +30,13 @@ var config = {
         },
         test: {
             mongodb: {
-                url: '{{mongodbUrl}}-test',
+                url: '{{mongodbUrl}}-test'
             },
             autoIndex: true
         },
         $default: {
             mongodb: {
-                url: '{{mongodbUrl}}',
+                url: '{{mongodbUrl}}'
             },
             autoIndex: true
         }
