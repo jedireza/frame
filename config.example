@@ -23,15 +23,21 @@ var config = {
     mongodb: {
         $filter: 'env',
         production: {
-            url: process.env.MONGOLAB_URI,
+            mongodb: {
+                url: process.env.MONGOLAB_URI
+            },
             autoIndex: false
         },
         test: {
-            url: '{{mongodbUrl}}-test',
+            mongodb: {
+                url: '{{mongodbUrl}}-test',
+            },
             autoIndex: true
         },
         $default: {
-            url: '{{mongodbUrl}}',
+            mongodb: {
+                url: '{{mongodbUrl}}',
+            },
             autoIndex: true
         }
     },
