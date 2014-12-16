@@ -20,7 +20,7 @@ var config = {
         forIp: 50,
         forIpAndUser: 7
     },
-    mongodb: {
+    hapiMongoModels: {
         $filter: 'env',
         production: {
             mongodb: {
