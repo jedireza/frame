@@ -24,7 +24,7 @@ exports.register = function (server, options, next) {
                 assign: 'abuseDetected',
                 method: function (request, reply) {
 
-                    var AuthAttempt = request.server.plugins.models.AuthAttempt;
+                    var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
                     var ip = request.info.remoteAddress;
                     var username = request.payload.username;
 
@@ -47,7 +47,7 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var username = request.payload.username;
                     var password = request.payload.password;
 
@@ -68,7 +68,7 @@ exports.register = function (server, options, next) {
                         return reply();
                     }
 
-                    var AuthAttempt = request.server.plugins.models.AuthAttempt;
+                    var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
                     var ip = request.info.remoteAddress;
                     var username = request.payload.username;
 
@@ -87,7 +87,7 @@ exports.register = function (server, options, next) {
                 assign: 'session',
                 method: function (request, reply) {
 
-                    var Session = request.server.plugins.models.Session;
+                    var Session = request.server.plugins['hapi-mongo-models'].Session;
 
                     Session.create(request.pre.user.username, function (err, session) {
 
@@ -132,7 +132,7 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email.toLowerCase()
                     };
@@ -154,8 +154,8 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
-            var User = request.server.plugins.models.User;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var mailer = request.server.plugins.mailer;
 
             Async.auto({
@@ -217,7 +217,7 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email.toLowerCase(),
                         'resetPassword.expires': { $gt: Date.now() }
@@ -240,7 +240,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
 
             Async.auto({
                 keyMatch: function (done) {

@@ -1,8 +1,8 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
-var AuthAttempt = require('../../../server/models/auth-attempt');
 var Config = require('../../../config');
+var AuthAttempt = require('../../../server/models/auth-attempt');
 
 
 var lab = exports.lab = Lab.script();
@@ -12,7 +12,7 @@ lab.experiment('AuthAttempt Class Methods', function () {
 
     lab.before(function (done) {
 
-        AuthAttempt.connect(function (err, db) {
+        AuthAttempt.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

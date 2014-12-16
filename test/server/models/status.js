@@ -1,5 +1,6 @@
 var Lab = require('lab');
 var Code = require('code');
+var Config = require('../../../config');
 var Status = require('../../../server/models/status');
 
 
@@ -10,7 +11,7 @@ lab.experiment('Status Class Methods', function () {
 
     lab.before(function (done) {
 
-        Status.connect(function (err, db) {
+        Status.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

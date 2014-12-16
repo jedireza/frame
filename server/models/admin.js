@@ -1,7 +1,7 @@
 var Joi = require('joi');
 var Async = require('async');
 var ObjectAssign = require('object-assign');
-var BaseModel = require('./base');
+var BaseModel = require('hapi-mongo-models').BaseModel;
 var AdminGroup = require('./admin-group');
 
 

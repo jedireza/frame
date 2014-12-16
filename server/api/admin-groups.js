@@ -30,7 +30,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -63,7 +63,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
 
             AdminGroup.findById(request.params.id, function (err, adminGroup) {
 
@@ -100,7 +100,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var name = request.payload.name;
 
             AdminGroup.create(name, function (err, adminGroup) {
@@ -134,7 +134,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -173,7 +173,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -207,7 +207,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins.models.AdminGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
 
             AdminGroup.findByIdAndRemove(request.params.id, function (err, count) {
 

@@ -1,6 +1,8 @@
 var Lab = require('lab');
 var Code = require('code');
+var Path = require('path');
 var Config = require('../../../config');
+var Manifest = require('../../../manifest');
 var Hapi = require('hapi');
 var AuthAttempt = require('../../../server/models/auth-attempt');
 var Session = require('../../../server/models/session');
@@ -25,11 +27,15 @@ lab.beforeEach(function (done) {
         User: {}
     };
 
-    ModelsPlugin = Proxyquire('../../../server/models', {
-        './models/auth-attempt': stub.AuthAttempt,
-        './models/session': stub.Session,
-        './models/user': stub.User
-    });
+    var proxy = {};
+    proxy[Path.join(process.cwd(), './server/models/auth-attempt')] = stub.AuthAttempt;
+    proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
+    proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
+
+    ModelsPlugin = {
+        register: Proxyquire('hapi-mongo-models', proxy),
+        options: Manifest.get('/plugins')['hapi-mongo-models']
+    };
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, MailerPlugin, LoginPlugin ];
     server = new Hapi.Server();
@@ -47,7 +53,7 @@ lab.beforeEach(function (done) {
 
 lab.afterEach(function (done) {
 
-    server.plugins.models.BaseModel.disconnect();
+    server.plugins['hapi-mongo-models'].BaseModel.disconnect();
 
     done();
 });

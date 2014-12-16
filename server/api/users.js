@@ -34,7 +34,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var query = {};
             if (request.query.username) {
                 query.username = new RegExp('^.*?' + request.query.username + '.*$', 'i');
@@ -76,7 +76,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
 
             User.findById(request.params.id, function (err, user) {
 
@@ -105,7 +105,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.auth.credentials.user._id.toString();
             var fields = User.fieldsAdapter('username email roles');
 
@@ -146,7 +146,7 @@ exports.register = function (server, options, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             username: request.payload.username
                         };
@@ -172,7 +172,7 @@ exports.register = function (server, options, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             email: request.payload.email.toLowerCase()
                         };
@@ -199,7 +199,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var username = request.payload.username;
             var password = request.payload.password;
             var email = request.payload.email;
@@ -237,7 +237,7 @@ exports.register = function (server, options, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             username: request.payload.username,
                             _id: { $ne: User._idClass(request.params.id) }
@@ -264,7 +264,7 @@ exports.register = function (server, options, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             email: request.payload.email.toLowerCase(),
                             _id: { $ne: User._idClass(request.params.id) }
@@ -292,7 +292,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -332,7 +332,7 @@ exports.register = function (server, options, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         username: request.payload.username,
                         _id: { $ne: request.auth.credentials.user._id }
@@ -359,7 +359,7 @@ exports.register = function (server, options, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email.toLowerCase(),
                         _id: { $ne: request.auth.credentials.user._id }
@@ -386,8 +386,8 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
-            var User = request.server.plugins.models.User;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
+            var User = request.server.plugins['hapi-mongo-models'].User;
 
             Async.auto({
                 user: function (done) {
@@ -453,7 +453,7 @@ exports.register = function (server, options, next) {
                     assign: 'password',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins.models.User;
+                        var User = request.server.plugins['hapi-mongo-models'].User;
 
                         User.generatePasswordHash(request.payload.password, function (err, hash) {
 
@@ -469,7 +469,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -506,7 +506,7 @@ exports.register = function (server, options, next) {
                 assign: 'password',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
 
                     User.generatePasswordHash(request.payload.password, function (err, hash) {
 
@@ -521,7 +521,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.auth.credentials.user._id.toString();
             var update = {
                 $set: {
@@ -558,7 +558,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins.models.User;
+            var User = request.server.plugins['hapi-mongo-models'].User;
 
             User.findByIdAndRemove(request.params.id, function (err, count) {
 

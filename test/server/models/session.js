@@ -1,6 +1,7 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Config = require('../../../config');
 var Proxyquire = require('proxyquire');
 
 
@@ -15,7 +16,7 @@ lab.experiment('Session Class Methods', function () {
 
     lab.before(function (done) {
 
-        Session.connect(function (err, db) {
+        Session.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var ObjectAssign = require('object-assign');
-var BaseModel = require('./base');
+var BaseModel = require('hapi-mongo-models').BaseModel;
 
 
 var StatusEntry = BaseModel.extend({

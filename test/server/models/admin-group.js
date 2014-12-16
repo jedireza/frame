@@ -1,5 +1,6 @@
 var Lab = require('lab');
 var Code = require('code');
+var Config = require('../../../config');
 var AdminGroup = require('../../../server/models/admin-group');
 
 
@@ -10,7 +11,7 @@ lab.experiment('AdminGroup Class Methods', function () {
 
     lab.before(function (done) {
 
-        AdminGroup.connect(function (err, db) {
+        AdminGroup.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });
@@ -68,7 +69,7 @@ lab.experiment('AdminGroup Instance Methods', function () {
 
     lab.before(function (done) {
 
-        AdminGroup.connect(function (err, db) {
+        AdminGroup.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

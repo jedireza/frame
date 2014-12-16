@@ -1,6 +1,7 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Config = require('../../../config');
 var Proxyquire = require('proxyquire');
 
 
@@ -18,7 +19,7 @@ lab.experiment('Admin Class Methods', function () {
 
     lab.before(function (done) {
 
-        Admin.connect(function (err, db) {
+        Admin.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });
@@ -126,7 +127,7 @@ lab.experiment('Admin Instance Methods', function () {
 
     lab.before(function (done) {
 
-        Admin.connect(function (err, db) {
+        Admin.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

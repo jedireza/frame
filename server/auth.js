@@ -3,8 +3,8 @@ var Async = require('async');
 
 exports.register = function (server, options, next) {
 
-    var Session = server.plugins.models.Session;
-    var User = server.plugins.models.User;
+    var Session = server.plugins['hapi-mongo-models'].Session;
+    var User = server.plugins['hapi-mongo-models'].User;
 
     server.connections.forEach(function (connection) {
 

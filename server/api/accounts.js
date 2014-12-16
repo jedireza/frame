@@ -28,7 +28,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -58,7 +58,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
 
             Account.findById(request.params.id, function (err, account) {
 
@@ -87,7 +87,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.auth.credentials.roles.account._id.toString();
             var fields = Account.fieldsAdapter('user name timeCreated');
 
@@ -123,7 +123,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var name = request.payload.name;
 
             Account.create(name, function (err, account) {
@@ -158,7 +158,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -198,7 +198,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.auth.credentials.roles.account._id.toString();
             var update = {
                 $set: {
@@ -238,7 +238,7 @@ exports.register = function (server, options, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins['hapi-mongo-models'].Account;
 
                     Account.findById(request.params.id, function (err, account) {
 
@@ -257,7 +257,7 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
 
                     User.findByUsername(request.payload.username, function (err, user) {
 
@@ -306,7 +306,7 @@ exports.register = function (server, options, next) {
             Async.auto({
                 account: function (done) {
 
-                    var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins['hapi-mongo-models'].Account;
                     var id = request.params.id;
                     var update = {
                         $set: {
@@ -321,7 +321,7 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id;
                     var update = {
                         $set: {
@@ -358,7 +358,7 @@ exports.register = function (server, options, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins['hapi-mongo-models'].Account;
 
                     Account.findById(request.params.id, function (err, account) {
 
@@ -381,7 +381,7 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
 
                     User.findById(request.pre.account.user.id, function (err, user) {
 
@@ -403,7 +403,7 @@ exports.register = function (server, options, next) {
             Async.auto({
                 account: function (done) {
 
-                    var Account = request.server.plugins.models.Account;
+                    var Account = request.server.plugins['hapi-mongo-models'].Account;
                     var id = request.params.id;
                     var update = {
                         $unset: {
@@ -415,7 +415,7 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id.toString();
                     var update = {
                         $unset: {
@@ -453,7 +453,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var update = {
                 $push: {
@@ -497,7 +497,7 @@ exports.register = function (server, options, next) {
                 assign: 'status',
                 method: function (request, reply) {
 
-                    var Status = request.server.plugins.models.Status;
+                    var Status = request.server.plugins['hapi-mongo-models'].Status;
 
                     Status.findById(request.payload.status, function (err, status) {
 
@@ -512,7 +512,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var newStatus = {
                 id: request.pre.status._id.toString(),
@@ -558,7 +558,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
 
             Account.findByIdAndRemove(request.params.id, function (err, count) {
 

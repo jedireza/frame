@@ -3,7 +3,7 @@ var Uuid = require('node-uuid');
 var Async = require('async');
 var Bcrypt = require('bcrypt');
 var ObjectAssign = require('object-assign');
-var BaseModel = require('./base');
+var BaseModel = require('hapi-mongo-models').BaseModel;
 
 
 var Session = BaseModel.extend({

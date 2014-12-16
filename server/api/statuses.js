@@ -30,7 +30,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins.models.Status;
+            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -63,7 +63,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins.models.Status;
+            var Status = request.server.plugins['hapi-mongo-models'].Status;
 
             Status.findById(request.params.id, function (err, status) {
 
@@ -101,7 +101,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins.models.Status;
+            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var pivot = request.payload.pivot;
             var name = request.payload.name;
 
@@ -136,7 +136,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins.models.Status;
+            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -170,7 +170,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins.models.Status;
+            var Status = request.server.plugins['hapi-mongo-models'].Status;
 
             Status.findByIdAndRemove(request.params.id, function (err, count) {
 

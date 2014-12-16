@@ -1,17 +1,17 @@
 var Async = require('async');
 var Lab = require('lab');
 var Code = require('code');
+var Config = require('../../../config');
 var Account = require('../../../server/models/account');
 
 
 var lab = exports.lab = Lab.script();
 
-
 lab.experiment('Account Class Methods', function () {
 
     lab.before(function (done) {
 
-        Account.connect(function (err, db) {
+        Account.connect(Config.get('/hapiMongoModels/mongodb'), function (err, db) {
 
             done(err);
         });

@@ -25,7 +25,7 @@ exports.register = function (server, options, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         username: request.payload.username
                     };
@@ -51,7 +51,7 @@ exports.register = function (server, options, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins.models.User;
+                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email.toLowerCase()
                     };
@@ -77,9 +77,9 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins.models.Account;
-            var User = request.server.plugins.models.User;
-            var Session = request.server.plugins.models.Session;
+            var Account = request.server.plugins['hapi-mongo-models'].Account;
+            var User = request.server.plugins['hapi-mongo-models'].User;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var mailer = request.server.plugins.mailer;
 
             Async.auto({

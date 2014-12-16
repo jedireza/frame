@@ -110,7 +110,7 @@ Async.auto({
     }],
     setupRootUser: ['createConfig', function (done, results) {
 
-        var BaseModel = require('./models/base');
+        var BaseModel = require('hapi-mongo-models').BaseModel;
         var User = require('./models/user');
         var Admin = require('./models/admin');
         var AdminGroup = require('./models/admin-group');

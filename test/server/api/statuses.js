@@ -1,6 +1,8 @@
 var Lab = require('lab');
 var Code = require('code');
+var Path = require('path');
 var Config = require('../../../config');
+var Manifest = require('../../../manifest');
 var Hapi = require('hapi');
 var HapiAuthBasic = require('hapi-auth-basic');
 var Proxyquire = require('proxyquire');
@@ -19,9 +21,13 @@ lab.beforeEach(function (done) {
         Status: {}
     };
 
-    ModelsPlugin = Proxyquire('../../../server/models', {
-        './models/status': stub.Status
-    });
+    var proxy = {};
+    proxy[Path.join(process.cwd(), './server/models/status')] = stub.Status;
+
+    ModelsPlugin = {
+        register: Proxyquire('hapi-mongo-models', proxy),
+        options: Manifest.get('/plugins')['hapi-mongo-models']
+    };
 
     var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, StatusesPlugin ];
     server = new Hapi.Server();
@@ -39,7 +45,7 @@ lab.beforeEach(function (done) {
 
 lab.afterEach(function (done) {
 
-    server.plugins.models.BaseModel.disconnect();
+    server.plugins['hapi-mongo-models'].BaseModel.disconnect();
 
     done();
 });

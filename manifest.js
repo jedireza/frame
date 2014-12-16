@@ -30,7 +30,19 @@ var manifest = {
             engines: { jade: 'jade' },
             path: './server/web'
         },
-        './server/models': {},
+        'hapi-mongo-models': {
+            mongodb: Config.get('/hapiMongoModels/mongodb'),
+            models: {
+                Account: './server/models/account',
+                AdminGroup: './server/models/admin-group',
+                Admin: './server/models/admin',
+                AuthAttempt: './server/models/auth-attempt',
+                Session: './server/models/session',
+                Status: './server/models/status',
+                User: './server/models/user'
+            },
+            autoIndex: Config.get('/hapiMongoModels/autoIndex')
+        },
         './server/auth': {},
         './server/mailer': {},
         './server/api/accounts': { basePath: '/api' },

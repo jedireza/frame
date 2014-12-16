@@ -17,7 +17,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var credentials = request.auth.credentials || { user: {} };
             var query = {
                 username: credentials.user.username

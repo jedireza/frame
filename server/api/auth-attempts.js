@@ -30,7 +30,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AuthAttempt = request.server.plugins.models.AuthAttempt;
+            var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -63,7 +63,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AuthAttempt = request.server.plugins.models.AuthAttempt;
+            var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
 
             AuthAttempt.findById(request.params.id, function (err, authAttempt) {
 
@@ -95,7 +95,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AuthAttempt = request.server.plugins.models.AuthAttempt;
+            var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
 
             AuthAttempt.findByIdAndRemove(request.params.id, function (err, count) {
 

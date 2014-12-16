@@ -30,7 +30,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -63,7 +63,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
 
             Session.findById(request.params.id, function (err, session) {
 
@@ -95,7 +95,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins.models.Session;
+            var Session = request.server.plugins['hapi-mongo-models'].Session;
 
             Session.findByIdAndRemove(request.params.id, function (err, count) {
 
