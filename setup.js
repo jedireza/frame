@@ -118,7 +118,7 @@ Async.auto({
         Async.auto({
             connect: function (done) {
 
-                BaseModel.connect(done);
+                BaseModel.connect({ url: results.mongodbUrl }, done);
             },
             clean: ['connect', function (done) {
 
