@@ -138,7 +138,7 @@ $ npm version
 Contributions welcome. Your code should:
 
  - include 100% test coverage
- - follow the [hapi.js coding conventions](https://github.com/hapijs/hapi/blob/master/docs/Style.md)
+ - follow the [hapi.js coding conventions](http://hapijs.com/styleguide)
 
 If you're changing something non-trivial, you may want to submit an issue
 first.
