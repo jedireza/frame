@@ -80,7 +80,7 @@ exports.preware.ensureAdminGroup = function (groups) {
 
             if (!groupFound) {
                 var response = {
-                    message: 'Permission denied to this resouce.'
+                    message: 'Permission denied to this resource.'
                 };
 
                 return reply(response).takeover().code(403);
