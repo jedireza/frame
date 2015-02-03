@@ -20,7 +20,7 @@
     "handlebars": "^2.0.0",
     "hapi": "^8.0.0",
     "hapi-auth-basic": "^2.0.0",
-    "hapi-mongo-models": "^1.0.3",
+    "hapi-mongo-models": "^1.1.0",
     "hoek": "^2.4.1",
     "jade": "^1.5.0",
     "joi": "^5.0.2",
