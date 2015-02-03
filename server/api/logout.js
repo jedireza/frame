@@ -19,8 +19,9 @@ exports.register = function (server, options, next) {
 
             var Session = request.server.plugins['hapi-mongo-models'].Session;
             var credentials = request.auth.credentials || { user: {} };
+            var user = credentials.user || {};
             var query = {
-                username: credentials.user.username
+                username: user.username
             };
 
             Session.remove(query, function (err, count) {
