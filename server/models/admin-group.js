@@ -9,8 +9,6 @@ var AdminGroup = BaseModel.extend({
 
         ObjectAssign(this, attrs);
     },
-
-
     hasPermissionTo: function (permission) {
 
         if (this.permissions && this.permissions.hasOwnProperty(permission)) {
