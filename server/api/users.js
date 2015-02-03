@@ -23,7 +23,7 @@ exports.register = function (server, options, next) {
                     isActive: Joi.string(),
                     role: Joi.string(),
                     fields: Joi.string(),
-                    sort: Joi.string(),
+                    sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
                     page: Joi.number().default(1)
                 }
