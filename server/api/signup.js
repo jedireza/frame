@@ -16,8 +16,8 @@ exports.register = function (server, options, next) {
             validate: {
                 payload: {
                     name: Joi.string().required(),
-                    email: Joi.string().email().required(),
-                    username: Joi.string().token().required(),
+                    email: Joi.string().email().lowercase().required(),
+                    username: Joi.string().token().lowercase().required(),
                     password: Joi.string().required()
                 }
             },
@@ -53,7 +53,7 @@ exports.register = function (server, options, next) {
 
                     var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
-                        email: request.payload.email.toLowerCase()
+                        email: request.payload.email
                     };
 
                     User.findOne(conditions, function (err, user) {
