@@ -116,37 +116,24 @@ lab.experiment('User Class Methods', function () {
         Async.auto({
             user: function (cb) {
 
-                User.create('stimpy', 'thebigshot', 'stimpy@ren.show', function (err, result) {
+                User.create('stimpy', 'thebigshot', 'stimpy@ren.show', cb);
+            },
+            username: ['user', function (cb, results) {
 
-                    Code.expect(err).to.not.exist();
-                    Code.expect(result).to.be.an.instanceOf(User);
+                User.findByCredentials(results.user.username, results.user.password, cb);
+            }],
+            email: ['user', function (cb, results) {
 
-                    cb(null, result);
-                });
-            }
+                User.findByCredentials(results.user.email, results.user.password, cb);
+            }]
         }, function (err, results) {
 
-            if (err) {
-                return done(err);
-            }
+            Code.expect(err).to.not.exist();
+            Code.expect(results.user).to.be.an.instanceOf(User);
+            Code.expect(results.username).to.be.an.instanceOf(User);
+            Code.expect(results.email).to.be.an.instanceOf(User);
 
-            var email = results.user.email;
-            var username = results.user.username;
-            var password = results.user.password;
-
-            User.findByCredentials(username, password, function (err, result) {
-
-                Code.expect(err).to.not.exist();
-                Code.expect(result).to.be.an.instanceOf(User);
-
-                User.findByCredentials(email, password, function (err, result) {
-
-                    Code.expect(err).to.not.exist();
-                    Code.expect(result).to.be.an.instanceOf(User);
-
-                    done();
-                });
-            });
+            done();
         });
     });
 
