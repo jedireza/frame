@@ -1,6 +1,7 @@
 var Lab = require('lab');
 var Code = require('code');
 var Path = require('path');
+var Hoek = require('hoek');
 var Config = require('../../../config');
 var Manifest = require('../../../manifest');
 var Hapi = require('hapi');
@@ -84,7 +85,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns a not found when remove misses', function (done) {
+    lab.test('it returns a not found when remove misses (no credentials)', function (done) {
 
         stub.Session.remove = function () {
 
@@ -95,6 +96,30 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
         };
 
         delete request.credentials;
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/session not found/i);
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a not found when remove misses (missing user from credentials)', function (done) {
+
+        stub.Session.remove = function () {
+
+            var args = Array.prototype.slice.call(arguments);
+            var callback = args.pop();
+
+            callback(null, 0);
+        };
+
+        var CorruptedAuthenticatedUser = Hoek.clone(AuthenticatedUser);
+        CorruptedAuthenticatedUser.user = undefined;
+        request.credentials = CorruptedAuthenticatedUser;
 
         server.inject(request, function (response) {
 
