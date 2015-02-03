@@ -18,7 +18,7 @@ AuthAttempt._collection = 'authAttempts';
 
 AuthAttempt.schema = Joi.object().keys({
     _id: Joi.object(),
-    username: Joi.string().required(),
+    username: Joi.string().lowercase().required(),
     ip: Joi.string().required(),
     time: Joi.date().required()
 });
@@ -34,7 +34,7 @@ AuthAttempt.create = function (ip, username, callback) {
 
     var document = {
         ip: ip,
-        username: username,
+        username: username.toLowerCase(),
         time: new Date()
     };
 
@@ -63,7 +63,7 @@ AuthAttempt.abuseDetected = function (ip, username, callback) {
 
             var query = {
                 ip: ip,
-                username: username
+                username: username.toLowerCase()
             };
 
             self.count(query, done);

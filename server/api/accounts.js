@@ -231,7 +231,7 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 payload: {
-                    username: Joi.string().required()
+                    username: Joi.string().lowercase().required()
                 }
             },
             pre: [{

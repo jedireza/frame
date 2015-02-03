@@ -16,7 +16,7 @@ NoteEntry.schema = Joi.object().keys({
     timeCreated: Joi.date().required(),
     userCreated: Joi.object().keys({
         id: Joi.string().required(),
-        name: Joi.string().required()
+        name: Joi.string().lowercase().required()
     }).required()
 });
 

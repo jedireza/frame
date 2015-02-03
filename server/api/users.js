@@ -19,7 +19,7 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 query: {
-                    username: Joi.string().token(),
+                    username: Joi.string().token().lowercase(),
                     isActive: Joi.string(),
                     role: Joi.string(),
                     fields: Joi.string(),
@@ -135,9 +135,9 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 payload: {
-                    username: Joi.string().token().required(),
+                    username: Joi.string().token().lowercase().required(),
                     password: Joi.string().required(),
-                    email: Joi.string().email().required()
+                    email: Joi.string().email().lowercase().required()
                 }
             },
             pre: [
@@ -174,7 +174,7 @@ exports.register = function (server, options, next) {
 
                         var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
-                            email: request.payload.email.toLowerCase()
+                            email: request.payload.email
                         };
 
                         User.findOne(conditions, function (err, user) {
@@ -227,8 +227,8 @@ exports.register = function (server, options, next) {
             validate: {
                 payload: {
                     isActive: Joi.boolean().required(),
-                    username: Joi.string().token().required(),
-                    email: Joi.string().email().required()
+                    username: Joi.string().token().lowercase().required(),
+                    email: Joi.string().email().lowercase().required()
                 }
             },
             pre: [
@@ -266,7 +266,7 @@ exports.register = function (server, options, next) {
 
                         var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
-                            email: request.payload.email.toLowerCase(),
+                            email: request.payload.email,
                             _id: { $ne: User._idClass(request.params.id) }
                         };
 
@@ -298,7 +298,7 @@ exports.register = function (server, options, next) {
                 $set: {
                     isActive: request.payload.isActive,
                     username: request.payload.username,
-                    email: request.payload.email.toLowerCase()
+                    email: request.payload.email
                 }
             };
 
@@ -324,8 +324,8 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 payload: {
-                    username: Joi.string().token().required(),
-                    email: Joi.string().email().required()
+                    username: Joi.string().token().lowercase().required(),
+                    email: Joi.string().email().lowercase().required()
                 }
             },
             pre: [{
@@ -361,7 +361,7 @@ exports.register = function (server, options, next) {
 
                     var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
-                        email: request.payload.email.toLowerCase(),
+                        email: request.payload.email,
                         _id: { $ne: request.auth.credentials.user._id }
                     };
 

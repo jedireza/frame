@@ -92,7 +92,7 @@ Admin.schema = Joi.object().keys({
     _id: Joi.object(),
     user: Joi.object().keys({
         id: Joi.string().required(),
-        name: Joi.string().required()
+        name: Joi.string().lowercase().required()
     }),
     groups: Joi.object().description('{ groupId: name, ... }'),
     permissions: Joi.object().description('{ permission: boolean, ... }'),
@@ -137,7 +137,7 @@ Admin.create = function (name, callback) {
 
 Admin.findByUsername = function (username, callback) {
 
-    var query = { 'user.name': username };
+    var query = { 'user.name': username.toLowerCase() };
     this.findOne(query, callback);
 };
 

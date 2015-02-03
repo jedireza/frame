@@ -20,7 +20,7 @@ Account.schema = Joi.object().keys({
     _id: Joi.object(),
     user: Joi.object().keys({
         id: Joi.string().required(),
-        name: Joi.string().required()
+        name: Joi.string().lowercase().required()
     }),
     name: Joi.object().keys({
         first: Joi.string().required(),
@@ -72,7 +72,7 @@ Account.create = function (name, callback) {
 
 Account.findByUsername = function (username, callback) {
 
-    var query = { 'user.name': username };
+    var query = { 'user.name': username.toLowerCase() };
     this.findOne(query, callback);
 };
 

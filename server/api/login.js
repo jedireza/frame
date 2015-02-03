@@ -16,7 +16,7 @@ exports.register = function (server, options, next) {
         config: {
             validate: {
                 payload: {
-                    username: Joi.string().required(),
+                    username: Joi.string().lowercase().required(),
                     password: Joi.string().required()
                 }
             },
@@ -125,7 +125,7 @@ exports.register = function (server, options, next) {
         config: {
             validate: {
                 payload: {
-                    email: Joi.string().email().required()
+                    email: Joi.string().email().lowercase().required()
                 }
             },
             pre: [{
@@ -134,7 +134,7 @@ exports.register = function (server, options, next) {
 
                     var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
-                        email: request.payload.email.toLowerCase()
+                        email: request.payload.email
                     };
 
                     User.findOne(conditions, function (err, user) {
@@ -209,7 +209,7 @@ exports.register = function (server, options, next) {
             validate: {
                 payload: {
                     key: Joi.string().required(),
-                    email: Joi.string().email().required(),
+                    email: Joi.string().email().lowercase().required(),
                     password: Joi.string().required()
                 }
             },
@@ -219,7 +219,7 @@ exports.register = function (server, options, next) {
 
                     var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
-                        email: request.payload.email.toLowerCase(),
+                        email: request.payload.email,
                         'resetPassword.expires': { $gt: Date.now() }
                     };
 

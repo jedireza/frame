@@ -73,9 +73,9 @@ User._collection = 'users';
 User.schema = Joi.object().keys({
     _id: Joi.object(),
     isActive: Joi.boolean().default(true),
-    username: Joi.string().token().required(),
+    username: Joi.string().token().lowercase().required(),
     password: Joi.string(),
-    email: Joi.string().email().required(),
+    email: Joi.string().email().lowercase().required(),
     roles: Joi.object().keys({
         admin: Joi.object().keys({
             id: Joi.string().required(),
@@ -134,9 +134,9 @@ User.create = function (username, password, email, callback) {
 
             var document = {
                 isActive: true,
-                username: username,
+                username: username.toLowerCase(),
                 password: results.passwordHash.hash,
-                email: email,
+                email: email.toLowerCase(),
                 timeCreated: new Date()
             };
 
@@ -167,10 +167,10 @@ User.findByCredentials = function (username, password, callback) {
             };
 
             if (username.indexOf('@') > -1) {
-                query.email = username;
+                query.email = username.toLowerCase();
             }
             else {
-                query.username = username;
+                query.username = username.toLowerCase();
             }
 
             self.findOne(query, done);
@@ -201,7 +201,7 @@ User.findByCredentials = function (username, password, callback) {
 
 User.findByUsername = function (username, callback) {
 
-    var query = { username: username };
+    var query = { username: username.toLowerCase() };
     this.findOne(query, callback);
 };
 
