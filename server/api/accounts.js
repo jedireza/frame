@@ -162,7 +162,7 @@ exports.register = function (server, options, next) {
             var id = request.params.id;
             var update = {
                 $set: {
-                    name: request.payload.name.first
+                    name: request.payload.name
                 }
             };
 
