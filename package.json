@@ -17,7 +17,7 @@
     "boom": "^2.5.1",
     "confidence": "^1.0.0",
     "glue": "^2.0.0",
-    "handlebars": "^2.0.0",
+    "handlebars": "^3.0.0",
     "hapi": "^8.0.0",
     "hapi-auth-basic": "^2.0.0",
     "hapi-mongo-models": "^1.1.0",
