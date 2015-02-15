@@ -178,6 +178,69 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
+    lab.test('it finishes successfully (even if sending welcome email fails)', function (done) {
+
+        stub.User.findOne = function (conditions, callback) {
+
+            callback();
+        };
+
+        stub.User.create = function (username, password, email, callback) {
+
+            callback(null, { _id: 'BL4M0' });
+        };
+
+        stub.Account.create = function (name, callback) {
+
+            var account = {
+                _id: 'BL4M0',
+                name: {
+                    first: 'Muddy',
+                    last: 'Mudskipper'
+                }
+            };
+
+            callback(null, account);
+        };
+
+        stub.User.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, [{}, {}]);
+        };
+
+        stub.Account.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, [{}, {}]);
+        };
+
+        var realSendEmail = server.plugins.mailer.sendEmail;
+        server.plugins.mailer.sendEmail = function (options, template, context, callback) {
+
+            callback(new Error('Whoops.'));
+        };
+
+        stub.Session.create = function (username, callback) {
+
+            callback(null, {});
+        };
+
+        var realWarn = console.warn;
+        console.warn = function () {
+
+            console.warn = realWarn;
+            done();
+        };
+
+        server.inject(request, function (response) {
+
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
+
+            server.plugins.mailer.sendEmail = realSendEmail;
+        });
+    });
+
+
     lab.test('it finishes successfully', function (done) {
 
         stub.User.findOne = function (conditions, callback) {
