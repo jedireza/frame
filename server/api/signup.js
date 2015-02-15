@@ -138,9 +138,16 @@ exports.register = function (server, options, next) {
                     };
                     var template = 'welcome';
 
-                    mailer.sendEmail(options, template, request.payload, done);
+                    mailer.sendEmail(options, template, request.payload, function (err) {
+
+                        if (err) {
+                            console.warn('sending welcome email failed:', err.stack);
+                        }
+                    });
+
+                    done();
                 }],
-                session: ['welcome', function (done, results) {
+                session: ['linkUser', 'linkAccount', function (done, results) {
 
                     Session.create(request.payload.username, done);
                 }]
