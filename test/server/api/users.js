@@ -700,7 +700,7 @@ lab.experiment('Users Plugin (My) Update', function () {
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
 
-            callback(null, [{ username: 'muddy' }, {}]);
+            callback(null, [{ _id: '1D', username: 'muddy' }, {}]);
         };
 
         server.inject(request, function (response) {

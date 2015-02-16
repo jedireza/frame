@@ -107,7 +107,7 @@ lab.experiment('Session Class Methods', function () {
         Async.auto({
             session: function (cb) {
 
-                Session.create('ren', function (err, result) {
+                Session.create('1D', function (err, result) {
 
                     Code.expect(err).to.not.exist();
                     Code.expect(result).to.be.an.instanceOf(Session);
@@ -121,10 +121,10 @@ lab.experiment('Session Class Methods', function () {
                 return done(err);
             }
 
-            var username = results.session.username;
+            var id = results.session._id.toString();
             var key = results.session.key;
 
-            Session.findByCredentials(username, key, function (err, result) {
+            Session.findByCredentials(id, key, function (err, result) {
 
                 Code.expect(err).to.not.exist();
                 Code.expect(result).to.be.an.instanceOf(Session);
@@ -137,13 +137,13 @@ lab.experiment('Session Class Methods', function () {
 
     lab.test('it returns nothing for find by credentials when key match fails', function (done) {
 
-        var realFindOne = Session.findOne;
-        Session.findOne = function () {
+        var realFindById = Session.findById;
+        Session.findById = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
 
-            callback(null, { username: 'toastman', key: 'letmein' });
+            callback(null, { _id: '2D', userId: '1D', key: 'letmein' });
         };
 
         var realCompare = stub.bcrypt.compare;
@@ -152,12 +152,12 @@ lab.experiment('Session Class Methods', function () {
             callback(null, false);
         };
 
-        Session.findByCredentials('toastman', 'doorislocked', function (err, result) {
+        Session.findByCredentials('2D', 'doorislocked', function (err, result) {
 
             Code.expect(err).to.not.exist();
             Code.expect(result).to.not.exist();
 
-            Session.findOne = realFindOne;
+            Session.findById = realFindById;
             stub.bcrypt.compare = realCompare;
 
             done();
@@ -167,21 +167,21 @@ lab.experiment('Session Class Methods', function () {
 
     lab.test('it returns an error when finding by credentials fails', function (done) {
 
-        var realFindOne = Session.findOne;
-        Session.findOne = function () {
+        var realFindById = Session.findById;
+        Session.findById = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
 
-            callback(Error('find one failed'));
+            callback(Error('find by id failed'));
         };
 
-        Session.findByCredentials('stimpy', 'dog', function (err, result) {
+        Session.findByCredentials('2D', 'dog', function (err, result) {
 
             Code.expect(err).to.be.an.object();
             Code.expect(result).to.not.exist();
 
-            Session.findOne = realFindOne;
+            Session.findById = realFindById;
 
             done();
         });
@@ -190,8 +190,8 @@ lab.experiment('Session Class Methods', function () {
 
     lab.test('it returns early when finding by credentials misses', function (done) {
 
-        var realFindOne = Session.findOne;
-        Session.findOne = function () {
+        var realFindById = Session.findById;
+        Session.findById = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -199,12 +199,12 @@ lab.experiment('Session Class Methods', function () {
             callback();
         };
 
-        Session.findByCredentials('stimpy', 'dog', function (err, result) {
+        Session.findByCredentials('2D', 'dog', function (err, result) {
 
             Code.expect(err).to.not.exist();
             Code.expect(result).to.not.exist();
 
-            Session.findOne = realFindOne;
+            Session.findById = realFindById;
 
             done();
         });

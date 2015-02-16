@@ -197,7 +197,7 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         stub.User.findByCredentials = function (username, password, callback) {
 
-            callback(null, new User({ username: 'ren' }));
+            callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
         stub.Session.create = function (username, callback) {
@@ -228,12 +228,12 @@ lab.experiment('Login Plugin (Create Session)', function () {
 
         stub.User.findByCredentials = function (username, password, callback) {
 
-            callback(null, new User({ username: 'ren' }));
+            callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
         stub.Session.create = function (username, callback) {
 
-            callback(null, new Session({ username: username }));
+            callback(null, new Session({ _id: '2D', userId: '1D' }));
         };
 
         server.inject(request, function (response) {
