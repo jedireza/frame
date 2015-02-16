@@ -20,7 +20,7 @@ exports.register = function (server, options, next) {
                         return done();
                     }
 
-                    User.findByUsername(username, done);
+                    User.findById(results.session.userId, done);
                 }],
                 roles: ['user', function (done, results) {
 

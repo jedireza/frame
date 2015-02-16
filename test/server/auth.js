@@ -60,12 +60,12 @@ lab.experiment('Auth Plugin', function () {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
-        stub.User.findByUsername = function (username, callback) {
+        stub.User.findById = function (username, callback) {
 
-            callback(null, new User({ username: 'ren' }));
+            callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
         server.route({
@@ -213,12 +213,12 @@ lab.experiment('Auth Plugin', function () {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
-        stub.User.findByUsername = function (username, callback) {
+        stub.User.findById = function (id, callback) {
 
-            callback(null, new User({ username: 'ren' }));
+            callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
         server.route({
@@ -242,7 +242,7 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
             }
         };
 
@@ -259,10 +259,10 @@ lab.experiment('Auth Plugin', function () {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
-        stub.User.findByUsername = function (username, callback) {
+        stub.User.findById = function (id, callback) {
 
             var user = new User({
                 username: 'ren',
@@ -325,10 +325,10 @@ lab.experiment('Auth Plugin', function () {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
-        stub.User.findByUsername = function (username, callback) {
+        stub.User.findById = function (id, callback) {
 
             var user = new User({
                 username: 'ren',
@@ -377,7 +377,7 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
             }
         };
 
@@ -394,10 +394,10 @@ lab.experiment('Auth Plugin', function () {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
-        stub.User.findByUsername = function (username, callback) {
+        stub.User.findById = function (id, callback) {
 
             var user = new User({
                 username: 'ren',
@@ -449,7 +449,7 @@ lab.experiment('Auth Plugin', function () {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
             }
         };
 

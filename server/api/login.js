@@ -89,7 +89,7 @@ exports.register = function (server, options, next) {
 
                     var Session = request.server.plugins['hapi-mongo-models'].Session;
 
-                    Session.create(request.pre.user.username, function (err, session) {
+                    Session.create(request.pre.user._id.toString(), function (err, session) {
 
                         if (err) {
                             return reply(err);
@@ -102,7 +102,7 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var credentials = request.pre.user.username + ':' + request.pre.session.key;
+            var credentials = request.pre.session._id.toString() + ':' + request.pre.session.key;
             var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
             reply({

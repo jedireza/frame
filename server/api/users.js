@@ -407,7 +407,7 @@ exports.register = function (server, options, next) {
                 },
                 session: ['user', function (done, results) {
 
-                    Session.create(results.user[0].username, done);
+                    Session.create(results.user[0]._id.toString(), done);
                 }]
             }, function (err, results) {
 
@@ -416,7 +416,7 @@ exports.register = function (server, options, next) {
                 }
 
                 var user = results.user[0];
-                var credentials = user.username + ':' + results.session.key;
+                var credentials = results.session._id.toString() + ':' + results.session.key;
                 var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
                 reply({

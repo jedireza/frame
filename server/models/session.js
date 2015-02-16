@@ -19,14 +19,14 @@ Session._collection = 'sessions';
 
 Session.schema = Joi.object().keys({
     _id: Joi.object(),
-    username: Joi.string().lowercase().required(),
+    userId: Joi.string().required(),
     key: Joi.string().required(),
     time: Joi.date().required()
 });
 
 
 Session.indexes = [
-    [{ username: 1 }]
+    [{ userId: 1 }]
 ];
 
 
@@ -57,7 +57,7 @@ Session.generateKeyHash = function (callback) {
 };
 
 
-Session.create = function (username, callback) {
+Session.create = function (userId, callback) {
 
     var self = this;
 
@@ -66,7 +66,7 @@ Session.create = function (username, callback) {
         newSession: ['keyHash', function (done, results) {
 
             var document = {
-                username: username.toLowerCase(),
+                userId: userId,
                 key: results.keyHash.hash,
                 time: new Date()
             };
@@ -76,7 +76,7 @@ Session.create = function (username, callback) {
         clean: ['newSession', function (done, results) {
 
             var query = {
-                username: username.toLowerCase(),
+                userId: userId,
                 key: { $ne: results.keyHash.hash }
             };
 
@@ -95,15 +95,14 @@ Session.create = function (username, callback) {
 };
 
 
-Session.findByCredentials = function (username, key, callback) {
+Session.findByCredentials = function (id, key, callback) {
 
     var self = this;
 
     Async.auto({
         session: function (done) {
 
-            var query = { username: username.toLowerCase() };
-            self.findOne(query, done);
+            self.findById(id, done);
         },
         keyMatch: ['session', function (done, results) {
 
