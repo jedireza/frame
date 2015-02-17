@@ -1,6 +1,5 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
-var Async = require('async');
 var AuthPlugin = require('../auth');
 
 
@@ -386,49 +385,26 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var User = request.server.plugins['hapi-mongo-models'].User;
 
-            Async.auto({
-                user: function (done) {
+            var id = request.auth.credentials.user._id.toString();
+            var update = {
+                $set: {
+                    username: request.payload.username,
+                    email: request.payload.email
+                }
+            };
+            var options = {
+                fields: User.fieldsAdapter('username email roles')
+            };
 
-                    var id = request.auth.credentials.user._id.toString();
-                    var update = {
-                        $set: {
-                            username: request.payload.username,
-                            email: request.payload.email
-                        }
-                    };
-                    var options = {
-                        fields: User.fieldsAdapter('username email roles')
-                    };
-
-                    User.findByIdAndUpdate(id, update, options, done);
-                },
-                session: ['user', function (done, results) {
-
-                    Session.create(results.user[0]._id.toString(), done);
-                }]
-            }, function (err, results) {
+            User.findByIdAndUpdate(id, update, options, function (err, user)  {
 
                 if (err) {
                     return reply(err);
                 }
 
-                var user = results.user[0];
-                var credentials = results.session._id.toString() + ':' + results.session.key;
-                var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
-
-                reply({
-                    user: {
-                        _id: user._id,
-                        username: user.username,
-                        email: user.email,
-                        roles: user.roles
-                    },
-                    session: results.session,
-                    authHeader: authHeader
-                });
+                reply(user);
             });
         }
     });
