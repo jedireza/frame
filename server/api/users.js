@@ -398,7 +398,7 @@ exports.register = function (server, options, next) {
                 fields: User.fieldsAdapter('username email roles')
             };
 
-            User.findByIdAndUpdate(id, update, options, function (err, user)  {
+            User.findByIdAndUpdate(id, update, options, function (err, user) {
 
                 if (err) {
                     return reply(err);
