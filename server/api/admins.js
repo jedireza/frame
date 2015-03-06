@@ -271,7 +271,7 @@ exports.register = function (server, options, next) {
                             reply(admin);
                         });
                     }
-                },{
+                }, {
                     assign: 'user',
                     method: function (request, reply) {
 
@@ -301,7 +301,7 @@ exports.register = function (server, options, next) {
                             reply(user);
                         });
                     }
-                },{
+                }, {
                     assign: 'userCheck',
                     method: function (request, reply) {
 
@@ -398,7 +398,7 @@ exports.register = function (server, options, next) {
                             reply(admin);
                         });
                     }
-                },{
+                }, {
                     assign: 'user',
                     method: function (request, reply) {
 

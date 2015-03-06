@@ -43,7 +43,7 @@ exports.register = function (server, options, next) {
                         reply();
                     });
                 }
-            },{
+            }, {
                 assign: 'user',
                 method: function (request, reply) {
 
@@ -60,7 +60,7 @@ exports.register = function (server, options, next) {
                         reply(user);
                     });
                 }
-            },{
+            }, {
                 assign: 'logAttempt',
                 method: function (request, reply) {
 
@@ -83,7 +83,7 @@ exports.register = function (server, options, next) {
                         }).takeover().code(400);
                     });
                 }
-            },{
+            }, {
                 assign: 'session',
                 method: function (request, reply) {
 
@@ -180,7 +180,7 @@ exports.register = function (server, options, next) {
                 email: ['user', function (done, results) {
 
                     var options = {
-                        subject: 'Reset your ' + Config.get('/projectName')    + ' password',
+                        subject: 'Reset your ' + Config.get('/projectName') + ' password',
                         to: request.payload.email
                     };
                     var template = 'forgot-password';
