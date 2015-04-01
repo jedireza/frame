@@ -24,7 +24,7 @@ exports.register = function (server, options, next) {
                 username: user.username
             };
 
-            Session.remove(query, function (err, count) {
+            Session.deleteMany(query, function (err, count) {
 
                 if (err) {
                     return reply(err);
