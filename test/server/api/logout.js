@@ -47,7 +47,6 @@ lab.beforeEach(function (done) {
 lab.afterEach(function (done) {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
-
     done();
 });
 
@@ -66,28 +65,27 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns an error when remove fails', function (done) {
+    lab.test('it returns an error when delete fails', function (done) {
 
-        stub.Session.remove = function () {
+        stub.Session.deleteMany = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
 
-            callback(Error('remove failed'));
+            callback(Error('delete failed'));
         };
 
         server.inject(request, function (response) {
 
             Code.expect(response.statusCode).to.equal(500);
-
             done();
         });
     });
 
 
-    lab.test('it returns a not found when remove misses (no credentials)', function (done) {
+    lab.test('it returns a not found when delete misses (no credentials)', function (done) {
 
-        stub.Session.remove = function () {
+        stub.Session.deleteMany = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -107,9 +105,9 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns a not found when remove misses (missing user from credentials)', function (done) {
+    lab.test('it returns a not found when delete misses (missing user from credentials)', function (done) {
 
-        stub.Session.remove = function () {
+        stub.Session.deleteOne = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -131,9 +129,9 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it removes the authenticated user session successfully', function (done) {
+    lab.test('it deletes the authenticated user session successfully', function (done) {
 
-        stub.Session.remove = function () {
+        stub.Session.deleteMany = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
