@@ -16,7 +16,7 @@ var lab = exports.lab = Lab.script();
 var ModelsPlugin, request, server, stub;
 
 
-lab.beforeEach(function (done) {
+lab.before(function (done) {
 
     stub = {
         Account: {},
@@ -48,7 +48,7 @@ lab.beforeEach(function (done) {
 });
 
 
-lab.afterEach(function (done) {
+lab.after(function (done) {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
     done();
