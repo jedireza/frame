@@ -157,7 +157,7 @@ exports.register = function (server, options, next) {
                     return reply(err);
                 }
 
-                var user = results.linkAccount[0];
+                var user = results.linkAccount;
                 var credentials = user.username + ':' + results.session.key;
                 var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
