@@ -30,7 +30,7 @@
     "nodemailer": "^1.x.x",
     "nodemailer-markdown": "^1.x.x",
     "object-assign": "^2.x.x",
-    "slug": "^0.8.x",
+    "slug": "^0.9.x",
     "visionary": "^2.x.x"
   },
   "devDependencies": {
