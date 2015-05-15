@@ -344,7 +344,7 @@ exports.register = function (server, options, next) {
                     return reply(err);
                 }
 
-                reply(results.account[0]);
+                reply(results.account);
             });
         }
     });
@@ -435,7 +435,7 @@ exports.register = function (server, options, next) {
                     return reply(err);
                 }
 
-                reply(results.account[0]);
+                reply(results.account);
             });
         }
     });
