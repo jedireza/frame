@@ -363,7 +363,7 @@ exports.register = function (server, options, next) {
                     return reply(err);
                 }
 
-                reply(results.admin[0]);
+                reply(results.admin);
             });
         }
     });
@@ -457,7 +457,7 @@ exports.register = function (server, options, next) {
                     return reply(err);
                 }
 
-                reply(results.admin[0]);
+                reply(results.admin);
             });
         }
     });
