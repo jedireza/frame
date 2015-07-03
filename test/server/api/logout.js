@@ -67,7 +67,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
     lab.test('it returns an error when delete fails', function (done) {
 
-        stub.Session.deleteMany = function () {
+        stub.Session.findByIdAndDelete = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -85,7 +85,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
     lab.test('it returns a not found when delete misses (no credentials)', function (done) {
 
-        stub.Session.deleteMany = function () {
+        stub.Session.findByIdAndDelete = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
@@ -131,7 +131,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
 
     lab.test('it deletes the authenticated user session successfully', function (done) {
 
-        stub.Session.deleteMany = function () {
+        stub.Session.findByIdAndDelete = function () {
 
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
