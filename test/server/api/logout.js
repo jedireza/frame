@@ -30,7 +30,7 @@ lab.before(function (done) {
         options: Manifest.get('/plugins')['hapi-mongo-models']
     };
 
-    var plugins = [ HapiAuthBasic, ModelsPlugin, AuthPlugin, LogoutPlugin ];
+    var plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin, LogoutPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
     server.register(plugins, function (err) {
