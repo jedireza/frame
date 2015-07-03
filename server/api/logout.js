@@ -18,19 +18,16 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
 
             var Session = request.server.plugins['hapi-mongo-models'].Session;
-            var credentials = request.auth.credentials || { user: {} };
-            var user = credentials.user || {};
-            var query = {
-                username: user.username
-            };
+            var credentials = request.auth.credentials || { session: {} };
+            var session = credentials.session || {};
 
-            Session.deleteMany(query, function (err, count) {
+            Session.findByIdAndDelete(session._id, function (err, sessionDoc) {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (count === 0) {
+                if (!sessionDoc) {
                     return reply({ message: 'Session not found.' }).code(404);
                 }
 
