@@ -32,6 +32,10 @@ gulp.task('less', function (cb) {
         .pipe(less({
             compress: true
         }))
+        .on('error', function (err) {
+
+            console.log('LESS ERROR: ', err);
+        })
         .pipe(concat('build.css'))
         .pipe(gulp.dest('public'));
 });
