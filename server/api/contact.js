@@ -5,12 +5,9 @@ var Config = require('../../config');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'POST',
-        path: options.basePath + '/contact',
+        path: '/contact',
         config: {
             validate: {
                 payload: {

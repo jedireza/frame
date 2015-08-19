@@ -1,3 +1,4 @@
+var Boom = require('boom');
 var Joi = require('joi');
 var Hoek = require('hoek');
 var Async = require('async');
@@ -7,12 +8,9 @@ var Config = require('../../config');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'POST',
-        path: options.basePath + '/login',
+        path: '/login',
         config: {
             validate: {
                 payload: {
@@ -35,9 +33,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (detected) {
-                            return reply({
-                                message: 'Maximum number of auth attempts reached. Please try again later.'
-                            }).takeover().code(400);
+                            return reply(Boom.badRequest('Maximum number of auth attempts reached. Please try again later.'));
                         }
 
                         reply();
@@ -78,9 +74,7 @@ exports.register = function (server, options, next) {
                             return reply(err);
                         }
 
-                        return reply({
-                            message: 'Username and password combination not found or account is inactive.'
-                        }).takeover().code(400);
+                        return reply(Boom.badRequest('Username and password combination not found or account is inactive.'));
                     });
                 }
             }, {
@@ -121,7 +115,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/login/forgot',
+        path: '/login/forgot',
         config: {
             validate: {
                 payload: {
@@ -204,7 +198,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/login/reset',
+        path: '/login/reset',
         config: {
             validate: {
                 payload: {
@@ -230,7 +224,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (!user) {
-                            return reply({ message: 'Invalid email or key.' }).takeover().code(400);
+                            return reply(Boom.badRequest('Invalid email or key.'));
                         }
 
                         reply(user);
@@ -252,7 +246,7 @@ exports.register = function (server, options, next) {
                 passwordHash: ['keyMatch', function (done, results) {
 
                     if (!results.keyMatch) {
-                        return reply({ message: 'Invalid email or key.' }).takeover().code(400);
+                        return reply(Boom.badRequest('Invalid email or key.'));
                     }
 
                     User.generatePasswordHash(request.payload.password, done);

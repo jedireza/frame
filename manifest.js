@@ -26,6 +26,8 @@ var manifest = {
     plugins: {
         'hapi-auth-basic': {},
         'lout': {},
+        'inert': {},
+        'vision': {},
         'visionary': {
             engines: { jade: 'jade' },
             path: './server/web'
@@ -45,18 +47,18 @@ var manifest = {
         },
         './server/auth': {},
         './server/mailer': {},
-        './server/api/accounts': { basePath: '/api' },
-        './server/api/admin-groups': { basePath: '/api' },
-        './server/api/admins': { basePath: '/api' },
-        './server/api/auth-attempts': { basePath: '/api' },
-        './server/api/contact': { basePath: '/api' },
-        './server/api/index': { basePath: '/api' },
-        './server/api/login': { basePath: '/api' },
-        './server/api/logout': { basePath: '/api' },
-        './server/api/sessions': { basePath: '/api' },
-        './server/api/signup': { basePath: '/api' },
-        './server/api/statuses': { basePath: '/api' },
-        './server/api/users': { basePath: '/api' },
+        './server/api/accounts': [{ routes: { prefix: '/api' } }],
+        './server/api/admin-groups': [{ routes: { prefix: '/api' } }],
+        './server/api/admins': [{ routes: { prefix: '/api' } }],
+        './server/api/auth-attempts': [{ routes: { prefix: '/api' } }],
+        './server/api/contact': [{ routes: { prefix: '/api' } }],
+        './server/api/index': [{ routes: { prefix: '/api' } }],
+        './server/api/login': [{ routes: { prefix: '/api' } }],
+        './server/api/logout': [{ routes: { prefix: '/api' } }],
+        './server/api/sessions': [{ routes: { prefix: '/api' } }],
+        './server/api/signup': [{ routes: { prefix: '/api' } }],
+        './server/api/statuses': [{ routes: { prefix: '/api' } }],
+        './server/api/users': [{ routes: { prefix: '/api' } }],
         './server/web/index': {}
     }
 };

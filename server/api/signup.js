@@ -1,3 +1,4 @@
+var Boom = require('boom');
 var Joi = require('joi');
 var Hoek = require('hoek');
 var Async = require('async');
@@ -6,12 +7,9 @@ var Config = require('../../config');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'POST',
-        path: options.basePath + '/signup',
+        path: '/signup',
         config: {
             validate: {
                 payload: {
@@ -37,11 +35,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (user) {
-                            var response = {
-                                message: 'Username already in use.'
-                            };
-
-                            return reply(response).takeover().code(409);
+                            return reply(Boom.conflict('Username already in use.'));
                         }
 
                         reply(true);
@@ -63,11 +57,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (user) {
-                            var response = {
-                                message: 'Email already in use.'
-                            };
-
-                            return reply(response).takeover().code(409);
+                            return reply(Boom.conflict('Email already in use.'));
                         }
 
                         reply(true);

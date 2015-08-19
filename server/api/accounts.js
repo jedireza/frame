@@ -1,3 +1,4 @@
+var Boom = require('boom');
 var Async = require('async');
 var Joi = require('joi');
 var Hoek = require('hoek');
@@ -6,12 +7,9 @@ var AuthPlugin = require('../auth');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'GET',
-        path: options.basePath + '/accounts',
+        path: '/accounts',
         config: {
             auth: {
                 strategy: 'simple',
@@ -49,7 +47,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/accounts/{id}',
+        path: '/accounts/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -78,7 +76,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/accounts/my',
+        path: '/accounts/my',
         config: {
             auth: {
                 strategy: 'simple',
@@ -109,7 +107,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/accounts',
+        path: '/accounts',
         config: {
             auth: {
                 strategy: 'simple',
@@ -140,7 +138,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/accounts/{id}',
+        path: '/accounts/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -184,7 +182,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/accounts/my',
+        path: '/accounts/my',
         config: {
             auth: {
                 strategy: 'simple',
@@ -227,7 +225,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/accounts/{id}/user',
+        path: '/accounts/{id}/user',
         config: {
             auth: {
                 strategy: 'simple',
@@ -251,7 +249,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (!account) {
-                            return reply({ message: 'Document not found.' }).takeover().code(404);
+                            return reply(Boom.notFound('Document not found.'));
                         }
 
                         reply(account);
@@ -270,18 +268,14 @@ exports.register = function (server, options, next) {
                         }
 
                         if (!user) {
-                            return reply({ message: 'User document not found.' }).takeover().code(404);
+                            return reply(Boom.notFound('User document not found.'));
                         }
 
                         if (user.roles &&
                             user.roles.account &&
                             user.roles.account.id !== request.params.id) {
 
-                            var response = {
-                                message: 'User is already linked to another account. Unlink first.'
-                            };
-
-                            return reply(response).takeover().code(409);
+                            return reply(Boom.conflict('User is already linked to another account. Unlink first.'));
                         }
 
                         reply(user);
@@ -294,11 +288,7 @@ exports.register = function (server, options, next) {
                     if (request.pre.account.user &&
                         request.pre.account.user.id !== request.pre.user._id.toString()) {
 
-                        var response = {
-                            message: 'Account is already linked to another user. Unlink first.'
-                        };
-
-                        return reply(response).takeover().code(409);
+                        return reply(Boom.conflict('Account is already linked to another user. Unlink first.'));
                     }
 
                     reply(true);
@@ -352,7 +342,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/accounts/{id}/user',
+        path: '/accounts/{id}/user',
         config: {
             auth: {
                 strategy: 'simple',
@@ -371,7 +361,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (!account) {
-                            return reply({ message: 'Document not found.' }).takeover().code(404);
+                            return reply(Boom.notFound('Document not found.'));
                         }
 
                         if (!account.user || !account.user.id) {
@@ -394,7 +384,7 @@ exports.register = function (server, options, next) {
                         }
 
                         if (!user) {
-                            return reply({ message: 'User document not found.' }).takeover().code(404);
+                            return reply(Boom.notFound('User document not found.'));
                         }
 
                         reply(user);
@@ -443,7 +433,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/accounts/{id}/notes',
+        path: '/accounts/{id}/notes',
         config: {
             auth: {
                 strategy: 'simple',
@@ -486,7 +476,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/accounts/{id}/status',
+        path: '/accounts/{id}/status',
         config: {
             auth: {
                 strategy: 'simple',
@@ -550,7 +540,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/accounts/{id}',
+        path: '/accounts/{id}',
         config: {
             auth: {
                 strategy: 'simple',

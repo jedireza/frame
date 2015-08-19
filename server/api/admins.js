@@ -1,3 +1,4 @@
+var Boom = require('boom');
 var Async = require('async');
 var Joi = require('joi');
 var Hoek = require('hoek');
@@ -6,12 +7,9 @@ var AuthPlugin = require('../auth');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'GET',
-        path: options.basePath + '/admins',
+        path: '/admins',
         config: {
             auth: {
                 strategy: 'simple',
@@ -52,7 +50,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/admins/{id}',
+        path: '/admins/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -84,7 +82,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/admins',
+        path: '/admins',
         config: {
             auth: {
                 strategy: 'simple',
@@ -118,7 +116,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admins/{id}',
+        path: '/admins/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -165,7 +163,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admins/{id}/permissions',
+        path: '/admins/{id}/permissions',
         config: {
             auth: {
                 strategy: 'simple',
@@ -204,7 +202,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admins/{id}/groups',
+        path: '/admins/{id}/groups',
         config: {
             auth: {
                 strategy: 'simple',
@@ -243,7 +241,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admins/{id}/user',
+        path: '/admins/{id}/user',
         config: {
             auth: {
                 strategy: 'simple',
@@ -269,7 +267,7 @@ exports.register = function (server, options, next) {
                             }
 
                             if (!admin) {
-                                return reply({ message: 'Document not found.' }).takeover().code(404);
+                                return reply(Boom.notFound('Document not found.'));
                             }
 
                             reply(admin);
@@ -288,18 +286,14 @@ exports.register = function (server, options, next) {
                             }
 
                             if (!user) {
-                                return reply({ message: 'User document not found.' }).takeover().code(404);
+                                return reply(Boom.notFound('User document not found.'));
                             }
 
                             if (user.roles &&
                                 user.roles.admin &&
                                 user.roles.admin.id !== request.params.id) {
 
-                                var response = {
-                                    message: 'User is already linked to another admin. Unlink first.'
-                                };
-
-                                return reply(response).takeover().code(409);
+                                return reply(Boom.conflict('User is already linked to another admin. Unlink first.'));
                             }
 
                             reply(user);
@@ -312,11 +306,7 @@ exports.register = function (server, options, next) {
                         if (request.pre.admin.user &&
                             request.pre.admin.user.id !== request.pre.user._id.toString()) {
 
-                            var response = {
-                                message: 'Admin is already linked to another user. Unlink first.'
-                            };
-
-                            return reply(response).takeover().code(409);
+                            return reply(Boom.conflict('Admin is already linked to another user. Unlink first.'));
                         }
 
                         reply(true);
@@ -371,7 +361,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/admins/{id}/user',
+        path: '/admins/{id}/user',
         config: {
             auth: {
                 strategy: 'simple',
@@ -392,7 +382,7 @@ exports.register = function (server, options, next) {
                             }
 
                             if (!admin) {
-                                return reply({ message: 'Document not found.' }).takeover().code(404);
+                                return reply(Boom.notFound('Document not found.'));
                             }
 
                             if (!admin.user || !admin.user.id) {
@@ -415,7 +405,7 @@ exports.register = function (server, options, next) {
                             }
 
                             if (!user) {
-                                return reply({ message: 'User document not found.' }).takeover().code(404);
+                                return reply(Boom.notFound('User document not found.'));
                             }
 
                             reply(user);
@@ -465,7 +455,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/admins/{id}',
+        path: '/admins/{id}',
         config: {
             auth: {
                 strategy: 'simple',
