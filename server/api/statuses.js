@@ -5,12 +5,9 @@ var AuthPlugin = require('../auth');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'GET',
-        path: options.basePath + '/statuses',
+        path: '/statuses',
         config: {
             auth: {
                 strategy: 'simple',
@@ -51,7 +48,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/statuses/{id}',
+        path: '/statuses/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -83,7 +80,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/statuses',
+        path: '/statuses',
         config: {
             auth: {
                 strategy: 'simple',
@@ -119,7 +116,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/statuses/{id}',
+        path: '/statuses/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -162,7 +159,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/statuses/{id}',
+        path: '/statuses/{id}',
         config: {
             auth: {
                 strategy: 'simple',

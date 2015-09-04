@@ -5,12 +5,9 @@ var AuthPlugin = require('../auth');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
-
-
     server.route({
         method: 'GET',
-        path: options.basePath + '/admin-groups',
+        path: '/admin-groups',
         config: {
             auth: {
                 strategy: 'simple',
@@ -51,7 +48,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/admin-groups/{id}',
+        path: '/admin-groups/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -83,7 +80,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/admin-groups',
+        path: '/admin-groups',
         config: {
             auth: {
                 strategy: 'simple',
@@ -117,7 +114,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admin-groups/{id}',
+        path: '/admin-groups/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -160,7 +157,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'PUT',
-        path: options.basePath + '/admin-groups/{id}/permissions',
+        path: '/admin-groups/{id}/permissions',
         config: {
             auth: {
                 strategy: 'simple',
@@ -199,7 +196,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/admin-groups/{id}',
+        path: '/admin-groups/{id}',
         config: {
             auth: {
                 strategy: 'simple',

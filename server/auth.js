@@ -1,3 +1,4 @@
+var Boom = require('boom');
 var Async = require('async');
 
 
@@ -7,7 +8,7 @@ exports.register = function (server, options, next) {
     var User = server.plugins['hapi-mongo-models'].User;
 
     server.auth.strategy('simple', 'basic', {
-        validateFunc: function (username, password, callback) {
+        validateFunc: function (request, username, password, callback) {
 
             Async.auto({
                 session: function (done) {
@@ -76,11 +77,7 @@ exports.preware.ensureAdminGroup = function (groups) {
             });
 
             if (!groupFound) {
-                var response = {
-                    message: 'Permission denied to this resource.'
-                };
-
-                return reply(response).takeover().code(403);
+                return reply(Boom.notFound('Permission denied to this resource.'));
             }
 
             reply();
