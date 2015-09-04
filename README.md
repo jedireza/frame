@@ -100,9 +100,9 @@ This will start the app using [`nodemon`](https://github.com/remy/nodemon).
 
  - Create a user system API
  - Don't include a front-end
- - Write code in a simple and consistent way
- - It's just JavaScript
+ - Follow the [hapi coding conventions](http://hapijs.com/styleguide)
  - 100% test coverage
+ - It's just JavaScript
 
 
 ## Features
