@@ -5,7 +5,14 @@ var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Admin = server.plugins['hapi-mongo-models'].Admin;
+    var User = server.plugins['hapi-mongo-models'].User;
+
 
     server.route({
         method: 'GET',
@@ -29,7 +36,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -62,8 +68,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
-
             Admin.findById(request.params.id, function (err, admin) {
 
                 if (err) {
@@ -71,7 +75,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!admin) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(admin);
@@ -99,7 +103,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
             var name = request.payload.name;
 
             Admin.create(name, function (err, admin) {
@@ -137,7 +140,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -152,7 +154,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!admin) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(admin);
@@ -180,7 +182,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -219,7 +220,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -258,8 +258,6 @@ exports.register = function (server, options, next) {
                     assign: 'admin',
                     method: function (request, reply) {
 
-                        var Admin = request.server.plugins['hapi-mongo-models'].Admin;
-
                         Admin.findById(request.params.id, function (err, admin) {
 
                             if (err) {
@@ -276,8 +274,6 @@ exports.register = function (server, options, next) {
                 }, {
                     assign: 'user',
                     method: function (request, reply) {
-
-                        var User = request.server.plugins['hapi-mongo-models'].User;
 
                         User.findByUsername(request.payload.username, function (err, user) {
 
@@ -319,7 +315,6 @@ exports.register = function (server, options, next) {
             Async.auto({
                 admin: function (done) {
 
-                    var Admin = request.server.plugins['hapi-mongo-models'].Admin;
                     var id = request.params.id;
                     var update = {
                         $set: {
@@ -334,7 +329,6 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id;
                     var update = {
                         $set: {
@@ -373,8 +367,6 @@ exports.register = function (server, options, next) {
                     assign: 'admin',
                     method: function (request, reply) {
 
-                        var Admin = request.server.plugins['hapi-mongo-models'].Admin;
-
                         Admin.findById(request.params.id, function (err, admin) {
 
                             if (err) {
@@ -395,8 +387,6 @@ exports.register = function (server, options, next) {
                 }, {
                     assign: 'user',
                     method: function (request, reply) {
-
-                        var User = request.server.plugins['hapi-mongo-models'].User;
 
                         User.findById(request.pre.admin.user.id, function (err, user) {
 
@@ -419,7 +409,6 @@ exports.register = function (server, options, next) {
             Async.auto({
                 admin: function (done) {
 
-                    var Admin = request.server.plugins['hapi-mongo-models'].Admin;
                     var id = request.params.id;
                     var update = {
                         $unset: {
@@ -431,7 +420,6 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id.toString();
                     var update = {
                         $unset: {
@@ -467,7 +455,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Admin = request.server.plugins['hapi-mongo-models'].Admin;
 
             Admin.findByIdAndDelete(request.params.id, function (err, admin) {
 
@@ -476,7 +463,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!admin) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -484,6 +471,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

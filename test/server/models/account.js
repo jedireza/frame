@@ -7,6 +7,7 @@ var Account = require('../../../server/models/account');
 
 var lab = exports.lab = Lab.script();
 
+
 lab.experiment('Account Class Methods', function () {
 
     lab.before(function (done) {

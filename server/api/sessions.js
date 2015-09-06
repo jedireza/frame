@@ -1,9 +1,16 @@
+var Boom = require('boom');
 var Joi = require('joi');
 var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Session = server.plugins['hapi-mongo-models'].Session;
+
 
     server.route({
         method: 'GET',
@@ -27,7 +34,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -60,8 +66,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
-
             Session.findById(request.params.id, function (err, session) {
 
                 if (err) {
@@ -69,7 +73,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!session) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(session);
@@ -92,8 +96,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
-
             Session.findByIdAndDelete(request.params.id, function (err, session) {
 
                 if (err) {
@@ -101,7 +103,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!session) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -109,6 +111,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

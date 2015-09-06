@@ -3,7 +3,10 @@ var Hoek = require('hoek');
 var Config = require('../../config');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'POST',
@@ -41,6 +44,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency('mailer', internals.applyRoutes);
 
     next();
 };

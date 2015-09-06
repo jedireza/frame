@@ -1,9 +1,16 @@
+var Boom = require('boom');
 var Joi = require('joi');
 var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var AdminGroup = server.plugins['hapi-mongo-models'].AdminGroup;
+
 
     server.route({
         method: 'GET',
@@ -27,7 +34,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -60,8 +66,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
-
             AdminGroup.findById(request.params.id, function (err, adminGroup) {
 
                 if (err) {
@@ -69,7 +73,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!adminGroup) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(adminGroup);
@@ -97,7 +101,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var name = request.payload.name;
 
             AdminGroup.create(name, function (err, adminGroup) {
@@ -131,7 +134,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -146,7 +148,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!adminGroup) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(adminGroup);
@@ -174,7 +176,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -208,8 +209,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
-
             AdminGroup.findByIdAndDelete(request.params.id, function (err, adminGroup) {
 
                 if (err) {
@@ -217,7 +216,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!adminGroup) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -225,6 +224,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

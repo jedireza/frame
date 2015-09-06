@@ -5,7 +5,15 @@ var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Account = server.plugins['hapi-mongo-models'].Account;
+    var User = server.plugins['hapi-mongo-models'].User;
+    var Status = server.plugins['hapi-mongo-models'].Status;
+
 
     server.route({
         method: 'GET',
@@ -26,7 +34,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -56,8 +63,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
-
             Account.findById(request.params.id, function (err, account) {
 
                 if (err) {
@@ -65,7 +70,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!account) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(account);
@@ -85,7 +90,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.auth.credentials.roles.account._id.toString();
             var fields = Account.fieldsAdapter('user name timeCreated');
 
@@ -96,7 +100,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!account) {
-                    return reply({ message: 'Document not found. That is strange.' }).code(404);
+                    return reply(Boom.notFound('Document not found. That is strange.'));
                 }
 
                 reply(account);
@@ -121,7 +125,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var name = request.payload.name;
 
             Account.create(name, function (err, account) {
@@ -156,7 +159,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -171,7 +173,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!account) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(account);
@@ -200,7 +202,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.auth.credentials.roles.account._id.toString();
             var update = {
                 $set: {
@@ -240,8 +241,6 @@ exports.register = function (server, options, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    var Account = request.server.plugins['hapi-mongo-models'].Account;
-
                     Account.findById(request.params.id, function (err, account) {
 
                         if (err) {
@@ -258,8 +257,6 @@ exports.register = function (server, options, next) {
             }, {
                 assign: 'user',
                 method: function (request, reply) {
-
-                    var User = request.server.plugins['hapi-mongo-models'].User;
 
                     User.findByUsername(request.payload.username, function (err, user) {
 
@@ -300,7 +297,6 @@ exports.register = function (server, options, next) {
             Async.auto({
                 account: function (done) {
 
-                    var Account = request.server.plugins['hapi-mongo-models'].Account;
                     var id = request.params.id;
                     var update = {
                         $set: {
@@ -315,7 +311,6 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id;
                     var update = {
                         $set: {
@@ -352,8 +347,6 @@ exports.register = function (server, options, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    var Account = request.server.plugins['hapi-mongo-models'].Account;
-
                     Account.findById(request.params.id, function (err, account) {
 
                         if (err) {
@@ -375,8 +368,6 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
-
                     User.findById(request.pre.account.user.id, function (err, user) {
 
                         if (err) {
@@ -397,7 +388,6 @@ exports.register = function (server, options, next) {
             Async.auto({
                 account: function (done) {
 
-                    var Account = request.server.plugins['hapi-mongo-models'].Account;
                     var id = request.params.id;
                     var update = {
                         $unset: {
@@ -409,7 +399,6 @@ exports.register = function (server, options, next) {
                 },
                 user: function (done) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var id = request.pre.user._id.toString();
                     var update = {
                         $unset: {
@@ -447,7 +436,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var update = {
                 $push: {
@@ -491,8 +479,6 @@ exports.register = function (server, options, next) {
                 assign: 'status',
                 method: function (request, reply) {
 
-                    var Status = request.server.plugins['hapi-mongo-models'].Status;
-
                     Status.findById(request.payload.status, function (err, status) {
 
                         if (err) {
@@ -506,7 +492,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var id = request.params.id;
             var newStatus = {
                 id: request.pre.status._id.toString(),
@@ -552,8 +537,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
-
             Account.findByIdAndDelete(request.params.id, function (err, account) {
 
                 if (err) {
@@ -561,7 +544,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!account) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -569,6 +552,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

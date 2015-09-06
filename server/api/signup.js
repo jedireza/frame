@@ -5,7 +5,15 @@ var Async = require('async');
 var Config = require('../../config');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Account = server.plugins['hapi-mongo-models'].Account;
+    var Session = server.plugins['hapi-mongo-models'].Session;
+    var User = server.plugins['hapi-mongo-models'].User;
+
 
     server.route({
         method: 'POST',
@@ -23,7 +31,6 @@ exports.register = function (server, options, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         username: request.payload.username
                     };
@@ -45,7 +52,6 @@ exports.register = function (server, options, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email
                     };
@@ -67,9 +73,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
-            var User = request.server.plugins['hapi-mongo-models'].User;
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var mailer = request.server.plugins.mailer;
 
             Async.auto({
@@ -165,6 +168,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['mailer', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };
