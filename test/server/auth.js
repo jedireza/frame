@@ -41,7 +41,7 @@ lab.beforeEach(function (done) {
             return done(err);
         }
 
-        done();
+        server.initialize(done);
     });
 });
 

@@ -6,7 +6,15 @@ var Bcrypt = require('bcrypt');
 var Config = require('../../config');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var AuthAttempt = server.plugins['hapi-mongo-models'].AuthAttempt;
+    var Session = server.plugins['hapi-mongo-models'].Session;
+    var User = server.plugins['hapi-mongo-models'].User;
+
 
     server.route({
         method: 'POST',
@@ -22,7 +30,6 @@ exports.register = function (server, options, next) {
                 assign: 'abuseDetected',
                 method: function (request, reply) {
 
-                    var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
                     var ip = request.info.remoteAddress;
                     var username = request.payload.username;
 
@@ -43,7 +50,6 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var username = request.payload.username;
                     var password = request.payload.password;
 
@@ -64,7 +70,6 @@ exports.register = function (server, options, next) {
                         return reply();
                     }
 
-                    var AuthAttempt = request.server.plugins['hapi-mongo-models'].AuthAttempt;
                     var ip = request.info.remoteAddress;
                     var username = request.payload.username;
 
@@ -80,8 +85,6 @@ exports.register = function (server, options, next) {
             }, {
                 assign: 'session',
                 method: function (request, reply) {
-
-                    var Session = request.server.plugins['hapi-mongo-models'].Session;
 
                     Session.create(request.pre.user._id.toString(), function (err, session) {
 
@@ -126,7 +129,6 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email
                     };
@@ -148,8 +150,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var mailer = request.server.plugins.mailer;
 
             Async.auto({
@@ -211,7 +211,6 @@ exports.register = function (server, options, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email,
                         'resetPassword.expires': { $gt: Date.now() }
@@ -233,8 +232,6 @@ exports.register = function (server, options, next) {
             }]
         },
         handler: function (request, reply) {
-
-            var User = request.server.plugins['hapi-mongo-models'].User;
 
             Async.auto({
                 keyMatch: function (done) {
@@ -276,6 +273,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['mailer', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

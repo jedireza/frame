@@ -1,9 +1,16 @@
+var Boom = require('boom');
 var Joi = require('joi');
 var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Status = server.plugins['hapi-mongo-models'].Status;
+
 
     server.route({
         method: 'GET',
@@ -27,7 +34,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var query = {};
             var fields = request.query.fields;
             var sort = request.query.sort;
@@ -60,8 +66,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
-
             Status.findById(request.params.id, function (err, status) {
 
                 if (err) {
@@ -69,7 +73,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!status) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(status);
@@ -98,7 +102,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var pivot = request.payload.pivot;
             var name = request.payload.name;
 
@@ -133,7 +136,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -148,7 +150,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!status) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(status);
@@ -171,8 +173,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
-
             Status.findByIdAndDelete(request.params.id, function (err, status) {
 
                 if (err) {
@@ -180,7 +180,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!status) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -188,6 +188,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

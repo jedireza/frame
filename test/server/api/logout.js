@@ -39,7 +39,7 @@ lab.before(function (done) {
             return done(err);
         }
 
-        done();
+        server.initialize(done);
     });
 });
 
@@ -98,7 +98,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
         server.inject(request, function (response) {
 
             Code.expect(response.statusCode).to.equal(404);
-            Code.expect(response.result.message).to.match(/session not found/i);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });
@@ -122,7 +122,7 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
         server.inject(request, function (response) {
 
             Code.expect(response.statusCode).to.equal(404);
-            Code.expect(response.result.message).to.match(/session not found/i);
+            Code.expect(response.result.message).to.match(/document not found/i);
 
             done();
         });

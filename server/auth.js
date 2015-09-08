@@ -2,7 +2,10 @@ var Boom = require('boom');
 var Async = require('async');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyStrategy = function (server, next) {
 
     var Session = server.plugins['hapi-mongo-models'].Session;
     var User = server.plugins['hapi-mongo-models'].User;
@@ -54,36 +57,47 @@ exports.register = function (server, options, next) {
         }
     });
 
+
     next();
 };
 
 
-exports.preware = {};
+internals.preware = {
+    ensureAdminGroup: function (groups) {
 
+        return {
+            assign: 'ensureAdminGroup',
+            method: function (request, reply) {
 
-exports.preware.ensureAdminGroup = function (groups) {
+                if (Object.prototype.toString.call(groups) !== '[object Array]') {
+                    groups = [groups];
+                }
 
-    return {
-        assign: 'ensureAdminGroup',
-        method: function (request, reply) {
+                var groupFound = groups.some(function (group) {
 
-            if (Object.prototype.toString.call(groups) !== '[object Array]') {
-                groups = [groups];
+                    return request.auth.credentials.roles.admin.isMemberOf(group);
+                });
+
+                if (!groupFound) {
+                    return reply(Boom.notFound('Permission denied to this resource.'));
+                }
+
+                reply();
             }
-
-            var groupFound = groups.some(function (group) {
-
-                return request.auth.credentials.roles.admin.isMemberOf(group);
-            });
-
-            if (!groupFound) {
-                return reply(Boom.notFound('Permission denied to this resource.'));
-            }
-
-            reply();
-        }
-    };
+        };
+    }
 };
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency('hapi-mongo-models', internals.applyStrategy);
+
+    next();
+};
+
+
+exports.preware = internals.preware;
 
 
 exports.register.attributes = {

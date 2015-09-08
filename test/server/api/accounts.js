@@ -43,7 +43,7 @@ lab.before(function (done) {
             return done(err);
         }
 
-        done();
+        server.initialize(done);
     });
 });
 

@@ -4,7 +4,13 @@ var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var User = server.plugins['hapi-mongo-models'].User;
+
 
     server.route({
         method: 'GET',
@@ -31,7 +37,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var query = {};
             if (request.query.username) {
                 query.username = new RegExp('^.*?' + request.query.username + '.*$', 'i');
@@ -73,8 +78,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
-
             User.findById(request.params.id, function (err, user) {
 
                 if (err) {
@@ -82,7 +85,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!user) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(user);
@@ -102,7 +105,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.auth.credentials.user._id.toString();
             var fields = User.fieldsAdapter('username email roles');
 
@@ -113,7 +115,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!user) {
-                    return reply({ message: 'Document not found. That is strange.' }).code(404);
+                    return reply(Boom.notFound('Document not found. That is strange.'));
                 }
 
                 reply(user);
@@ -143,7 +145,6 @@ exports.register = function (server, options, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             username: request.payload.username
                         };
@@ -165,7 +166,6 @@ exports.register = function (server, options, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             email: request.payload.email
                         };
@@ -188,7 +188,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var username = request.payload.username;
             var password = request.payload.password;
             var email = request.payload.email;
@@ -226,7 +225,6 @@ exports.register = function (server, options, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             username: request.payload.username,
                             _id: { $ne: User._idClass(request.params.id) }
@@ -249,7 +247,6 @@ exports.register = function (server, options, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins['hapi-mongo-models'].User;
                         var conditions = {
                             email: request.payload.email,
                             _id: { $ne: User._idClass(request.params.id) }
@@ -273,7 +270,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -290,7 +286,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!user) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply(user);
@@ -317,7 +313,6 @@ exports.register = function (server, options, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         username: request.payload.username,
                         _id: { $ne: request.auth.credentials.user._id }
@@ -340,7 +335,6 @@ exports.register = function (server, options, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
                     var conditions = {
                         email: request.payload.email,
                         _id: { $ne: request.auth.credentials.user._id }
@@ -362,8 +356,6 @@ exports.register = function (server, options, next) {
             }]
         },
         handler: function (request, reply) {
-
-            var User = request.server.plugins['hapi-mongo-models'].User;
 
             var id = request.auth.credentials.user._id.toString();
             var update = {
@@ -407,8 +399,6 @@ exports.register = function (server, options, next) {
                     assign: 'password',
                     method: function (request, reply) {
 
-                        var User = request.server.plugins['hapi-mongo-models'].User;
-
                         User.generatePasswordHash(request.payload.password, function (err, hash) {
 
                             if (err) {
@@ -423,7 +413,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.params.id;
             var update = {
                 $set: {
@@ -460,8 +449,6 @@ exports.register = function (server, options, next) {
                 assign: 'password',
                 method: function (request, reply) {
 
-                    var User = request.server.plugins['hapi-mongo-models'].User;
-
                     User.generatePasswordHash(request.payload.password, function (err, hash) {
 
                         if (err) {
@@ -475,7 +462,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.auth.credentials.user._id.toString();
             var update = {
                 $set: {
@@ -512,8 +498,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var User = request.server.plugins['hapi-mongo-models'].User;
-
             User.findByIdAndDelete(request.params.id, function (err, user) {
 
                 if (err) {
@@ -521,7 +505,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!user) {
-                    return reply({ message: 'Document not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -529,6 +513,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };

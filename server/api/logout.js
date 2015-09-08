@@ -1,7 +1,14 @@
+var Boom = require('boom');
 var Hoek = require('hoek');
 
 
-exports.register = function (server, options, next) {
+var internals = {};
+
+
+internals.applyRoutes = function (server, next) {
+
+    var Session = server.plugins['hapi-mongo-models'].Session;
+
 
     server.route({
         method: 'DELETE',
@@ -14,7 +21,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Session = request.server.plugins['hapi-mongo-models'].Session;
             var credentials = request.auth.credentials || { session: {} };
             var session = credentials.session || {};
 
@@ -25,7 +31,7 @@ exports.register = function (server, options, next) {
                 }
 
                 if (!sessionDoc) {
-                    return reply({ message: 'Session not found.' }).code(404);
+                    return reply(Boom.notFound('Document not found.'));
                 }
 
                 reply({ message: 'Success.' });
@@ -33,6 +39,14 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    next();
+};
+
+
+exports.register = function (server, options, next) {
+
+    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
     next();
 };
