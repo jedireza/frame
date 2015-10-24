@@ -26,8 +26,8 @@ Status.schema = Joi.object().keys({
 
 
 Status.indexes = [
-    [{ pivot: 1 }],
-    [{ name: 1 }]
+    { key: { pivot: 1 } },
+    { key: { name: 1 } }
 ];
 
 

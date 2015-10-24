@@ -26,7 +26,7 @@ Session.schema = Joi.object().keys({
 
 
 Session.indexes = [
-    [{ userId: 1 }]
+    { key: { userId: 1 } }
 ];
 
 

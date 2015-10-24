@@ -1,6 +1,5 @@
 var Boom = require('boom');
 var Joi = require('joi');
-var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 

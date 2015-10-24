@@ -1,6 +1,3 @@
-var Hoek = require('hoek');
-
-
 exports.register = function (server, options, next) {
 
     server.route({
