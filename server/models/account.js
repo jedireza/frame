@@ -41,8 +41,8 @@ Account.schema = Joi.object().keys({
 
 
 Account.indexes = [
-    [{ 'user.id': 1 }],
-    [{ 'user.name': 1 }]
+    { key: { 'user.id': 1 } },
+    { key: { 'user.name': 1 } }
 ];
 
 

@@ -1,5 +1,4 @@
 var Boom = require('boom');
-var Hoek = require('hoek');
 
 
 var internals = {};

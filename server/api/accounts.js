@@ -1,7 +1,6 @@
 var Boom = require('boom');
 var Async = require('async');
 var Joi = require('joi');
-var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
 

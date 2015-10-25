@@ -106,8 +106,8 @@ Admin.schema = Joi.object().keys({
 
 
 Admin.indexes = [
-    [{ 'user.id': 1 }],
-    [{ 'user.name': 1 }]
+    { key: { 'user.id': 1 } },
+    { key: { 'user.name': 1 } }
 ];
 
 

@@ -25,8 +25,8 @@ AuthAttempt.schema = Joi.object().keys({
 
 
 AuthAttempt.indexes = [
-    [{ ip: 1, username: 1 }],
-    [{ username: 1 }]
+    { key: { ip: 1, username: 1 } },
+    { key: { username: 1 } }
 ];
 
 

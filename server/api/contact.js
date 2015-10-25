@@ -1,5 +1,4 @@
 var Joi = require('joi');
-var Hoek = require('hoek');
 var Config = require('../../config');
 
 
