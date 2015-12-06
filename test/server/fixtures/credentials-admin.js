@@ -1,8 +1,10 @@
-var User = require('../../../server/models/user');
-var Admin = require('../../../server/models/admin');
+'use strict';
+
+const User = require('../../../server/models/user');
+const Admin = require('../../../server/models/admin');
 
 
-var user = new User({
+const user = new User({
     _id: '535HOW35',
     username: 'ren',
     roles: {

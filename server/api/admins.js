@@ -1,16 +1,18 @@
-var Boom = require('boom');
-var Async = require('async');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Async = require('async');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Admin = server.plugins['hapi-mongo-models'].Admin;
-    var User = server.plugins['hapi-mongo-models'].User;
+    const Admin = server.plugins['hapi-mongo-models'].Admin;
+    const User = server.plugins['hapi-mongo-models'].User;
 
 
     server.route({
@@ -35,13 +37,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const query = {};
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            Admin.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            Admin.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -67,7 +69,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Admin.findById(request.params.id, function (err, admin) {
+            Admin.findById(request.params.id, (err, admin) => {
 
                 if (err) {
                     return reply(err);
@@ -102,9 +104,9 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var name = request.payload.name;
+            const name = request.payload.name;
 
-            Admin.create(name, function (err, admin) {
+            Admin.create(name, (err, admin) => {
 
                 if (err) {
                     return reply(err);
@@ -139,14 +141,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     name: request.payload.name
                 }
             };
 
-            Admin.findByIdAndUpdate(id, update, function (err, admin) {
+            Admin.findByIdAndUpdate(id, update, (err, admin) => {
 
                 if (err) {
                     return reply(err);
@@ -181,14 +183,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     permissions: request.payload.permissions
                 }
             };
 
-            Admin.findByIdAndUpdate(id, update, function (err, admin) {
+            Admin.findByIdAndUpdate(id, update, (err, admin) => {
 
                 if (err) {
                     return reply(err);
@@ -219,14 +221,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     groups: request.payload.groups
                 }
             };
 
-            Admin.findByIdAndUpdate(id, update, function (err, admin) {
+            Admin.findByIdAndUpdate(id, update, (err, admin) => {
 
                 if (err) {
                     return reply(err);
@@ -257,7 +259,7 @@ internals.applyRoutes = function (server, next) {
                     assign: 'admin',
                     method: function (request, reply) {
 
-                        Admin.findById(request.params.id, function (err, admin) {
+                        Admin.findById(request.params.id, (err, admin) => {
 
                             if (err) {
                                 return reply(err);
@@ -274,7 +276,7 @@ internals.applyRoutes = function (server, next) {
                     assign: 'user',
                     method: function (request, reply) {
 
-                        User.findByUsername(request.payload.username, function (err, user) {
+                        User.findByUsername(request.payload.username, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -314,8 +316,8 @@ internals.applyRoutes = function (server, next) {
             Async.auto({
                 admin: function (done) {
 
-                    var id = request.params.id;
-                    var update = {
+                    const id = request.params.id;
+                    const update = {
                         $set: {
                             user: {
                                 id: request.pre.user._id.toString(),
@@ -328,8 +330,8 @@ internals.applyRoutes = function (server, next) {
                 },
                 user: function (done) {
 
-                    var id = request.pre.user._id;
-                    var update = {
+                    const id = request.pre.user._id;
+                    const update = {
                         $set: {
                             'roles.admin': {
                                 id: request.pre.admin._id.toString(),
@@ -340,7 +342,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -366,7 +368,7 @@ internals.applyRoutes = function (server, next) {
                     assign: 'admin',
                     method: function (request, reply) {
 
-                        Admin.findById(request.params.id, function (err, admin) {
+                        Admin.findById(request.params.id, (err, admin) => {
 
                             if (err) {
                                 return reply(err);
@@ -387,7 +389,7 @@ internals.applyRoutes = function (server, next) {
                     assign: 'user',
                     method: function (request, reply) {
 
-                        User.findById(request.pre.admin.user.id, function (err, user) {
+                        User.findById(request.pre.admin.user.id, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -408,8 +410,8 @@ internals.applyRoutes = function (server, next) {
             Async.auto({
                 admin: function (done) {
 
-                    var id = request.params.id;
-                    var update = {
+                    const id = request.params.id;
+                    const update = {
                         $unset: {
                             user: undefined
                         }
@@ -419,8 +421,8 @@ internals.applyRoutes = function (server, next) {
                 },
                 user: function (done) {
 
-                    var id = request.pre.user._id.toString();
-                    var update = {
+                    const id = request.pre.user._id.toString();
+                    const update = {
                         $unset: {
                             'roles.admin': undefined
                         }
@@ -428,7 +430,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -455,7 +457,7 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
 
-            Admin.findByIdAndDelete(request.params.id, function (err, admin) {
+            Admin.findByIdAndDelete(request.params.id, (err, admin) => {
 
                 if (err) {
                     return reply(err);

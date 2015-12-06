@@ -1,13 +1,15 @@
-var Joi = require('joi');
-var Async = require('async');
-var Bcrypt = require('bcrypt');
-var ObjectAssign = require('object-assign');
-var BaseModel = require('hapi-mongo-models').BaseModel;
-var Account = require('./account');
-var Admin = require('./admin');
+'use strict';
+
+const Joi = require('joi');
+const Async = require('async');
+const Bcrypt = require('bcrypt');
+const ObjectAssign = require('object-assign');
+const BaseModel = require('hapi-mongo-models').BaseModel;
+const Account = require('./account');
+const Admin = require('./admin');
 
 
-var User = BaseModel.extend({
+const User = BaseModel.extend({
     constructor: function (attrs) {
 
         ObjectAssign(this, attrs);
@@ -36,8 +38,8 @@ var User = BaseModel.extend({
             return callback(null, this._roles);
         }
 
-        var self = this;
-        var tasks = {};
+        const self = this;
+        const tasks = {};
 
         if (this.roles.account) {
             tasks.account = function (done) {
@@ -53,7 +55,7 @@ var User = BaseModel.extend({
             };
         }
 
-        Async.auto(tasks, function (err, results) {
+        Async.auto(tasks, (err, results) => {
 
             if (err) {
                 return callback(err);
@@ -111,7 +113,7 @@ User.generatePasswordHash = function (password, callback) {
 
             Bcrypt.hash(password, results.salt, done);
         }]
-    }, function (err, results) {
+    }, (err, results) => {
 
         if (err) {
             return callback(err);
@@ -126,13 +128,13 @@ User.generatePasswordHash = function (password, callback) {
 
 User.create = function (username, password, email, callback) {
 
-    var self = this;
+    const self = this;
 
     Async.auto({
         passwordHash: this.generatePasswordHash.bind(this, password),
         newUser: ['passwordHash', function (done, results) {
 
-            var document = {
+            const document = {
                 isActive: true,
                 username: username.toLowerCase(),
                 password: results.passwordHash.hash,
@@ -142,7 +144,7 @@ User.create = function (username, password, email, callback) {
 
             self.insertOne(document, done);
         }]
-    }, function (err, results) {
+    }, (err, results) => {
 
         if (err) {
             return callback(err);
@@ -157,12 +159,12 @@ User.create = function (username, password, email, callback) {
 
 User.findByCredentials = function (username, password, callback) {
 
-    var self = this;
+    const self = this;
 
     Async.auto({
         user: function (done) {
 
-            var query = {
+            const query = {
                 isActive: true
             };
 
@@ -181,10 +183,10 @@ User.findByCredentials = function (username, password, callback) {
                 return done(null, false);
             }
 
-            var source = results.user.password;
+            const source = results.user.password;
             Bcrypt.compare(password, source, done);
         }]
-    }, function (err, results) {
+    }, (err, results) => {
 
         if (err) {
             return callback(err);
@@ -201,7 +203,7 @@ User.findByCredentials = function (username, password, callback) {
 
 User.findByUsername = function (username, callback) {
 
-    var query = { username: username.toLowerCase() };
+    const query = { username: username.toLowerCase() };
     this.findOne(query, callback);
 };
 

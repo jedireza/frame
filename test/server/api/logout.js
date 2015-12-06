@@ -1,28 +1,33 @@
-var Lab = require('lab');
-var Code = require('code');
-var Path = require('path');
-var Hoek = require('hoek');
-var Config = require('../../../config');
-var Manifest = require('../../../manifest');
-var Hapi = require('hapi');
-var HapiAuthBasic = require('hapi-auth-basic');
-var Proxyquire = require('proxyquire');
-var AuthPlugin = require('../../../server/auth');
-var LogoutPlugin = require('../../../server/api/logout');
-var AuthenticatedUser = require('../fixtures/credentials-admin');
+'use strict';
+
+const Lab = require('lab');
+const Code = require('code');
+const Path = require('path');
+const Hoek = require('hoek');
+const Config = require('../../../config');
+const Manifest = require('../../../manifest');
+const Hapi = require('hapi');
+const HapiAuthBasic = require('hapi-auth-basic');
+const Proxyquire = require('proxyquire');
+const AuthPlugin = require('../../../server/auth');
+const LogoutPlugin = require('../../../server/api/logout');
+const AuthenticatedUser = require('../fixtures/credentials-admin');
 
 
-var lab = exports.lab = Lab.script();
-var ModelsPlugin, request, server, stub;
+const lab = exports.lab = Lab.script();
+let ModelsPlugin;
+let request;
+let server;
+let stub;
 
 
-lab.before(function (done) {
+lab.before((done) => {
 
     stub = {
         Session: {}
     };
 
-    var proxy = {};
+    const proxy = {};
     proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
 
     ModelsPlugin = {
@@ -30,10 +35,10 @@ lab.before(function (done) {
         options: Manifest.get('/plugins')['hapi-mongo-models']
     };
 
-    var plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin, LogoutPlugin];
+    const plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin, LogoutPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
-    server.register(plugins, function (err) {
+    server.register(plugins, (err) => {
 
         if (err) {
             return done(err);
@@ -44,16 +49,16 @@ lab.before(function (done) {
 });
 
 
-lab.after(function (done) {
+lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
     done();
 });
 
 
-lab.experiment('Logout Plugin (Delete Session)', function () {
+lab.experiment('Logout Plugin (Delete Session)', () => {
 
-    lab.beforeEach(function (done) {
+    lab.beforeEach((done) => {
 
         request = {
             method: 'DELETE',
@@ -65,17 +70,17 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns an error when delete fails', function (done) {
+    lab.test('it returns an error when delete fails', (done) => {
 
         stub.Session.findByIdAndDelete = function () {
 
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+            const args = Array.prototype.slice.call(arguments);
+            const callback = args.pop();
 
             callback(Error('delete failed'));
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
             done();
@@ -83,19 +88,19 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns a not found when delete misses (no credentials)', function (done) {
+    lab.test('it returns a not found when delete misses (no credentials)', (done) => {
 
         stub.Session.findByIdAndDelete = function () {
 
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+            const args = Array.prototype.slice.call(arguments);
+            const callback = args.pop();
 
             callback(null, 0);
         };
 
         delete request.credentials;
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
             Code.expect(response.result.message).to.match(/document not found/i);
@@ -105,21 +110,21 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it returns a not found when delete misses (missing user from credentials)', function (done) {
+    lab.test('it returns a not found when delete misses (missing user from credentials)', (done) => {
 
         stub.Session.deleteOne = function () {
 
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+            const args = Array.prototype.slice.call(arguments);
+            const callback = args.pop();
 
             callback(null, 0);
         };
 
-        var CorruptedAuthenticatedUser = Hoek.clone(AuthenticatedUser);
+        const CorruptedAuthenticatedUser = Hoek.clone(AuthenticatedUser);
         CorruptedAuthenticatedUser.user = undefined;
         request.credentials = CorruptedAuthenticatedUser;
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
             Code.expect(response.result.message).to.match(/document not found/i);
@@ -129,17 +134,17 @@ lab.experiment('Logout Plugin (Delete Session)', function () {
     });
 
 
-    lab.test('it deletes the authenticated user session successfully', function (done) {
+    lab.test('it deletes the authenticated user session successfully', (done) => {
 
         stub.Session.findByIdAndDelete = function () {
 
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
+            const args = Array.prototype.slice.call(arguments);
+            const callback = args.pop();
 
             callback(null, 1);
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
             Code.expect(response.result.message).to.match(/success/i);

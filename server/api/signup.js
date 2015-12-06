@@ -1,17 +1,19 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var Async = require('async');
-var Config = require('../../config');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const Async = require('async');
+const Config = require('../../config');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Account = server.plugins['hapi-mongo-models'].Account;
-    var Session = server.plugins['hapi-mongo-models'].Session;
-    var User = server.plugins['hapi-mongo-models'].User;
+    const Account = server.plugins['hapi-mongo-models'].Account;
+    const Session = server.plugins['hapi-mongo-models'].Session;
+    const User = server.plugins['hapi-mongo-models'].User;
 
 
     server.route({
@@ -30,11 +32,11 @@ internals.applyRoutes = function (server, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         username: request.payload.username
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -51,11 +53,11 @@ internals.applyRoutes = function (server, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         email: request.payload.email
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -72,27 +74,27 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var mailer = request.server.plugins.mailer;
+            const mailer = request.server.plugins.mailer;
 
             Async.auto({
                 user: function (done) {
 
-                    var username = request.payload.username;
-                    var password = request.payload.password;
-                    var email = request.payload.email;
+                    const username = request.payload.username;
+                    const password = request.payload.password;
+                    const email = request.payload.email;
 
                     User.create(username, password, email, done);
                 },
                 account: ['user', function (done, results) {
 
-                    var name = request.payload.name;
+                    const name = request.payload.name;
 
                     Account.create(name, done);
                 }],
                 linkUser: ['account', function (done, results) {
 
-                    var id = results.account._id.toString();
-                    var update = {
+                    const id = results.account._id.toString();
+                    const update = {
                         $set: {
                             user: {
                                 id: results.user._id.toString(),
@@ -105,8 +107,8 @@ internals.applyRoutes = function (server, next) {
                 }],
                 linkAccount: ['account', function (done, results) {
 
-                    var id = results.user._id.toString();
-                    var update = {
+                    const id = results.user._id.toString();
+                    const update = {
                         $set: {
                             roles: {
                                 account: {
@@ -121,16 +123,16 @@ internals.applyRoutes = function (server, next) {
                 }],
                 welcome: ['linkUser', 'linkAccount', function (done, results) {
 
-                    var emailOptions = {
+                    const emailOptions = {
                         subject: 'Your ' + Config.get('/projectName') + ' account',
                         to: {
                             name: request.payload.name,
                             address: request.payload.email
                         }
                     };
-                    var template = 'welcome';
+                    const template = 'welcome';
 
-                    mailer.sendEmail(emailOptions, template, request.payload, function (err) {
+                    mailer.sendEmail(emailOptions, template, request.payload, (err) => {
 
                         if (err) {
                             console.warn('sending welcome email failed:', err.stack);
@@ -143,15 +145,15 @@ internals.applyRoutes = function (server, next) {
 
                     Session.create(results.user._id.toString(), done);
                 }]
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
                 }
 
-                var user = results.linkAccount;
-                var credentials = user.username + ':' + results.session.key;
-                var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+                const user = results.linkAccount;
+                const credentials = user.username + ':' + results.session.key;
+                const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
                 reply({
                     user: {

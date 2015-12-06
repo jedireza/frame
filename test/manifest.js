@@ -1,14 +1,16 @@
-var Lab = require('lab');
-var Code = require('code');
-var Manifest = require('../manifest');
+'use strict';
+
+const Lab = require('lab');
+const Code = require('code');
+const Manifest = require('../manifest');
 
 
-var lab = exports.lab = Lab.script();
+const lab = exports.lab = Lab.script();
 
 
-lab.experiment('Manifest', function () {
+lab.experiment('Manifest', () => {
 
-    lab.test('it gets manifest data', function (done) {
+    lab.test('it gets manifest data', (done) => {
 
         Code.expect(Manifest.get('/')).to.be.an.object();
 
@@ -16,7 +18,7 @@ lab.experiment('Manifest', function () {
     });
 
 
-    lab.test('it gets manifest meta data', function (done) {
+    lab.test('it gets manifest meta data', (done) => {
 
         Code.expect(Manifest.meta('/')).to.match(/this file defines the plot device/i);
 

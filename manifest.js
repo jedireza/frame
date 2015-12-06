@@ -1,13 +1,15 @@
-var Confidence = require('confidence');
-var Config = require('./config');
+'use strict';
+
+const Confidence = require('confidence');
+const Config = require('./config');
 
 
-var criteria = {
+const criteria = {
     env: process.env.NODE_ENV
 };
 
 
-var manifest = {
+const manifest = {
     $meta: 'This file defines the plot device.',
     server: {
         debug: {
@@ -64,7 +66,7 @@ var manifest = {
 };
 
 
-var store = new Confidence.Store(manifest);
+const store = new Confidence.Store(manifest);
 
 
 exports.get = function (key) {

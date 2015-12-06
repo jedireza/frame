@@ -1,3 +1,5 @@
+'use strict';
+
 exports.register = function (server, options, next) {
 
     server.route({

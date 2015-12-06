@@ -1,17 +1,19 @@
-var Boom = require('boom');
-var Async = require('async');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Async = require('async');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Account = server.plugins['hapi-mongo-models'].Account;
-    var User = server.plugins['hapi-mongo-models'].User;
-    var Status = server.plugins['hapi-mongo-models'].Status;
+    const Account = server.plugins['hapi-mongo-models'].Account;
+    const User = server.plugins['hapi-mongo-models'].User;
+    const Status = server.plugins['hapi-mongo-models'].Status;
 
 
     server.route({
@@ -33,13 +35,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const query = {};
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            Account.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            Account.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -62,7 +64,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Account.findById(request.params.id, function (err, account) {
+            Account.findById(request.params.id, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -89,10 +91,10 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.auth.credentials.roles.account._id.toString();
-            var fields = Account.fieldsAdapter('user name timeCreated');
+            const id = request.auth.credentials.roles.account._id.toString();
+            const fields = Account.fieldsAdapter('user name timeCreated');
 
-            Account.findById(id, fields, function (err, account) {
+            Account.findById(id, fields, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -124,9 +126,9 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var name = request.payload.name;
+            const name = request.payload.name;
 
-            Account.create(name, function (err, account) {
+            Account.create(name, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -158,14 +160,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     name: request.payload.name
                 }
             };
 
-            Account.findByIdAndUpdate(id, update, function (err, account) {
+            Account.findByIdAndUpdate(id, update, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -201,17 +203,17 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.auth.credentials.roles.account._id.toString();
-            var update = {
+            const id = request.auth.credentials.roles.account._id.toString();
+            const update = {
                 $set: {
                     name: request.payload.name
                 }
             };
-            var findOptions = {
+            const findOptions = {
                 fields: Account.fieldsAdapter('user name timeCreated')
             };
 
-            Account.findByIdAndUpdate(id, update, findOptions, function (err, account) {
+            Account.findByIdAndUpdate(id, update, findOptions, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -240,7 +242,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    Account.findById(request.params.id, function (err, account) {
+                    Account.findById(request.params.id, (err, account) => {
 
                         if (err) {
                             return reply(err);
@@ -257,7 +259,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    User.findByUsername(request.payload.username, function (err, user) {
+                    User.findByUsername(request.payload.username, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -296,8 +298,8 @@ internals.applyRoutes = function (server, next) {
             Async.auto({
                 account: function (done) {
 
-                    var id = request.params.id;
-                    var update = {
+                    const id = request.params.id;
+                    const update = {
                         $set: {
                             user: {
                                 id: request.pre.user._id.toString(),
@@ -310,8 +312,8 @@ internals.applyRoutes = function (server, next) {
                 },
                 user: function (done) {
 
-                    var id = request.pre.user._id;
-                    var update = {
+                    const id = request.pre.user._id;
+                    const update = {
                         $set: {
                             'roles.account': {
                                 id: request.pre.account._id.toString(),
@@ -322,7 +324,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -346,7 +348,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'account',
                 method: function (request, reply) {
 
-                    Account.findById(request.params.id, function (err, account) {
+                    Account.findById(request.params.id, (err, account) => {
 
                         if (err) {
                             return reply(err);
@@ -367,7 +369,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    User.findById(request.pre.account.user.id, function (err, user) {
+                    User.findById(request.pre.account.user.id, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -387,8 +389,8 @@ internals.applyRoutes = function (server, next) {
             Async.auto({
                 account: function (done) {
 
-                    var id = request.params.id;
-                    var update = {
+                    const id = request.params.id;
+                    const update = {
                         $unset: {
                             user: undefined
                         }
@@ -398,8 +400,8 @@ internals.applyRoutes = function (server, next) {
                 },
                 user: function (done) {
 
-                    var id = request.pre.user._id.toString();
-                    var update = {
+                    const id = request.pre.user._id.toString();
+                    const update = {
                         $unset: {
                             'roles.account': undefined
                         }
@@ -407,7 +409,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -435,8 +437,8 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $push: {
                     notes: {
                         data: request.payload.data,
@@ -449,7 +451,7 @@ internals.applyRoutes = function (server, next) {
                 }
             };
 
-            Account.findByIdAndUpdate(id, update, function (err, account) {
+            Account.findByIdAndUpdate(id, update, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -478,7 +480,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'status',
                 method: function (request, reply) {
 
-                    Status.findById(request.payload.status, function (err, status) {
+                    Status.findById(request.payload.status, (err, status) => {
 
                         if (err) {
                             return reply(err);
@@ -491,8 +493,8 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var newStatus = {
+            const id = request.params.id;
+            const newStatus = {
                 id: request.pre.status._id.toString(),
                 name: request.pre.status.name,
                 timeCreated: new Date(),
@@ -501,7 +503,7 @@ internals.applyRoutes = function (server, next) {
                     name: request.auth.credentials.user.username
                 }
             };
-            var update = {
+            const update = {
                 $set: {
                     'status.current': newStatus
                 },
@@ -510,7 +512,7 @@ internals.applyRoutes = function (server, next) {
                 }
             };
 
-            Account.findByIdAndUpdate(id, update, function (err, account) {
+            Account.findByIdAndUpdate(id, update, (err, account) => {
 
                 if (err) {
                     return reply(err);
@@ -536,7 +538,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Account.findByIdAndDelete(request.params.id, function (err, account) {
+            Account.findByIdAndDelete(request.params.id, (err, account) => {
 
                 if (err) {
                     return reply(err);

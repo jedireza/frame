@@ -1,20 +1,25 @@
-var Lab = require('lab');
-var Code = require('code');
-var Path = require('path');
-var Config = require('../../../config');
-var Manifest = require('../../../manifest');
-var Hapi = require('hapi');
-var HapiAuthBasic = require('hapi-auth-basic');
-var Proxyquire = require('proxyquire');
-var SignupPlugin = require('../../../server/api/signup');
-var MailerPlugin = require('../../../server/mailer');
+'use strict';
+
+const Lab = require('lab');
+const Code = require('code');
+const Path = require('path');
+const Config = require('../../../config');
+const Manifest = require('../../../manifest');
+const Hapi = require('hapi');
+const HapiAuthBasic = require('hapi-auth-basic');
+const Proxyquire = require('proxyquire');
+const SignupPlugin = require('../../../server/api/signup');
+const MailerPlugin = require('../../../server/mailer');
 
 
-var lab = exports.lab = Lab.script();
-var ModelsPlugin, request, server, stub;
+const lab = exports.lab = Lab.script();
+let ModelsPlugin;
+let request;
+let server;
+let stub;
 
 
-lab.before(function (done) {
+lab.before((done) => {
 
     stub = {
         Account: {},
@@ -22,7 +27,7 @@ lab.before(function (done) {
         User: {}
     };
 
-    var proxy = {};
+    const proxy = {};
     proxy[Path.join(process.cwd(), './server/models/account')] = stub.Account;
     proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
     proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
@@ -32,10 +37,10 @@ lab.before(function (done) {
         options: Manifest.get('/plugins')['hapi-mongo-models']
     };
 
-    var plugins = [HapiAuthBasic, ModelsPlugin, MailerPlugin, SignupPlugin];
+    const plugins = [HapiAuthBasic, ModelsPlugin, MailerPlugin, SignupPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
-    server.register(plugins, function (err) {
+    server.register(plugins, (err) => {
 
         if (err) {
             return done(err);
@@ -46,16 +51,16 @@ lab.before(function (done) {
 });
 
 
-lab.after(function (done) {
+lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
     done();
 });
 
 
-lab.experiment('Signup Plugin', function () {
+lab.experiment('Signup Plugin', () => {
 
-    lab.beforeEach(function (done) {
+    lab.beforeEach((done) => {
 
         request = {
             method: 'POST',
@@ -72,7 +77,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it returns an error when find one fails for username check', function (done) {
+    lab.test('it returns an error when find one fails for username check', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -84,7 +89,7 @@ lab.experiment('Signup Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
             done();
@@ -92,7 +97,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it returns a conflict when find one hits for username check', function (done) {
+    lab.test('it returns a conflict when find one hits for username check', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -104,7 +109,7 @@ lab.experiment('Signup Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
             done();
@@ -112,7 +117,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it returns an error when find one fails for email check', function (done) {
+    lab.test('it returns an error when find one fails for email check', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -124,7 +129,7 @@ lab.experiment('Signup Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
             done();
@@ -132,7 +137,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it returns a conflict when find one hits for email check', function (done) {
+    lab.test('it returns a conflict when find one hits for email check', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -144,7 +149,7 @@ lab.experiment('Signup Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
             done();
@@ -152,7 +157,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it returns an error if any critical setup step fails', function (done) {
+    lab.test('it returns an error if any critical setup step fails', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -164,7 +169,7 @@ lab.experiment('Signup Plugin', function () {
             callback(Error('create failed'));
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
             done();
@@ -172,7 +177,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it finishes successfully (even if sending welcome email fails)', function (done) {
+    lab.test('it finishes successfully (even if sending welcome email fails)', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -186,7 +191,7 @@ lab.experiment('Signup Plugin', function () {
 
         stub.Account.create = function (name, callback) {
 
-            var account = {
+            const account = {
                 _id: 'BL4M0',
                 name: {
                     first: 'Muddy',
@@ -207,7 +212,7 @@ lab.experiment('Signup Plugin', function () {
             callback(null, [{}, {}]);
         };
 
-        var realSendEmail = server.plugins.mailer.sendEmail;
+        const realSendEmail = server.plugins.mailer.sendEmail;
         server.plugins.mailer.sendEmail = function (options, template, context, callback) {
 
             callback(new Error('Whoops.'));
@@ -218,14 +223,14 @@ lab.experiment('Signup Plugin', function () {
             callback(null, {});
         };
 
-        var realWarn = console.warn;
+        const realWarn = console.warn;
         console.warn = function () {
 
             console.warn = realWarn;
             done();
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
             Code.expect(response.result).to.be.an.object();
@@ -235,7 +240,7 @@ lab.experiment('Signup Plugin', function () {
     });
 
 
-    lab.test('it finishes successfully', function (done) {
+    lab.test('it finishes successfully', (done) => {
 
         stub.User.findOne = function (conditions, callback) {
 
@@ -249,7 +254,7 @@ lab.experiment('Signup Plugin', function () {
 
         stub.Account.create = function (name, callback) {
 
-            var account = {
+            const account = {
                 _id: 'BL4M0',
                 name: {
                     first: 'Muddy',
@@ -270,7 +275,7 @@ lab.experiment('Signup Plugin', function () {
             callback(null, [{}, {}]);
         };
 
-        var realSendEmail = server.plugins.mailer.sendEmail;
+        const realSendEmail = server.plugins.mailer.sendEmail;
         server.plugins.mailer.sendEmail = function (options, template, context, callback) {
 
             callback(null, {});
@@ -281,7 +286,7 @@ lab.experiment('Signup Plugin', function () {
             callback(null, {});
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
             Code.expect(response.result).to.be.an.object();

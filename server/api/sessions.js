@@ -1,14 +1,16 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Session = server.plugins['hapi-mongo-models'].Session;
+    const Session = server.plugins['hapi-mongo-models'].Session;
 
 
     server.route({
@@ -33,13 +35,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const query = {};
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            Session.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            Session.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -65,7 +67,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Session.findById(request.params.id, function (err, session) {
+            Session.findById(request.params.id, (err, session) => {
 
                 if (err) {
                     return reply(err);
@@ -95,7 +97,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Session.findByIdAndDelete(request.params.id, function (err, session) {
+            Session.findByIdAndDelete(request.params.id, (err, session) => {
 
                 if (err) {
                     return reply(err);

@@ -1,8 +1,10 @@
-var Joi = require('joi');
-var Config = require('../../config');
+'use strict';
+
+const Joi = require('joi');
+const Config = require('../../config');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
@@ -21,8 +23,8 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var mailer = request.server.plugins.mailer;
-            var emailOptions = {
+            const mailer = request.server.plugins.mailer;
+            const emailOptions = {
                 subject: Config.get('/projectName') + ' contact form',
                 to: Config.get('/system/toAddress'),
                 replyTo: {
@@ -30,9 +32,9 @@ internals.applyRoutes = function (server, next) {
                     address: request.payload.email
                 }
             };
-            var template = 'contact';
+            const template = 'contact';
 
-            mailer.sendEmail(emailOptions, template, request.payload, function (err, info) {
+            mailer.sendEmail(emailOptions, template, request.payload, (err, info) => {
 
                 if (err) {
                     return reply(err);
