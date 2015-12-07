@@ -1,14 +1,16 @@
-var Boom = require('boom');
-var Async = require('async');
+'use strict';
+
+const Boom = require('boom');
+const Async = require('async');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyStrategy = function (server, next) {
 
-    var Session = server.plugins['hapi-mongo-models'].Session;
-    var User = server.plugins['hapi-mongo-models'].User;
+    const Session = server.plugins['hapi-mongo-models'].Session;
+    const User = server.plugins['hapi-mongo-models'].User;
 
     server.auth.strategy('simple', 'basic', {
         validateFunc: function (request, username, password, callback) {
@@ -42,7 +44,7 @@ internals.applyStrategy = function (server, next) {
 
                     done(null, Object.keys(results.user.roles));
                 }]
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return callback(err);
@@ -73,7 +75,7 @@ internals.preware = {
                     groups = [groups];
                 }
 
-                var groupFound = groups.some(function (group) {
+                const groupFound = groups.some((group) => {
 
                     return request.auth.credentials.roles.admin.isMemberOf(group);
                 });

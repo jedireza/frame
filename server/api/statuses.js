@@ -1,14 +1,16 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Status = server.plugins['hapi-mongo-models'].Status;
+    const Status = server.plugins['hapi-mongo-models'].Status;
 
 
     server.route({
@@ -33,13 +35,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const query = {};
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            Status.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            Status.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -65,7 +67,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Status.findById(request.params.id, function (err, status) {
+            Status.findById(request.params.id, (err, status) => {
 
                 if (err) {
                     return reply(err);
@@ -101,10 +103,10 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var pivot = request.payload.pivot;
-            var name = request.payload.name;
+            const pivot = request.payload.pivot;
+            const name = request.payload.name;
 
-            Status.create(pivot, name, function (err, status) {
+            Status.create(pivot, name, (err, status) => {
 
                 if (err) {
                     return reply(err);
@@ -135,14 +137,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     name: request.payload.name
                 }
             };
 
-            Status.findByIdAndUpdate(id, update, function (err, status) {
+            Status.findByIdAndUpdate(id, update, (err, status) => {
 
                 if (err) {
                     return reply(err);
@@ -172,7 +174,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            Status.findByIdAndDelete(request.params.id, function (err, status) {
+            Status.findByIdAndDelete(request.params.id, (err, status) => {
 
                 if (err) {
                     return reply(err);

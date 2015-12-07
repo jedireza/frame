@@ -1,29 +1,33 @@
-var Lab = require('lab');
-var Code = require('code');
-var Path = require('path');
-var Config = require('../../config');
-var Manifest = require('../../manifest');
-var Hapi = require('hapi');
-var Session = require('../../server/models/session');
-var User = require('../../server/models/user');
-var Admin = require('../../server/models/admin');
-var HapiAuthBasic = require('hapi-auth-basic');
-var Proxyquire = require('proxyquire');
-var AuthPlugin = require('../../server/auth');
+'use strict';
+
+const Lab = require('lab');
+const Code = require('code');
+const Path = require('path');
+const Config = require('../../config');
+const Manifest = require('../../manifest');
+const Hapi = require('hapi');
+const Session = require('../../server/models/session');
+const User = require('../../server/models/user');
+const Admin = require('../../server/models/admin');
+const HapiAuthBasic = require('hapi-auth-basic');
+const Proxyquire = require('proxyquire');
+const AuthPlugin = require('../../server/auth');
 
 
-var lab = exports.lab = Lab.script();
-var ModelsPlugin, server, stub;
+const lab = exports.lab = Lab.script();
+let ModelsPlugin;
+let server;
+let stub;
 
 
-lab.beforeEach(function (done) {
+lab.beforeEach((done) => {
 
     stub = {
         Session: {},
         User: {}
     };
 
-    var proxy = {};
+    const proxy = {};
     proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
     proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
 
@@ -32,10 +36,10 @@ lab.beforeEach(function (done) {
         options: Manifest.get('/plugins')['hapi-mongo-models']
     };
 
-    var plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin];
+    const plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
-    server.register(plugins, function (err) {
+    server.register(plugins, (err) => {
 
         if (err) {
             return done(err);
@@ -46,7 +50,7 @@ lab.beforeEach(function (done) {
 });
 
 
-lab.afterEach(function (done) {
+lab.afterEach((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
 
@@ -54,9 +58,9 @@ lab.afterEach(function (done) {
 });
 
 
-lab.experiment('Auth Plugin', function () {
+lab.experiment('Auth Plugin', () => {
 
-    lab.test('it returns authentication credentials', function (done) {
+    lab.test('it returns authentication credentials', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -73,7 +77,7 @@ lab.experiment('Auth Plugin', function () {
             path: '/',
             handler: function (request, reply) {
 
-                server.auth.test('simple', request, function (err, credentials) {
+                server.auth.test('simple', request, (err, credentials) => {
 
                     Code.expect(err).to.not.exist();
                     Code.expect(credentials).to.be.an.object();
@@ -82,7 +86,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -90,14 +94,14 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             done();
         });
     });
 
 
-    lab.test('it returns an error when the session is not found', function (done) {
+    lab.test('it returns an error when the session is not found', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -109,7 +113,7 @@ lab.experiment('Auth Plugin', function () {
             path: '/',
             handler: function (request, reply) {
 
-                server.auth.test('simple', request, function (err, credentials) {
+                server.auth.test('simple', request, (err, credentials) => {
 
                     Code.expect(err).to.be.an.object();
                     Code.expect(credentials).to.not.exist();
@@ -118,7 +122,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -126,14 +130,14 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             done();
         });
     });
 
 
-    lab.test('it returns an error when the user is not found', function (done) {
+    lab.test('it returns an error when the user is not found', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -150,7 +154,7 @@ lab.experiment('Auth Plugin', function () {
             path: '/',
             handler: function (request, reply) {
 
-                server.auth.test('simple', request, function (err, credentials) {
+                server.auth.test('simple', request, (err, credentials) => {
 
                     Code.expect(err).to.be.an.object();
                     reply('ok');
@@ -158,7 +162,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -166,14 +170,14 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             done();
         });
     });
 
 
-    lab.test('it returns an error when a model error occurs', function (done) {
+    lab.test('it returns an error when a model error occurs', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -185,7 +189,7 @@ lab.experiment('Auth Plugin', function () {
             path: '/',
             handler: function (request, reply) {
 
-                server.auth.test('simple', request, function (err, credentials) {
+                server.auth.test('simple', request, (err, credentials) => {
 
                     Code.expect(err).to.be.an.object();
                     Code.expect(credentials).to.not.exist();
@@ -194,7 +198,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -202,14 +206,14 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             done();
         });
     });
 
 
-    lab.test('it takes over when the required role is missing', function (done) {
+    lab.test('it takes over when the required role is missing', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -238,7 +242,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -246,7 +250,7 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.result.message).to.match(/insufficient scope/i);
 
@@ -255,7 +259,7 @@ lab.experiment('Auth Plugin', function () {
     });
 
 
-    lab.test('it continues through pre handler when role is present', function (done) {
+    lab.test('it continues through pre handler when role is present', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -264,7 +268,7 @@ lab.experiment('Auth Plugin', function () {
 
         stub.User.findById = function (id, callback) {
 
-            var user = new User({
+            const user = new User({
                 username: 'ren',
                 roles: {
                     admin: {
@@ -304,7 +308,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -312,7 +316,7 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.result).to.match(/ok/i);
 
@@ -321,7 +325,7 @@ lab.experiment('Auth Plugin', function () {
     });
 
 
-    lab.test('it takes over when the required group is missing', function (done) {
+    lab.test('it takes over when the required group is missing', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -330,7 +334,7 @@ lab.experiment('Auth Plugin', function () {
 
         stub.User.findById = function (id, callback) {
 
-            var user = new User({
+            const user = new User({
                 username: 'ren',
                 roles: {
                     admin: {
@@ -373,7 +377,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -381,7 +385,7 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.result.message).to.match(/permission denied/i);
 
@@ -390,7 +394,7 @@ lab.experiment('Auth Plugin', function () {
     });
 
 
-    lab.test('it continues through pre handler when group is present', function (done) {
+    lab.test('it continues through pre handler when group is present', (done) => {
 
         stub.Session.findByCredentials = function (username, key, callback) {
 
@@ -399,7 +403,7 @@ lab.experiment('Auth Plugin', function () {
 
         stub.User.findById = function (id, callback) {
 
-            var user = new User({
+            const user = new User({
                 username: 'ren',
                 roles: {
                     admin: {
@@ -445,7 +449,7 @@ lab.experiment('Auth Plugin', function () {
             }
         });
 
-        var request = {
+        const request = {
             method: 'GET',
             url: '/',
             headers: {
@@ -453,7 +457,7 @@ lab.experiment('Auth Plugin', function () {
             }
         };
 
-        server.inject(request, function (response) {
+        server.inject(request, (response) => {
 
             Code.expect(response.result).to.match(/ok/i);
 

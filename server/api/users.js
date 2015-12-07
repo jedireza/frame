@@ -1,14 +1,16 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var User = server.plugins['hapi-mongo-models'].User;
+    const User = server.plugins['hapi-mongo-models'].User;
 
 
     server.route({
@@ -36,7 +38,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
+            const query = {};
             if (request.query.username) {
                 query.username = new RegExp('^.*?' + request.query.username + '.*$', 'i');
             }
@@ -46,12 +48,12 @@ internals.applyRoutes = function (server, next) {
             if (request.query.role) {
                 query['roles.' + request.query.role] = { $exists: true };
             }
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            User.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            User.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -77,7 +79,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            User.findById(request.params.id, function (err, user) {
+            User.findById(request.params.id, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -104,10 +106,10 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.auth.credentials.user._id.toString();
-            var fields = User.fieldsAdapter('username email roles');
+            const id = request.auth.credentials.user._id.toString();
+            const fields = User.fieldsAdapter('username email roles');
 
-            User.findById(id, fields, function (err, user) {
+            User.findById(id, fields, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -144,11 +146,11 @@ internals.applyRoutes = function (server, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var conditions = {
+                        const conditions = {
                             username: request.payload.username
                         };
 
-                        User.findOne(conditions, function (err, user) {
+                        User.findOne(conditions, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -165,11 +167,11 @@ internals.applyRoutes = function (server, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var conditions = {
+                        const conditions = {
                             email: request.payload.email
                         };
 
-                        User.findOne(conditions, function (err, user) {
+                        User.findOne(conditions, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -187,11 +189,11 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var username = request.payload.username;
-            var password = request.payload.password;
-            var email = request.payload.email;
+            const username = request.payload.username;
+            const password = request.payload.password;
+            const email = request.payload.email;
 
-            User.create(username, password, email, function (err, user) {
+            User.create(username, password, email, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -224,12 +226,12 @@ internals.applyRoutes = function (server, next) {
                     assign: 'usernameCheck',
                     method: function (request, reply) {
 
-                        var conditions = {
+                        const conditions = {
                             username: request.payload.username,
                             _id: { $ne: User._idClass(request.params.id) }
                         };
 
-                        User.findOne(conditions, function (err, user) {
+                        User.findOne(conditions, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -246,12 +248,12 @@ internals.applyRoutes = function (server, next) {
                     assign: 'emailCheck',
                     method: function (request, reply) {
 
-                        var conditions = {
+                        const conditions = {
                             email: request.payload.email,
                             _id: { $ne: User._idClass(request.params.id) }
                         };
 
-                        User.findOne(conditions, function (err, user) {
+                        User.findOne(conditions, (err, user) => {
 
                             if (err) {
                                 return reply(err);
@@ -269,8 +271,8 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     isActive: request.payload.isActive,
                     username: request.payload.username,
@@ -278,7 +280,7 @@ internals.applyRoutes = function (server, next) {
                 }
             };
 
-            User.findByIdAndUpdate(id, update, function (err, user) {
+            User.findByIdAndUpdate(id, update, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -312,12 +314,12 @@ internals.applyRoutes = function (server, next) {
                 assign: 'usernameCheck',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         username: request.payload.username,
                         _id: { $ne: request.auth.credentials.user._id }
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -334,12 +336,12 @@ internals.applyRoutes = function (server, next) {
                 assign: 'emailCheck',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         email: request.payload.email,
                         _id: { $ne: request.auth.credentials.user._id }
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -356,18 +358,18 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.auth.credentials.user._id.toString();
-            var update = {
+            const id = request.auth.credentials.user._id.toString();
+            const update = {
                 $set: {
                     username: request.payload.username,
                     email: request.payload.email
                 }
             };
-            var findOptions = {
+            const findOptions = {
                 fields: User.fieldsAdapter('username email roles')
             };
 
-            User.findByIdAndUpdate(id, update, findOptions, function (err, user) {
+            User.findByIdAndUpdate(id, update, findOptions, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -398,7 +400,7 @@ internals.applyRoutes = function (server, next) {
                     assign: 'password',
                     method: function (request, reply) {
 
-                        User.generatePasswordHash(request.payload.password, function (err, hash) {
+                        User.generatePasswordHash(request.payload.password, (err, hash) => {
 
                             if (err) {
                                 return reply(err);
@@ -412,14 +414,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     password: request.pre.password.hash
                 }
             };
 
-            User.findByIdAndUpdate(id, update, function (err, user) {
+            User.findByIdAndUpdate(id, update, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -448,7 +450,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'password',
                 method: function (request, reply) {
 
-                    User.generatePasswordHash(request.payload.password, function (err, hash) {
+                    User.generatePasswordHash(request.payload.password, (err, hash) => {
 
                         if (err) {
                             return reply(err);
@@ -461,17 +463,17 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.auth.credentials.user._id.toString();
-            var update = {
+            const id = request.auth.credentials.user._id.toString();
+            const update = {
                 $set: {
                     password: request.pre.password.hash
                 }
             };
-            var findOptions = {
+            const findOptions = {
                 fields: User.fieldsAdapter('username email')
             };
 
-            User.findByIdAndUpdate(id, update, findOptions, function (err, user) {
+            User.findByIdAndUpdate(id, update, findOptions, (err, user) => {
 
                 if (err) {
                     return reply(err);
@@ -497,7 +499,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            User.findByIdAndDelete(request.params.id, function (err, user) {
+            User.findByIdAndDelete(request.params.id, (err, user) => {
 
                 if (err) {
                     return reply(err);

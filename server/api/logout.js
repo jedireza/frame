@@ -1,12 +1,14 @@
-var Boom = require('boom');
+'use strict';
+
+const Boom = require('boom');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var Session = server.plugins['hapi-mongo-models'].Session;
+    const Session = server.plugins['hapi-mongo-models'].Session;
 
 
     server.route({
@@ -20,10 +22,10 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var credentials = request.auth.credentials || { session: {} };
-            var session = credentials.session || {};
+            const credentials = request.auth.credentials || { session: {} };
+            const session = credentials.session || {};
 
-            Session.findByIdAndDelete(session._id, function (err, sessionDoc) {
+            Session.findByIdAndDelete(session._id, (err, sessionDoc) => {
 
                 if (err) {
                     return reply(err);

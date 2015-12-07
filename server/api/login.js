@@ -1,18 +1,20 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var Async = require('async');
-var Bcrypt = require('bcrypt');
-var Config = require('../../config');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const Async = require('async');
+const Bcrypt = require('bcrypt');
+const Config = require('../../config');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var AuthAttempt = server.plugins['hapi-mongo-models'].AuthAttempt;
-    var Session = server.plugins['hapi-mongo-models'].Session;
-    var User = server.plugins['hapi-mongo-models'].User;
+    const AuthAttempt = server.plugins['hapi-mongo-models'].AuthAttempt;
+    const Session = server.plugins['hapi-mongo-models'].Session;
+    const User = server.plugins['hapi-mongo-models'].User;
 
 
     server.route({
@@ -29,10 +31,10 @@ internals.applyRoutes = function (server, next) {
                 assign: 'abuseDetected',
                 method: function (request, reply) {
 
-                    var ip = request.info.remoteAddress;
-                    var username = request.payload.username;
+                    const ip = request.info.remoteAddress;
+                    const username = request.payload.username;
 
-                    AuthAttempt.abuseDetected(ip, username, function (err, detected) {
+                    AuthAttempt.abuseDetected(ip, username, (err, detected) => {
 
                         if (err) {
                             return reply(err);
@@ -49,10 +51,10 @@ internals.applyRoutes = function (server, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var username = request.payload.username;
-                    var password = request.payload.password;
+                    const username = request.payload.username;
+                    const password = request.payload.password;
 
-                    User.findByCredentials(username, password, function (err, user) {
+                    User.findByCredentials(username, password, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -69,10 +71,10 @@ internals.applyRoutes = function (server, next) {
                         return reply();
                     }
 
-                    var ip = request.info.remoteAddress;
-                    var username = request.payload.username;
+                    const ip = request.info.remoteAddress;
+                    const username = request.payload.username;
 
-                    AuthAttempt.create(ip, username, function (err, authAttempt) {
+                    AuthAttempt.create(ip, username, (err, authAttempt) => {
 
                         if (err) {
                             return reply(err);
@@ -85,7 +87,7 @@ internals.applyRoutes = function (server, next) {
                 assign: 'session',
                 method: function (request, reply) {
 
-                    Session.create(request.pre.user._id.toString(), function (err, session) {
+                    Session.create(request.pre.user._id.toString(), (err, session) => {
 
                         if (err) {
                             return reply(err);
@@ -98,8 +100,8 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var credentials = request.pre.session._id.toString() + ':' + request.pre.session.key;
-            var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+            const credentials = request.pre.session._id.toString() + ':' + request.pre.session.key;
+            const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
             reply({
                 user: {
@@ -128,11 +130,11 @@ internals.applyRoutes = function (server, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         email: request.payload.email
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -149,7 +151,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var mailer = request.server.plugins.mailer;
+            const mailer = request.server.plugins.mailer;
 
             Async.auto({
                 keyHash: function (done) {
@@ -158,8 +160,8 @@ internals.applyRoutes = function (server, next) {
                 },
                 user: ['keyHash', function (done, results) {
 
-                    var id = request.pre.user._id.toString();
-                    var update = {
+                    const id = request.pre.user._id.toString();
+                    const update = {
                         $set: {
                             resetPassword: {
                                 token: results.keyHash.hash,
@@ -172,18 +174,18 @@ internals.applyRoutes = function (server, next) {
                 }],
                 email: ['user', function (done, results) {
 
-                    var emailOptions = {
+                    const emailOptions = {
                         subject: 'Reset your ' + Config.get('/projectName') + ' password',
                         to: request.payload.email
                     };
-                    var template = 'forgot-password';
-                    var context = {
+                    const template = 'forgot-password';
+                    const context = {
                         key: results.keyHash.key
                     };
 
                     mailer.sendEmail(emailOptions, template, context, done);
                 }]
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -210,12 +212,12 @@ internals.applyRoutes = function (server, next) {
                 assign: 'user',
                 method: function (request, reply) {
 
-                    var conditions = {
+                    const conditions = {
                         email: request.payload.email,
                         'resetPassword.expires': { $gt: Date.now() }
                     };
 
-                    User.findOne(conditions, function (err, user) {
+                    User.findOne(conditions, (err, user) => {
 
                         if (err) {
                             return reply(err);
@@ -235,8 +237,8 @@ internals.applyRoutes = function (server, next) {
             Async.auto({
                 keyMatch: function (done) {
 
-                    var key = request.payload.key;
-                    var token = request.pre.user.resetPassword.token;
+                    const key = request.payload.key;
+                    const token = request.pre.user.resetPassword.token;
                     Bcrypt.compare(key, token, done);
                 },
                 passwordHash: ['keyMatch', function (done, results) {
@@ -249,8 +251,8 @@ internals.applyRoutes = function (server, next) {
                 }],
                 user: ['passwordHash', function (done, results) {
 
-                    var id = request.pre.user._id.toString();
-                    var update = {
+                    const id = request.pre.user._id.toString();
+                    const update = {
                         $set: {
                             password: results.passwordHash.hash
                         },
@@ -261,7 +263,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }]
-            }, function (err, results) {
+            }, (err, results) => {
 
                 if (err) {
                     return reply(err);

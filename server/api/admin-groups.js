@@ -1,14 +1,16 @@
-var Boom = require('boom');
-var Joi = require('joi');
-var AuthPlugin = require('../auth');
+'use strict';
+
+const Boom = require('boom');
+const Joi = require('joi');
+const AuthPlugin = require('../auth');
 
 
-var internals = {};
+const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    var AdminGroup = server.plugins['hapi-mongo-models'].AdminGroup;
+    const AdminGroup = server.plugins['hapi-mongo-models'].AdminGroup;
 
 
     server.route({
@@ -33,13 +35,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var query = {};
-            var fields = request.query.fields;
-            var sort = request.query.sort;
-            var limit = request.query.limit;
-            var page = request.query.page;
+            const query = {};
+            const fields = request.query.fields;
+            const sort = request.query.sort;
+            const limit = request.query.limit;
+            const page = request.query.page;
 
-            AdminGroup.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            AdminGroup.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -65,7 +67,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            AdminGroup.findById(request.params.id, function (err, adminGroup) {
+            AdminGroup.findById(request.params.id, (err, adminGroup) => {
 
                 if (err) {
                     return reply(err);
@@ -100,9 +102,9 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var name = request.payload.name;
+            const name = request.payload.name;
 
-            AdminGroup.create(name, function (err, adminGroup) {
+            AdminGroup.create(name, (err, adminGroup) => {
 
                 if (err) {
                     return reply(err);
@@ -133,14 +135,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     name: request.payload.name
                 }
             };
 
-            AdminGroup.findByIdAndUpdate(id, update, function (err, adminGroup) {
+            AdminGroup.findByIdAndUpdate(id, update, (err, adminGroup) => {
 
                 if (err) {
                     return reply(err);
@@ -175,14 +177,14 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            var id = request.params.id;
-            var update = {
+            const id = request.params.id;
+            const update = {
                 $set: {
                     permissions: request.payload.permissions
                 }
             };
 
-            AdminGroup.findByIdAndUpdate(id, update, function (err, adminGroup) {
+            AdminGroup.findByIdAndUpdate(id, update, (err, adminGroup) => {
 
                 if (err) {
                     return reply(err);
@@ -208,7 +210,7 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            AdminGroup.findByIdAndDelete(request.params.id, function (err, adminGroup) {
+            AdminGroup.findByIdAndDelete(request.params.id, (err, adminGroup) => {
 
                 if (err) {
                     return reply(err);
