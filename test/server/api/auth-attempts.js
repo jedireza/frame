@@ -31,7 +31,17 @@ lab.before((done) => {
 
     ModelsPlugin = {
         register: Proxyquire('hapi-mongo-models', proxy),
-        options: Manifest.get('/plugins')['hapi-mongo-models']
+        options: Manifest.get('/registrations').filter((reg) => {
+
+            if (reg.plugin &&
+                reg.plugin.register &&
+                reg.plugin.register === 'hapi-mongo-models') {
+
+                return true;
+            }
+
+            return false;
+        })[0].plugin.options
     };
 
     const plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin, AuthAttemptPlugin];

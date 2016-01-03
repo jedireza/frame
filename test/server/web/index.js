@@ -12,7 +12,17 @@ const HomePlugin = require('../../../server/web/index');
 
 const VisionaryPlugin = {
     register: Visionary,
-    options: Manifest.get('/plugins/visionary')
+    options: Manifest.get('/registrations').filter((reg) => {
+
+        if (reg.plugin &&
+            reg.plugin.register &&
+            reg.plugin.register === 'visionary') {
+
+            return true;
+        }
+
+        return false;
+    })[0].plugin.options
 };
 const lab = exports.lab = Lab.script();
 let request;
