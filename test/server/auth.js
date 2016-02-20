@@ -15,7 +15,6 @@ const AuthPlugin = require('../../server/auth');
 
 
 const lab = exports.lab = Lab.script();
-let ModelsPlugin;
 let server;
 let stub;
 
@@ -31,7 +30,7 @@ lab.beforeEach((done) => {
     proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
     proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
 
-    ModelsPlugin = {
+    const ModelsPlugin = {
         register: Proxyquire('hapi-mongo-models', proxy),
         options: Manifest.get('/registrations').filter((reg) => {
 

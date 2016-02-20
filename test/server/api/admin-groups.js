@@ -14,7 +14,6 @@ const AuthenticatedUser = require('../fixtures/credentials-admin');
 
 
 const lab = exports.lab = Lab.script();
-let ModelsPlugin;
 let request;
 let server;
 let stub;
@@ -29,7 +28,7 @@ lab.before((done) => {
     const proxy = {};
     proxy[Path.join(process.cwd(), './server/models/admin-group')] = stub.AdminGroup;
 
-    ModelsPlugin = {
+    const ModelsPlugin = {
         register: Proxyquire('hapi-mongo-models', proxy),
         options: Manifest.get('/registrations').filter((reg) => {
 
