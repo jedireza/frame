@@ -18,7 +18,6 @@ const Bcrypt = require('bcrypt');
 
 
 const lab = exports.lab = Lab.script();
-let ModelsPlugin;
 let request;
 let server;
 let stub;
@@ -37,7 +36,7 @@ lab.before((done) => {
     proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
     proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
 
-    ModelsPlugin = {
+    const ModelsPlugin = {
         register: Proxyquire('hapi-mongo-models', proxy),
         options: Manifest.get('/registrations').filter((reg) => {
 
