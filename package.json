@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "code": "2.x.x",
-    "lab": "9.x.x",
+    "lab": "10.x.x",
     "nodemon": "1.x.x",
     "promptly": "1.x.x",
     "proxyquire": "1.x.x"
