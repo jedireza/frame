@@ -36,7 +36,6 @@ const Admin = BaseModel.extend({
             return callback(null, this._groups);
         }
 
-        const self = this;
         const tasks = {};
 
         Object.keys(this.groups).forEach((group) => {
@@ -53,9 +52,9 @@ const Admin = BaseModel.extend({
                 return callback(err);
             }
 
-            self._groups = results;
+            this._groups = results;
 
-            callback(null, self._groups);
+            callback(null, this._groups);
         });
     },
     hasPermissionTo: function (permission, callback) {
@@ -63,8 +62,6 @@ const Admin = BaseModel.extend({
         if (this.permissions && this.permissions.hasOwnProperty(permission)) {
             return callback(null, this.permissions[permission]);
         }
-
-        const self = this;
 
         this.hydrateGroups((err) => {
 
@@ -74,9 +71,9 @@ const Admin = BaseModel.extend({
 
             let groupHasPermission = false;
 
-            Object.keys(self._groups).forEach((group) => {
+            Object.keys(this._groups).forEach((group) => {
 
-                if (self._groups[group].hasPermissionTo(permission)) {
+                if (this._groups[group].hasPermissionTo(permission)) {
                     groupHasPermission = true;
                 }
             });
