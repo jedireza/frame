@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 Async.auto({
-    projectName: (done) => {
+    projectName: function (done) {
 
         Promptly.prompt('Project name: (Frame)', { default: 'Frame' }, done);
     },
@@ -118,7 +118,7 @@ Async.auto({
         const AdminGroup = require('./server/models/admin-group');
 
         Async.auto({
-            connect: (done) => {
+            connect: function (done) {
 
                 BaseModel.connect({ url: results.mongodbUrl }, done);
             },
@@ -130,19 +130,19 @@ Async.auto({
                     AdminGroup.deleteMany.bind(AdminGroup, {})
                 ], done);
             }],
-            adminGroup: ['clean', (done) => {
+            adminGroup: ['clean', function (done) {
 
                 AdminGroup.create('Root', done);
             }],
-            admin: ['clean', (done) => {
+            admin: ['clean', function (done) {
 
                 Admin.create('Root Admin', done);
             }],
-            user: ['clean', (done, dbResults) => {
+            user: ['clean', function (done, dbResults) {
 
                 User.create('root', results.rootPassword, results.rootEmail, done);
             }],
-            adminMembership: ['admin', (done, dbResults) => {
+            adminMembership: ['admin', function (done, dbResults) {
 
                 const id = dbResults.admin._id.toString();
                 const update = {
@@ -155,7 +155,7 @@ Async.auto({
 
                 Admin.findByIdAndUpdate(id, update, done);
             }],
-            linkUser: ['admin', 'user', (done, dbResults) => {
+            linkUser: ['admin', 'user', function (done, dbResults) {
 
                 const id = dbResults.user._id.toString();
                 const update = {
@@ -169,7 +169,7 @@ Async.auto({
 
                 User.findByIdAndUpdate(id, update, done);
             }],
-            linkAdmin: ['admin', 'user', (done, dbResults) => {
+            linkAdmin: ['admin', 'user', function (done, dbResults) {
 
                 const id = dbResults.admin._id.toString();
                 const update = {
