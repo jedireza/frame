@@ -152,7 +152,7 @@ internals.applyRoutes = function (server, next) {
                 }
 
                 const user = results.linkAccount;
-                const credentials = user.username + ':' + results.session.key;
+                const credentials = results.session._id + ':' + results.session.key;
                 const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
 
                 reply({
