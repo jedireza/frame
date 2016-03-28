@@ -36,7 +36,7 @@ if (process.env.NODE_ENV === 'test') {
 Async.auto({
     projectName: function (done) {
 
-        Promptly.prompt('Project name: (Frame)', { default: 'Frame' }, done);
+        Promptly.prompt('Project name', { default: 'Frame' }, done);
     },
     mongodbUrl: ['projectName', (done, results) => {
 
@@ -44,7 +44,7 @@ Async.auto({
             default: 'mongodb://localhost:27017/frame'
         };
 
-        Promptly.prompt('MongoDB URL: (mongodb://localhost:27017/frame)', promptOptions, done);
+        Promptly.prompt('MongoDB URL', promptOptions, done);
     }],
     testMongo: ['rootPassword', (done, results) => {
 
@@ -61,11 +61,11 @@ Async.auto({
     }],
     rootEmail: ['mongodbUrl', (done, results) => {
 
-        Promptly.prompt('Root user email:', done);
+        Promptly.prompt('Root user email', done);
     }],
     rootPassword: ['rootEmail', (done, results) => {
 
-        Promptly.password('Root user password:', { default: null }, done);
+        Promptly.password('Root user password', done);
     }],
     systemEmail: ['rootPassword', (done, results) => {
 
@@ -73,15 +73,15 @@ Async.auto({
             default: results.rootEmail
         };
 
-        Promptly.prompt('System email: (' + results.rootEmail + ')', promptOptions, done);
+        Promptly.prompt('System email', promptOptions, done);
     }],
     smtpHost: ['systemEmail', (done, results) => {
 
-        Promptly.prompt('SMTP host: (smtp.gmail.com)', { default: 'smtp.gmail.com' }, done);
+        Promptly.prompt('SMTP host', { default: 'smtp.gmail.com' }, done);
     }],
     smtpPort: ['smtpHost', (done, results) => {
 
-        Promptly.prompt('SMTP port: (465)', { default: 465 }, done);
+        Promptly.prompt('SMTP port', { default: 465 }, done);
     }],
     smtpUsername: ['smtpPort', (done, results) => {
 
@@ -89,11 +89,11 @@ Async.auto({
             default: results.systemEmail
         };
 
-        Promptly.prompt('SMTP username: (' + results.systemEmail + ')', promptOptions, done);
+        Promptly.prompt('SMTP username', promptOptions, done);
     }],
     smtpPassword: ['smtpUsername', (done, results) => {
 
-        Promptly.password('SMTP password:', done);
+        Promptly.password('SMTP password', done);
     }],
     createConfig: ['smtpPassword', (done, results) => {
 
