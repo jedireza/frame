@@ -120,11 +120,11 @@ lab.experiment('User Class Methods', () => {
 
                 User.create('stimpy', 'thebigshot', 'stimpy@ren.show', cb);
             },
-            username: ['user', function (cb, results) {
+            username: ['user', function (results, cb) {
 
                 User.findByCredentials(results.user.username, results.user.password, cb);
             }],
-            email: ['user', function (cb, results) {
+            email: ['user', function (results, cb) {
 
                 User.findByCredentials(results.user.email, results.user.password, cb);
             }]

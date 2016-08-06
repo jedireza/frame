@@ -15,19 +15,19 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "async": "1.x.x",
+    "async": "2.x.x",
     "bcrypt": "0.8.x",
     "boom": "3.x.x",
     "confidence": "3.x.x",
     "glue": "3.x.x",
     "handlebars": "4.x.x",
-    "hapi": "13.x.x",
+    "hapi": "14.x.x",
     "hapi-auth-basic": "4.x.x",
-    "hapi-mongo-models": "4.x.x",
+    "hapi-mongo-models": "5.x.x",
     "hoek": "4.x.x",
     "inert": "4.x.x",
     "jade": "1.x.x",
-    "joi": "8.x.x",
+    "joi": "9.x.x",
     "lout": "9.x.x",
     "mongodb": "2.x.x",
     "node-uuid": "1.x.x",
@@ -42,7 +42,7 @@
     "code": "3.x.x",
     "lab": "10.x.x",
     "nodemon": "1.x.x",
-    "promptly": "1.x.x",
+    "promptly": "2.x.x",
     "proxyquire": "1.x.x"
   }
 }

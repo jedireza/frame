@@ -109,7 +109,7 @@ User.generatePasswordHash = function (password, callback) {
 
             Bcrypt.genSalt(10, done);
         },
-        hash: ['salt', function (done, results) {
+        hash: ['salt', function (results, done) {
 
             Bcrypt.hash(password, results.salt, done);
         }]
@@ -132,7 +132,7 @@ User.create = function (username, password, email, callback) {
 
     Async.auto({
         passwordHash: this.generatePasswordHash.bind(this, password),
-        newUser: ['passwordHash', function (done, results) {
+        newUser: ['passwordHash', function (results, done) {
 
             const document = {
                 isActive: true,
@@ -177,7 +177,7 @@ User.findByCredentials = function (username, password, callback) {
 
             self.findOne(query, done);
         },
-        passwordMatch: ['user', function (done, results) {
+        passwordMatch: ['user', function (results, done) {
 
             if (!results.user) {
                 return done(null, false);

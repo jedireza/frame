@@ -85,13 +85,13 @@ internals.applyRoutes = function (server, next) {
 
                     User.create(username, password, email, done);
                 },
-                account: ['user', function (done, results) {
+                account: ['user', function (results, done) {
 
                     const name = request.payload.name;
 
                     Account.create(name, done);
                 }],
-                linkUser: ['account', function (done, results) {
+                linkUser: ['account', function (results, done) {
 
                     const id = results.account._id.toString();
                     const update = {
@@ -105,7 +105,7 @@ internals.applyRoutes = function (server, next) {
 
                     Account.findByIdAndUpdate(id, update, done);
                 }],
-                linkAccount: ['account', function (done, results) {
+                linkAccount: ['account', function (results, done) {
 
                     const id = results.user._id.toString();
                     const update = {
@@ -121,7 +121,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }],
-                welcome: ['linkUser', 'linkAccount', function (done, results) {
+                welcome: ['linkUser', 'linkAccount', function (results, done) {
 
                     const emailOptions = {
                         subject: 'Your ' + Config.get('/projectName') + ' account',
@@ -141,7 +141,7 @@ internals.applyRoutes = function (server, next) {
 
                     done();
                 }],
-                session: ['linkUser', 'linkAccount', function (done, results) {
+                session: ['linkUser', 'linkAccount', function (results, done) {
 
                     Session.create(results.user._id.toString(), done);
                 }]

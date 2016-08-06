@@ -20,7 +20,7 @@ internals.applyStrategy = function (server, next) {
 
                     Session.findByCredentials(username, password, done);
                 },
-                user: ['session', function (done, results) {
+                user: ['session', function (results, done) {
 
                     if (!results.session) {
                         return done();
@@ -28,7 +28,7 @@ internals.applyStrategy = function (server, next) {
 
                     User.findById(results.session.userId, done);
                 }],
-                roles: ['user', function (done, results) {
+                roles: ['user', function (results, done) {
 
                     if (!results.user) {
                         return done();
@@ -36,7 +36,7 @@ internals.applyStrategy = function (server, next) {
 
                     results.user.hydrateRoles(done);
                 }],
-                scope: ['user', function (done, results) {
+                scope: ['user', function (results, done) {
 
                     if (!results.user || !results.user.roles) {
                         return done();
