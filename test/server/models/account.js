@@ -86,7 +86,7 @@ lab.experiment('Account Class Methods', () => {
 
                 Account.create('Stimpson J Cat', cb);
             },
-            accountUpdated: ['account', function (cb, results) {
+            accountUpdated: ['account', function (results, cb) {
 
                 const fieldsToUpdate = {
                     $set: {

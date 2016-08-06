@@ -158,7 +158,7 @@ internals.applyRoutes = function (server, next) {
 
                     Session.generateKeyHash(done);
                 },
-                user: ['keyHash', function (done, results) {
+                user: ['keyHash', function (results, done) {
 
                     const id = request.pre.user._id.toString();
                     const update = {
@@ -172,7 +172,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.findByIdAndUpdate(id, update, done);
                 }],
-                email: ['user', function (done, results) {
+                email: ['user', function (results, done) {
 
                     const emailOptions = {
                         subject: 'Reset your ' + Config.get('/projectName') + ' password',
@@ -241,7 +241,7 @@ internals.applyRoutes = function (server, next) {
                     const token = request.pre.user.resetPassword.token;
                     Bcrypt.compare(key, token, done);
                 },
-                passwordHash: ['keyMatch', function (done, results) {
+                passwordHash: ['keyMatch', function (results, done) {
 
                     if (!results.keyMatch) {
                         return reply(Boom.badRequest('Invalid email or key.'));
@@ -249,7 +249,7 @@ internals.applyRoutes = function (server, next) {
 
                     User.generatePasswordHash(request.payload.password, done);
                 }],
-                user: ['passwordHash', function (done, results) {
+                user: ['passwordHash', function (results, done) {
 
                     const id = request.pre.user._id.toString();
                     const update = {

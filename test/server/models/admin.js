@@ -94,7 +94,7 @@ lab.experiment('Admin Class Methods', () => {
 
                 Admin.create('Ren Höek', cb);
             },
-            adminUpdated: ['admin', function (cb, results) {
+            adminUpdated: ['admin', function (results, cb) {
 
                 const fieldsToUpdate = {
                     $set: {

@@ -41,7 +41,7 @@ Session.generateKeyHash = function (callback) {
 
             Bcrypt.genSalt(10, done);
         },
-        hash: ['salt', function (done, results) {
+        hash: ['salt', function (results, done) {
 
             Bcrypt.hash(key, results.salt, done);
         }]
@@ -65,7 +65,7 @@ Session.create = function (userId, callback) {
 
     Async.auto({
         keyHash: this.generateKeyHash.bind(this),
-        newSession: ['keyHash', function (done, results) {
+        newSession: ['keyHash', function (results, done) {
 
             const document = {
                 userId: userId,
@@ -75,7 +75,7 @@ Session.create = function (userId, callback) {
 
             self.insertOne(document, done);
         }],
-        clean: ['newSession', function (done, results) {
+        clean: ['newSession', function (results, done) {
 
             const query = {
                 userId: userId,
@@ -106,7 +106,7 @@ Session.findByCredentials = function (id, key, callback) {
 
             self.findById(id, done);
         },
-        keyMatch: ['session', function (done, results) {
+        keyMatch: ['session', function (results, done) {
 
             if (!results.session) {
                 return done(null, false);

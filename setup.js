@@ -36,17 +36,21 @@ if (process.env.NODE_ENV === 'test') {
 Async.auto({
     projectName: function (done) {
 
-        Promptly.prompt('Project name', { default: 'Frame' }, done);
-    },
-    mongodbUrl: ['projectName', (done, results) => {
+        const options = {
+            default: 'Frame'
+        };
 
-        const promptOptions = {
+        Promptly.prompt(`Project name: (${options.default})`, options, done);
+    },
+    mongodbUrl: ['projectName', (results, done) => {
+
+        const options = {
             default: 'mongodb://localhost:27017/frame'
         };
 
-        Promptly.prompt('MongoDB URL', promptOptions, done);
+        Promptly.prompt(`MongoDB URL: (${options.default})`, options, done);
     }],
-    testMongo: ['rootPassword', (done, results) => {
+    testMongo: ['rootPassword', (results, done) => {
 
         Mongodb.MongoClient.connect(results.mongodbUrl, {}, (err, db) => {
 
@@ -59,43 +63,51 @@ Async.auto({
             done(null, true);
         });
     }],
-    rootEmail: ['mongodbUrl', (done, results) => {
+    rootEmail: ['mongodbUrl', (results, done) => {
 
-        Promptly.prompt('Root user email', done);
+        Promptly.prompt('Root user email:', done);
     }],
-    rootPassword: ['rootEmail', (done, results) => {
+    rootPassword: ['rootEmail', (results, done) => {
 
-        Promptly.password('Root user password', done);
+        Promptly.password('Root user password:', done);
     }],
-    systemEmail: ['rootPassword', (done, results) => {
+    systemEmail: ['rootPassword', (results, done) => {
 
-        const promptOptions = {
+        const options = {
             default: results.rootEmail
         };
 
-        Promptly.prompt('System email', promptOptions, done);
+        Promptly.prompt(`System email: (${options.default})`, options, done);
     }],
-    smtpHost: ['systemEmail', (done, results) => {
+    smtpHost: ['systemEmail', (results, done) => {
 
-        Promptly.prompt('SMTP host', { default: 'smtp.gmail.com' }, done);
+        const options = {
+            default: 'smtp.gmail.com'
+        };
+
+        Promptly.prompt(`SMTP host: (${options.default})`, options, done);
     }],
-    smtpPort: ['smtpHost', (done, results) => {
+    smtpPort: ['smtpHost', (results, done) => {
 
-        Promptly.prompt('SMTP port', { default: 465 }, done);
+        const options = {
+            default: 465
+        };
+
+        Promptly.prompt(`SMTP port: (${options.default})`, options, done);
     }],
-    smtpUsername: ['smtpPort', (done, results) => {
+    smtpUsername: ['smtpPort', (results, done) => {
 
-        const promptOptions = {
+        const options = {
             default: results.systemEmail
         };
 
-        Promptly.prompt('SMTP username', promptOptions, done);
+        Promptly.prompt(`SMTP username: (${options.default})`, options, done);
     }],
-    smtpPassword: ['smtpUsername', (done, results) => {
+    smtpPassword: ['smtpUsername', (results, done) => {
 
-        Promptly.password('SMTP password', done);
+        Promptly.password('SMTP password:', done);
     }],
-    createConfig: ['smtpPassword', (done, results) => {
+    createConfig: ['smtpPassword', (results, done) => {
 
         const fsOptions = { encoding: 'utf-8' };
 
@@ -110,7 +122,7 @@ Async.auto({
             Fs.writeFile(configPath, configTemplate(results), done);
         });
     }],
-    setupRootUser: ['createConfig', (done, results) => {
+    setupRootUser: ['createConfig', (results, done) => {
 
         const BaseModel = require('hapi-mongo-models').BaseModel;
         const User = require('./server/models/user');
@@ -122,7 +134,7 @@ Async.auto({
 
                 BaseModel.connect({ url: results.mongodbUrl }, done);
             },
-            clean: ['connect', (done) => {
+            clean: ['connect', (dbResults, done) => {
 
                 Async.parallel([
                     User.deleteMany.bind(User, {}),
@@ -130,19 +142,19 @@ Async.auto({
                     AdminGroup.deleteMany.bind(AdminGroup, {})
                 ], done);
             }],
-            adminGroup: ['clean', function (done) {
+            adminGroup: ['clean', function (dbResults, done) {
 
                 AdminGroup.create('Root', done);
             }],
-            admin: ['clean', function (done) {
+            admin: ['clean', function (dbResults, done) {
 
                 Admin.create('Root Admin', done);
             }],
-            user: ['clean', function (done, dbResults) {
+            user: ['clean', function (dbResults, done) {
 
                 User.create('root', results.rootPassword, results.rootEmail, done);
             }],
-            adminMembership: ['admin', function (done, dbResults) {
+            adminMembership: ['admin', function (dbResults, done) {
 
                 const id = dbResults.admin._id.toString();
                 const update = {
@@ -155,7 +167,7 @@ Async.auto({
 
                 Admin.findByIdAndUpdate(id, update, done);
             }],
-            linkUser: ['admin', 'user', function (done, dbResults) {
+            linkUser: ['admin', 'user', function (dbResults, done) {
 
                 const id = dbResults.user._id.toString();
                 const update = {
@@ -169,7 +181,7 @@ Async.auto({
 
                 User.findByIdAndUpdate(id, update, done);
             }],
-            linkAdmin: ['admin', 'user', function (done, dbResults) {
+            linkAdmin: ['admin', 'user', function (dbResults, done) {
 
                 const id = dbResults.admin._id.toString();
                 const update = {
