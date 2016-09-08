@@ -39,7 +39,7 @@ AdminGroup.create = function (name, callback) {
 
     const document = {
         _id: Slug(name).toLowerCase(),
-        name: name
+        name
     };
 
     this.insertOne(document, (err, docs) => {

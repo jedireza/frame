@@ -52,7 +52,7 @@ Session.generateKeyHash = function (callback) {
         }
 
         callback(null, {
-            key: key,
+            key,
             hash: results.hash
         });
     });
@@ -68,7 +68,7 @@ Session.create = function (userId, callback) {
         newSession: ['keyHash', function (results, done) {
 
             const document = {
-                userId: userId,
+                userId,
                 key: results.keyHash.hash,
                 time: new Date()
             };
@@ -78,7 +78,7 @@ Session.create = function (userId, callback) {
         clean: ['newSession', function (results, done) {
 
             const query = {
-                userId: userId,
+                userId,
                 key: { $ne: results.keyHash.hash }
             };
 

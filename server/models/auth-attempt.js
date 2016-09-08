@@ -35,7 +35,7 @@ AuthAttempt.indexes = [
 AuthAttempt.create = function (ip, username, callback) {
 
     const document = {
-        ip: ip,
+        ip,
         username: username.toLowerCase(),
         time: new Date()
     };
@@ -58,13 +58,13 @@ AuthAttempt.abuseDetected = function (ip, username, callback) {
     Async.auto({
         abusiveIpCount: function (done) {
 
-            const query = { ip: ip };
+            const query = { ip };
             self.count(query, done);
         },
         abusiveIpUserCount: function (done) {
 
             const query = {
-                ip: ip,
+                ip,
                 username: username.toLowerCase()
             };
 

@@ -37,8 +37,8 @@ Status.create = function (pivot, name, callback) {
 
     const document = {
         _id: Slug(pivot + ' ' + name).toLowerCase(),
-        pivot: pivot,
-        name: name
+        pivot,
+        name
     };
 
     this.insertOne(document, (err, docs) => {

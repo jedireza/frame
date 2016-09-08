@@ -29,7 +29,7 @@ const user = new User({
 
 
 module.exports = {
-    user: user,
+    user,
     roles: user._roles,
     scope: Object.keys(user.roles)
 };
