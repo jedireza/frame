@@ -111,7 +111,7 @@ internals.applyRoutes = function (server, next) {
                     roles: request.pre.user.roles
                 },
                 session: request.pre.session,
-                authHeader: authHeader
+                authHeader
             });
         }
     });

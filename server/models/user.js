@@ -120,7 +120,7 @@ User.generatePasswordHash = function (password, callback) {
         }
 
         callback(null, {
-            password: password,
+            password,
             hash: results.hash
         });
     });

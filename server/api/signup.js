@@ -163,7 +163,7 @@ internals.applyRoutes = function (server, next) {
                         roles: user.roles
                     },
                     session: results.session,
-                    authHeader: authHeader
+                    authHeader
                 });
             });
         }
