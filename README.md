@@ -127,8 +127,14 @@ Chrome. It looks something like this:
 $ node server.js
 ```
 
-Unlike `$ npm start` this doesn't watch for file changes. Also be sure to
-set the `NODE_ENV` environment variable to `production`.
+Unlike `$ npm start` this doesn't watch for file changes. Also be sure to set
+these environment variables in your production environment:
+
+ - `NODE_ENV=production` - This is important for many different
+   optimizations.
+ - `NPM_CONFIG_PRODUCTION=false` - This tells `$ npm install` to not skip
+   installing `devDependencies`, which we may need to run the first time
+   setup script.
 
 
 ## Have a question?
