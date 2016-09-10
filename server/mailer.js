@@ -1,11 +1,10 @@
 'use strict';
-
-const Hoek = require('hoek');
+const Config = require('../config');
 const Fs = require('fs');
 const Handlebars = require('handlebars');
-const Nodemailer = require('nodemailer');
+const Hoek = require('hoek');
 const Markdown = require('nodemailer-markdown').markdown;
-const Config = require('../config');
+const Nodemailer = require('nodemailer');
 
 
 const internals = {};

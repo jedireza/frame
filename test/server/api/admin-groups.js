@@ -1,16 +1,15 @@
 'use strict';
-
-const Lab = require('lab');
+const AdminGroupsPlugin = require('../../../server/api/admin-groups');
+const AuthPlugin = require('../../../server/auth');
+const AuthenticatedUser = require('../fixtures/credentials-admin');
 const Code = require('code');
-const Path = require('path');
 const Config = require('../../../config');
-const Manifest = require('../../../manifest');
 const Hapi = require('hapi');
 const HapiAuthBasic = require('hapi-auth-basic');
+const Lab = require('lab');
+const Manifest = require('../../../manifest');
+const Path = require('path');
 const Proxyquire = require('proxyquire');
-const AuthPlugin = require('../../../server/auth');
-const AdminGroupsPlugin = require('../../../server/api/admin-groups');
-const AuthenticatedUser = require('../fixtures/credentials-admin');
 
 
 const lab = exports.lab = Lab.script();
@@ -60,6 +59,7 @@ lab.before((done) => {
 lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+
     done();
 });
 
@@ -91,6 +91,7 @@ lab.experiment('Admin Groups Plugin Result List', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -142,6 +143,7 @@ lab.experiment('Admin Groups Plugin Read', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -209,6 +211,7 @@ lab.experiment('Admin Groups Plugin Create', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -259,6 +262,7 @@ lab.experiment('Admin Groups Plugin Update', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -274,6 +278,7 @@ lab.experiment('Admin Groups Plugin Update', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -324,6 +329,7 @@ lab.experiment('Admin Groups Plugin Update Permissions', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -371,6 +377,7 @@ lab.experiment('Admin Groups Plugin Delete', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });

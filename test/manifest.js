@@ -1,7 +1,6 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
+const Lab = require('lab');
 const Manifest = require('../manifest');
 
 

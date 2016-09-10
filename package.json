@@ -1,13 +1,12 @@
 {
   "name": "frame",
   "version": "10.0.1",
-  "description": "A user system API for Node.js",
+  "description": "A user system API starter",
   "main": "index.js",
   "scripts": {
-    "setup": "./setup.js",
-    "start": "nodemon -e js,md ./server.js",
-    "test": "lab -c -L",
-    "test-cover": "lab -c -r html -o ./test/artifacts/coverage.html && open ./test/artifacts/coverage.html"
+    "start": "nodemon --inspect -e js,md server.js",
+    "first-time-setup": "node first-time-setup.js",
+    "test": "lab -c -L"
   },
   "author": "Reza Akhavan <jedireza@gmail.com> (http://reza.akhavan.me/)",
   "license": "MIT",
@@ -19,6 +18,7 @@
     "bcrypt": "0.8.x",
     "boom": "4.x.x",
     "confidence": "3.x.x",
+    "dotenv": "2.x.x",
     "glue": "4.x.x",
     "handlebars": "4.x.x",
     "hapi": "15.x.x",

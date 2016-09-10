@@ -1,8 +1,7 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../../config');
+const Lab = require('lab');
 const Status = require('../../../server/models/status');
 
 

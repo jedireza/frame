@@ -1,8 +1,7 @@
 'use strict';
-
+const AuthPlugin = require('../auth');
 const Boom = require('boom');
 const Joi = require('joi');
-const AuthPlugin = require('../auth');
 
 
 const internals = {};
@@ -125,6 +124,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('root')
+                },
                 payload: {
                     name: Joi.string().required()
                 }
@@ -167,6 +169,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('root')
+                },
                 payload: {
                     permissions: Joi.object().required()
                 }
@@ -203,6 +208,11 @@ internals.applyRoutes = function (server, next) {
             auth: {
                 strategy: 'simple',
                 scope: 'admin'
+            },
+            validate: {
+                params: {
+                    id: Joi.string().invalid('root')
+                }
             },
             pre: [
                 AuthPlugin.preware.ensureAdminGroup('root')

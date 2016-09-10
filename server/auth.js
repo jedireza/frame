@@ -1,7 +1,6 @@
 'use strict';
-
-const Boom = require('boom');
 const Async = require('async');
+const Boom = require('boom');
 
 
 const internals = {};
@@ -65,6 +64,19 @@ internals.applyStrategy = function (server, next) {
 
 
 internals.preware = {
+    ensureNotRoot: {
+        assign: 'ensureNotRoot',
+        method: function (request, reply) {
+
+            if (request.auth.credentials.user.username === 'root') {
+                const message = 'Not permitted for root user.';
+
+                return reply(Boom.badRequest(message));
+            }
+
+            reply();
+        }
+    },
     ensureAdminGroup: function (groups) {
 
         return {

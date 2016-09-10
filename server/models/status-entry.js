@@ -1,8 +1,7 @@
 'use strict';
-
+const BaseModel = require('hapi-mongo-models').BaseModel;
 const Joi = require('joi');
 const ObjectAssign = require('object-assign');
-const BaseModel = require('hapi-mongo-models').BaseModel;
 
 
 const StatusEntry = BaseModel.extend({

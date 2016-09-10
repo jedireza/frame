@@ -1,7 +1,6 @@
 'use strict';
-
-const User = require('../../../server/models/user');
 const Account = require('../../../server/models/account');
+const User = require('../../../server/models/user');
 
 
 const user = new User({

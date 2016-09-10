@@ -1,5 +1,4 @@
 'use strict';
-
 const Glue = require('glue');
 const Manifest = require('./manifest');
 

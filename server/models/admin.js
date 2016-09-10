@@ -1,10 +1,9 @@
 'use strict';
-
-const Joi = require('joi');
-const Async = require('async');
-const ObjectAssign = require('object-assign');
-const BaseModel = require('hapi-mongo-models').BaseModel;
 const AdminGroup = require('./admin-group');
+const Async = require('async');
+const BaseModel = require('hapi-mongo-models').BaseModel;
+const Joi = require('joi');
+const ObjectAssign = require('object-assign');
 
 
 const Admin = BaseModel.extend({

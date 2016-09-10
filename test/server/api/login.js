@@ -1,20 +1,19 @@
 'use strict';
-
-const Lab = require('lab');
-const Code = require('code');
-const Path = require('path');
-const Config = require('../../../config');
-const Manifest = require('../../../manifest');
-const Hapi = require('hapi');
 const AuthAttempt = require('../../../server/models/auth-attempt');
+const AuthPlugin = require('../../../server/auth');
+const Bcrypt = require('bcrypt');
+const Code = require('code');
+const Config = require('../../../config');
+const Hapi = require('hapi');
+const HapiAuthBasic = require('hapi-auth-basic');
+const Lab = require('lab');
+const LoginPlugin = require('../../../server/api/login');
+const MailerPlugin = require('../../../server/mailer');
+const Manifest = require('../../../manifest');
+const Path = require('path');
+const Proxyquire = require('proxyquire');
 const Session = require('../../../server/models/session');
 const User = require('../../../server/models/user');
-const HapiAuthBasic = require('hapi-auth-basic');
-const Proxyquire = require('proxyquire');
-const AuthPlugin = require('../../../server/auth');
-const MailerPlugin = require('../../../server/mailer');
-const LoginPlugin = require('../../../server/api/login');
-const Bcrypt = require('bcrypt');
 
 
 const lab = exports.lab = Lab.script();
@@ -68,6 +67,7 @@ lab.before((done) => {
 lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+
     done();
 });
 
@@ -99,6 +99,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -136,6 +137,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -161,6 +163,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -218,6 +221,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -282,6 +286,7 @@ lab.experiment('Login Plugin Forgot Password', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -297,6 +302,7 @@ lab.experiment('Login Plugin Forgot Password', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
+
             done();
         });
     });
@@ -321,6 +327,7 @@ lab.experiment('Login Plugin Forgot Password', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -388,6 +395,7 @@ lab.experiment('Login Plugin Reset Password', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -403,6 +411,7 @@ lab.experiment('Login Plugin Reset Password', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
+
             done();
         });
     });

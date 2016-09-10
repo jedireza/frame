@@ -1,12 +1,11 @@
 'use strict';
-
-const Joi = require('joi');
-const Async = require('async');
-const Bcrypt = require('bcrypt');
-const ObjectAssign = require('object-assign');
-const BaseModel = require('hapi-mongo-models').BaseModel;
 const Account = require('./account');
 const Admin = require('./admin');
+const Async = require('async');
+const BaseModel = require('hapi-mongo-models').BaseModel;
+const Bcrypt = require('bcrypt');
+const Joi = require('joi');
+const ObjectAssign = require('object-assign');
 
 
 const User = BaseModel.extend({

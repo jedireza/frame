@@ -1,9 +1,8 @@
 'use strict';
-
-const Boom = require('boom');
 const Async = require('async');
-const Joi = require('joi');
 const AuthPlugin = require('../auth');
+const Boom = require('boom');
+const Joi = require('joi');
 
 
 const internals = {};
