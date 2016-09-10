@@ -1,9 +1,8 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../config');
 const Hapi = require('hapi');
+const Lab = require('lab');
 const Proxyquire = require('proxyquire');
 
 

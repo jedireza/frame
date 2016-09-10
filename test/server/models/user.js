@@ -1,9 +1,8 @@
 'use strict';
-
 const Async = require('async');
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../../config');
+const Lab = require('lab');
 const Proxyquire = require('proxyquire');
 
 
@@ -284,6 +283,7 @@ lab.experiment('User Instance Methods', () => {
         user.hydrateRoles((err) => {
 
             Code.expect(err).to.not.exist();
+
             done();
         });
     });

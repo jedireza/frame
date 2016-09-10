@@ -1,10 +1,9 @@
 'use strict';
-
+const Account = require('../../../server/models/account');
 const Async = require('async');
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../../config');
-const Account = require('../../../server/models/account');
+const Lab = require('lab');
 
 
 const lab = exports.lab = Lab.script();

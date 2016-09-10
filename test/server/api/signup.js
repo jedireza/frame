@@ -1,15 +1,14 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
-const Path = require('path');
 const Config = require('../../../config');
-const Manifest = require('../../../manifest');
 const Hapi = require('hapi');
 const HapiAuthBasic = require('hapi-auth-basic');
+const Lab = require('lab');
+const MailerPlugin = require('../../../server/mailer');
+const Manifest = require('../../../manifest');
+const Path = require('path');
 const Proxyquire = require('proxyquire');
 const SignupPlugin = require('../../../server/api/signup');
-const MailerPlugin = require('../../../server/mailer');
 
 
 const lab = exports.lab = Lab.script();
@@ -63,6 +62,7 @@ lab.before((done) => {
 lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+
     done();
 });
 
@@ -101,6 +101,7 @@ lab.experiment('Signup Plugin', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -121,6 +122,7 @@ lab.experiment('Signup Plugin', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
+
             done();
         });
     });
@@ -141,6 +143,7 @@ lab.experiment('Signup Plugin', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -161,6 +164,7 @@ lab.experiment('Signup Plugin', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
+
             done();
         });
     });
@@ -181,6 +185,7 @@ lab.experiment('Signup Plugin', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -236,6 +241,7 @@ lab.experiment('Signup Plugin', () => {
         console.warn = function () {
 
             console.warn = realWarn;
+
             done();
         };
 

@@ -1,11 +1,10 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../../config');
-const Hapi = require('hapi');
-const MailerPlugin = require('../../../server/mailer');
 const ContactPlugin = require('../../../server/api/contact');
+const Hapi = require('hapi');
+const Lab = require('lab');
+const MailerPlugin = require('../../../server/mailer');
 
 
 const lab = exports.lab = Lab.script();

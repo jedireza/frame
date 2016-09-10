@@ -1,9 +1,8 @@
 'use strict';
-
-const Boom = require('boom');
 const Async = require('async');
-const Joi = require('joi');
 const AuthPlugin = require('../auth');
+const Boom = require('boom');
+const Joi = require('joi');
 
 
 const internals = {};
@@ -127,6 +126,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('111111111111111111111111')
+                },
                 payload: {
                     name: Joi.object().keys({
                         first: Joi.string().required(),
@@ -173,6 +175,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('111111111111111111111111')
+                },
                 payload: {
                     permissions: Joi.object().required()
                 }
@@ -211,6 +216,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('111111111111111111111111')
+                },
                 payload: {
                     groups: Joi.object().required()
                 }
@@ -249,6 +257,9 @@ internals.applyRoutes = function (server, next) {
                 scope: 'admin'
             },
             validate: {
+                params: {
+                    id: Joi.string().invalid('111111111111111111111111')
+                },
                 payload: {
                     username: Joi.string().lowercase().required()
                 }
@@ -361,6 +372,11 @@ internals.applyRoutes = function (server, next) {
             auth: {
                 strategy: 'simple',
                 scope: 'admin'
+            },
+            validate: {
+                params: {
+                    id: Joi.string().invalid('111111111111111111111111')
+                }
             },
             pre: [
                 AuthPlugin.preware.ensureAdminGroup('root'),

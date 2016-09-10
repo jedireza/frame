@@ -1,16 +1,15 @@
 'use strict';
-
-const Lab = require('lab');
+const AdminPlugin = require('../../../server/api/admins');
+const AuthPlugin = require('../../../server/auth');
+const AuthenticatedUser = require('../fixtures/credentials-admin');
 const Code = require('code');
-const Path = require('path');
 const Config = require('../../../config');
-const Manifest = require('../../../manifest');
 const Hapi = require('hapi');
 const HapiAuthBasic = require('hapi-auth-basic');
+const Lab = require('lab');
+const Manifest = require('../../../manifest');
+const Path = require('path');
 const Proxyquire = require('proxyquire');
-const AuthPlugin = require('../../../server/auth');
-const AdminPlugin = require('../../../server/api/admins');
-const AuthenticatedUser = require('../fixtures/credentials-admin');
 
 
 const lab = exports.lab = Lab.script();
@@ -63,6 +62,7 @@ lab.before((done) => {
 lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+
     done();
 });
 
@@ -94,6 +94,7 @@ lab.experiment('Admins Plugin Result List', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -145,6 +146,7 @@ lab.experiment('Admins Plugin Read', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -212,6 +214,7 @@ lab.experiment('Admins Plugin Create', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -265,6 +268,7 @@ lab.experiment('Admins Plugin Update', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -280,6 +284,7 @@ lab.experiment('Admins Plugin Update', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -330,6 +335,7 @@ lab.experiment('Admins Plugin Update Permissions', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -380,6 +386,7 @@ lab.experiment('Admins Plugin Update Groups', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -430,6 +437,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -445,6 +453,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -465,6 +474,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -485,6 +495,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -514,6 +525,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
+
             done();
         });
     });
@@ -552,6 +564,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(409);
+
             done();
         });
     });
@@ -595,6 +608,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -638,6 +652,7 @@ lab.experiment('Admins Plugin Link User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
+
             done();
         });
     });
@@ -668,6 +683,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -683,6 +699,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -698,6 +715,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
+
             done();
         });
     });
@@ -713,6 +731,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
+
             done();
         });
     });
@@ -740,6 +759,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -767,6 +787,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(404);
+
             done();
         });
     });
@@ -815,6 +836,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });
@@ -862,6 +884,7 @@ lab.experiment('Admins Plugin Unlink User', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(200);
+
             done();
         });
     });
@@ -892,6 +915,7 @@ lab.experiment('Admins Plugin Delete', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });

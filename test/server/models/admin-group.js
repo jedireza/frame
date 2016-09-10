@@ -1,9 +1,8 @@
 'use strict';
-
-const Lab = require('lab');
+const AdminGroup = require('../../../server/models/admin-group');
 const Code = require('code');
 const Config = require('../../../config');
-const AdminGroup = require('../../../server/models/admin-group');
+const Lab = require('lab');
 
 
 const lab = exports.lab = Lab.script();

@@ -1,17 +1,16 @@
 'use strict';
-
-const Lab = require('lab');
+const AuthPlugin = require('../../../server/auth');
+const AuthenticatedUser = require('../fixtures/credentials-admin');
 const Code = require('code');
-const Path = require('path');
-const Hoek = require('hoek');
 const Config = require('../../../config');
-const Manifest = require('../../../manifest');
 const Hapi = require('hapi');
 const HapiAuthBasic = require('hapi-auth-basic');
-const Proxyquire = require('proxyquire');
-const AuthPlugin = require('../../../server/auth');
+const Hoek = require('hoek');
+const Lab = require('lab');
 const LogoutPlugin = require('../../../server/api/logout');
-const AuthenticatedUser = require('../fixtures/credentials-admin');
+const Manifest = require('../../../manifest');
+const Path = require('path');
+const Proxyquire = require('proxyquire');
 
 
 const lab = exports.lab = Lab.script();
@@ -61,6 +60,7 @@ lab.before((done) => {
 lab.after((done) => {
 
     server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+
     done();
 });
 
@@ -92,6 +92,7 @@ lab.experiment('Logout Plugin (Delete Session)', () => {
         server.inject(request, (response) => {
 
             Code.expect(response.statusCode).to.equal(500);
+
             done();
         });
     });

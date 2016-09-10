@@ -1,10 +1,9 @@
 'use strict';
-
-const Joi = require('joi');
-const ObjectAssign = require('object-assign');
 const BaseModel = require('hapi-mongo-models').BaseModel;
-const StatusEntry = require('./status-entry');
+const Joi = require('joi');
 const NoteEntry = require('./note-entry');
+const ObjectAssign = require('object-assign');
+const StatusEntry = require('./status-entry');
 
 
 const Account = BaseModel.extend({

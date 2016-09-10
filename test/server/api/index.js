@@ -1,10 +1,9 @@
 'use strict';
-
-const Lab = require('lab');
 const Code = require('code');
 const Config = require('../../../config');
 const Hapi = require('hapi');
 const IndexPlugin = require('../../../server/api/index');
+const Lab = require('lab');
 
 
 const lab = exports.lab = Lab.script();
