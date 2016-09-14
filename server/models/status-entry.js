@@ -1,15 +1,9 @@
 'use strict';
-const BaseModel = require('hapi-mongo-models').BaseModel;
 const Joi = require('joi');
-const ObjectAssign = require('object-assign');
+const MongoModels = require('mongo-models');
 
 
-const StatusEntry = BaseModel.extend({
-    constructor: function (attrs) {
-
-        ObjectAssign(this, attrs);
-    }
-});
+class StatusEntry extends MongoModels {}
 
 
 StatusEntry.schema = Joi.object().keys({
