@@ -12,10 +12,10 @@ var paths = {
     ],
     less: [
         './node_modules/bootstrap/less/bootstrap.less',
-        './src/less/font-awesome.less',
-        './src/less/index.less',
+        './src/font-awesome.less',
+        './src/index.less',
     ],
-    jade: './src/jade/*.jade'
+    jade: './src/*.jade'
 };
 
 
