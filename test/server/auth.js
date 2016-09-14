@@ -6,6 +6,7 @@ const Config = require('../../config');
 const Hapi = require('hapi');
 const HapiAuthBasic = require('hapi-auth-basic');
 const Lab = require('lab');
+const MakeMockModel = require('./fixtures/make-mock-model');
 const Manifest = require('../../manifest');
 const Path = require('path');
 const Proxyquire = require('proxyquire');
@@ -21,8 +22,8 @@ let stub;
 lab.beforeEach((done) => {
 
     stub = {
-        Session: {},
-        User: {}
+        Session: MakeMockModel(),
+        User: MakeMockModel()
     };
 
     const proxy = {};
@@ -60,7 +61,7 @@ lab.beforeEach((done) => {
 
 lab.afterEach((done) => {
 
-    server.plugins['hapi-mongo-models'].BaseModel.disconnect();
+    server.plugins['hapi-mongo-models'].MongoModels.disconnect();
 
     done();
 });

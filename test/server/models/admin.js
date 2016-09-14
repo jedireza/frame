@@ -7,6 +7,8 @@ const Proxyquire = require('proxyquire');
 
 
 const lab = exports.lab = Lab.script();
+const mongoUri = Config.get('/hapiMongoModels/mongodb/uri');
+const mongoOptions = Config.get('/hapiMongoModels/mongodb/options');
 const stub = {
     AdminGroup: {}
 };
@@ -20,7 +22,7 @@ lab.experiment('Admin Class Methods', () => {
 
     lab.before((done) => {
 
-        Admin.connect(Config.get('/hapiMongoModels/mongodb'), (err, db) => {
+        Admin.connect(mongoUri, mongoOptions, (err, db) => {
 
             done(err);
         });
@@ -128,7 +130,7 @@ lab.experiment('Admin Instance Methods', () => {
 
     lab.before((done) => {
 
-        Admin.connect(Config.get('/hapiMongoModels/mongodb'), (err, db) => {
+        Admin.connect(mongoUri, mongoOptions, (err, db) => {
 
             done(err);
         });

@@ -32,7 +32,7 @@ const config = {
     },
     hapiMongoModels: {
         mongodb: {
-            url: {
+            uri: {
                 $filter: 'env',
                 production: process.env.MONGODB_URI,
                 test: 'mongodb://localhost:27017/frame-test',

@@ -6,13 +6,15 @@ const Lab = require('lab');
 
 
 const lab = exports.lab = Lab.script();
+const mongoUri = Config.get('/hapiMongoModels/mongodb/uri');
+const mongoOptions = Config.get('/hapiMongoModels/mongodb/options');
 
 
 lab.experiment('AdminGroup Class Methods', () => {
 
     lab.before((done) => {
 
-        AdminGroup.connect(Config.get('/hapiMongoModels/mongodb'), (err, db) => {
+        AdminGroup.connect(mongoUri, mongoOptions, (err, db) => {
 
             done(err);
         });
@@ -70,7 +72,7 @@ lab.experiment('AdminGroup Instance Methods', () => {
 
     lab.before((done) => {
 
-        AdminGroup.connect(Config.get('/hapiMongoModels/mongodb'), (err, db) => {
+        AdminGroup.connect(mongoUri, mongoOptions, (err, db) => {
 
             done(err);
         });
