@@ -149,7 +149,7 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    name: Joi.object().keys({
+                    name: Joi.object({
                         first: Joi.string().required(),
                         middle: Joi.string().allow(''),
                         last: Joi.string().required()
@@ -192,7 +192,7 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    name: Joi.object().keys({
+                    name: Joi.object({
                         first: Joi.string().required(),
                         middle: Joi.string().allow(''),
                         last: Joi.string().required()
