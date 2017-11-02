@@ -201,8 +201,8 @@ User.schema = Joi.object({
 
 
 User.indexes = [
-    { key: { username: 1, unique: 1 } },
-    { key: { email: 1, unique: 1 } }
+    { key: { username: 1 }, unique: true },
+    { key: { email: 1 }, unique: true }
 ];
 
 
