@@ -3,6 +3,7 @@ const Async = require('async');
 const Bcrypt = require('bcrypt');
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const Useragent = require('useragent');
 const Uuid = require('uuid');
 
 
@@ -33,7 +34,7 @@ class Session extends MongoModels {
         });
     }
 
-    static create(userId, callback) {
+    static create(userId, ip, userAgent, callback) {
 
         const self = this;
 
@@ -41,22 +42,24 @@ class Session extends MongoModels {
             keyHash: this.generateKeyHash.bind(this),
             newSession: ['keyHash', function (results, done) {
 
+                const parsedAgent = Useragent.lookup(userAgent);
+                let browser = parsedAgent.family;
+
+                if (browser === 'Other') {
+                    browser = parsedAgent.source;
+                }
+
                 const document = {
                     userId,
                     key: results.keyHash.hash,
-                    time: new Date()
+                    time: new Date(),
+                    lastActive: new Date(),
+                    ip,
+                    browser,
+                    os: parsedAgent.os.toString()
                 };
 
                 self.insertOne(document, done);
-            }],
-            clean: ['newSession', function (results, done) {
-
-                const query = {
-                    userId,
-                    key: { $ne: results.keyHash.hash }
-                };
-
-                self.deleteOne(query, done);
             }]
         }, (err, results) => {
 
@@ -111,7 +114,11 @@ Session.schema = Joi.object({
     _id: Joi.object(),
     userId: Joi.string().required(),
     key: Joi.string().required(),
-    time: Joi.date().required()
+    time: Joi.date().required(),
+    lastActive: Joi.date().required(),
+    ip: Joi.string().required(),
+    browser: Joi.string().required(),
+    os: Joi.string().required()
 });
 
 

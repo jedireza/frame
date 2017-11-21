@@ -73,7 +73,7 @@ lab.experiment('Session Class Methods', () => {
 
     lab.test('it returns a new instance when create succeeds', (done) => {
 
-        Session.create('ren', (err, result) => {
+        Session.create('ren', 'ip', 'userAgent', (err, result) => {
 
             Code.expect(err).to.not.exist();
             Code.expect(result).to.be.an.instanceOf(Session);
@@ -93,7 +93,7 @@ lab.experiment('Session Class Methods', () => {
             callback(Error('insert failed'));
         };
 
-        Session.create('ren', (err, result) => {
+        Session.create('ren', 'ip', 'userAgent', (err, result) => {
 
             Code.expect(err).to.be.an.object();
             Code.expect(result).to.not.exist();
@@ -110,7 +110,7 @@ lab.experiment('Session Class Methods', () => {
         Async.auto({
             session: function (cb) {
 
-                Session.create('1D', (err, result) => {
+                Session.create('1D', 'ip', 'userAgent', (err, result) => {
 
                     Code.expect(err).to.not.exist();
                     Code.expect(result).to.be.an.instanceOf(Session);
@@ -208,6 +208,17 @@ lab.experiment('Session Class Methods', () => {
             Code.expect(result).to.not.exist();
 
             Session.findById = realFindById;
+
+            done();
+        });
+    });
+
+    lab.test('it returns a new instance when parsed a userAgent ', (done) => {
+
+        Session.create('ren', 'ip', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36', (err, result) => {
+
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(Session);
 
             done();
         });

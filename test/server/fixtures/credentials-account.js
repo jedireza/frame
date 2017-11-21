@@ -1,6 +1,7 @@
 'use strict';
 const Account = require('../../../server/models/account');
 const User = require('../../../server/models/user');
+const Session = require('../../../server/models/session');
 
 
 const user = new User({
@@ -23,9 +24,14 @@ const user = new User({
     }
 });
 
+const session = new Session({
+    '_id': '5250W35'
+});
+
 
 module.exports = {
     user,
     roles: user._roles,
-    scope: Object.keys(user.roles)
+    scope: Object.keys(user.roles),
+    session
 };

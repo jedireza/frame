@@ -1,6 +1,7 @@
 'use strict';
 const AuthPlugin = require('../../../server/auth');
 const AuthenticatedUser = require('../fixtures/credentials-admin');
+const AuthenticatedAccount = require('../fixtures/credentials-account');
 const Code = require('code');
 const Config = require('../../../config');
 const Hapi = require('hapi');
@@ -185,7 +186,149 @@ lab.experiment('Session Plugin Read', () => {
 });
 
 
-lab.experiment('Session Plugin Delete', () => {
+lab.experiment('Sessions Plugin (My) Read', () => {
+
+    lab.beforeEach((done) => {
+
+        request = {
+            method: 'GET',
+            url: '/sessions/my',
+            credentials: AuthenticatedUser
+        };
+
+        done();
+    });
+
+
+    lab.test('it returns an error when find by id fails', (done) => {
+
+        stub.Session.find = function (id, callback) {
+
+            callback(Error('find by id failed'));
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(500);
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a not found when find by id misses', (done) => {
+
+        stub.Session.find = function (id, callback) {
+
+            callback();
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a document successfully', (done) => {
+
+        stub.Session.find = function (id, callback) {
+
+            callback(null, [{ _id: '93EP150D35' }]);
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result[0]).to.be.an.object();
+
+            done();
+        });
+    });
+});
+
+
+lab.experiment('Session Plugin Delete By User', () => {
+
+    lab.beforeEach((done) => {
+
+        request = {
+            method: 'DELETE',
+            url: '/sessions/my/93EP150D35',
+            credentials: AuthenticatedAccount
+        };
+
+        done();
+    });
+
+
+    lab.test('it returns an error when delete by id fails', (done) => {
+
+        stub.Session.findByIdAndDelete = function (id, callback) {
+
+            callback(Error('update by id failed'));
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(500);
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a not found when update by id misses', (done) => {
+
+        stub.Session.findByIdAndDelete = function (id, callback) {
+
+            callback(null, undefined);
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(404);
+            Code.expect(response.result.message).to.match(/document not found/i);
+
+            done();
+        });
+    });
+
+
+    lab.test('it updates a document successfully', (done) => {
+
+        stub.Session.findByIdAndDelete = function (id, callback) {
+
+            callback(null, 1);
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(200);
+
+            done();
+        });
+    });
+
+    lab.test('it returns an error if you delete the current session', (done) => {
+
+
+        AuthenticatedAccount.session._id = '93EP150D35';
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(400);
+            Code.expect(response.result.message).to.match(/Unable to close your current session. You can use logout instead./i);
+            done();
+        });
+    });
+});
+
+
+lab.experiment('Session Plugin Delete by Admin', () => {
 
     lab.beforeEach((done) => {
 

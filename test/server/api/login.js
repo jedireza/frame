@@ -214,7 +214,12 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
-        stub.Session.create = function (username, callback) {
+        stub.Session.findOne = function (query, callback) {
+
+            callback(null, null);
+        };
+
+        stub.Session.create = function (username, ip, userAgent, callback) {
 
             callback(Error('create session failed'));
         };
@@ -245,9 +250,55 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
-        stub.Session.create = function (username, callback) {
+        stub.Session.findOne = function (query, callback) {
+
+            callback(null, null);
+        };
+
+        stub.Session.create = function (username, ip, userAgent, callback) {
 
             callback(null, new Session({ _id: '2D', userId: '1D' }));
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(200);
+            Code.expect(response.result).to.be.an.object();
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a session successfully with a x-forwarded-for header', (done) => {
+
+        stub.AuthAttempt.abuseDetected = function (ip, username, callback) {
+
+            callback(null, false);
+        };
+
+        stub.AuthAttempt.create = function (ip, username, callback) {
+
+            callback(null, new AuthAttempt({}));
+        };
+
+        stub.User.findByCredentials = function (username, password, callback) {
+
+            callback(null, new User({ _id: '1D', username: 'ren' }));
+        };
+
+        stub.Session.findOne = function (query, callback) {
+
+            callback(null, null);
+        };
+
+        stub.Session.create = function (username, ip, userAgent, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D' }));
+        };
+
+        request.headers = {
+            'x-forwarded-for': '127.0.0.1'
         };
 
         server.inject(request, (response) => {

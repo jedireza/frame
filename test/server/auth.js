@@ -81,6 +81,11 @@ lab.experiment('Auth Plugin', () => {
             callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
+        };
+
         server.route({
             method: 'GET',
             path: '/',
@@ -234,6 +239,11 @@ lab.experiment('Auth Plugin', () => {
             callback(null, new User({ _id: '1D', username: 'ren' }));
         };
 
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
+        };
+
         server.route({
             method: 'GET',
             path: '/',
@@ -300,6 +310,11 @@ lab.experiment('Auth Plugin', () => {
             callback(null, user);
         };
 
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
+        };
+
         server.route({
             method: 'GET',
             path: '/',
@@ -364,6 +379,11 @@ lab.experiment('Auth Plugin', () => {
             };
 
             callback(null, user);
+        };
+
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
         server.route({
@@ -438,6 +458,11 @@ lab.experiment('Auth Plugin', () => {
             callback(null, user);
         };
 
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
+        };
+
         server.route({
             method: 'GET',
             path: '/',
@@ -507,6 +532,11 @@ lab.experiment('Auth Plugin', () => {
             callback(null, user);
         };
 
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
+        };
+
         server.route({
             method: 'GET',
             path: '/',
@@ -574,6 +604,11 @@ lab.experiment('Auth Plugin', () => {
             };
 
             callback(null, user);
+        };
+
+        stub.Session.findByIdAndUpdate = function (id, update, callback) {
+
+            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
         };
 
         server.route({

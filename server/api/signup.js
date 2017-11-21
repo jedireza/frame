@@ -142,7 +142,10 @@ internals.applyRoutes = function (server, next) {
                 }],
                 session: ['linkUser', 'linkAccount', function (results, done) {
 
-                    Session.create(results.user._id.toString(), done);
+                    const userAgent = request.headers['user-agent'];
+                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
+
+                    Session.create(results.user._id.toString(), ip, userAgent, done);
                 }]
             }, (err, results) => {
 

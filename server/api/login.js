@@ -86,7 +86,10 @@ internals.applyRoutes = function (server, next) {
                 assign: 'session',
                 method: function (request, reply) {
 
-                    Session.create(request.pre.user._id.toString(), (err, session) => {
+                    const userAgent = request.headers['user-agent'];
+                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
+
+                    Session.create(request.pre.user._id.toString(), ip, userAgent, (err, session) => {
 
                         if (err) {
                             return reply(err);
