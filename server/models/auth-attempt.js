@@ -3,13 +3,23 @@ const Async = require('async');
 const Config = require('../../config');
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const Useragent = require('useragent');
 
 
 class AuthAttempt extends MongoModels {
-    static create(ip, username, callback) {
+    static create(ip, username, userAgent, callback) {
+
+        const parsedAgent = Useragent.lookup(userAgent);
+        let browser = parsedAgent.family;
+
+        if (browser === 'Other') {
+            browser = parsedAgent.source;
+        }
 
         const document = {
             ip,
+            browser,
+            os: parsedAgent.os.toString(),
             username: username.toLowerCase(),
             time: new Date()
         };
@@ -66,6 +76,8 @@ AuthAttempt.schema = Joi.object({
     _id: Joi.object(),
     username: Joi.string().lowercase().required(),
     ip: Joi.string().required(),
+    browser: Joi.string().required(),
+    os: Joi.string().required(),
     time: Joi.date().required()
 });
 

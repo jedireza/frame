@@ -151,7 +151,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, false);
         };
 
-        stub.AuthAttempt.create = function (ip, username, callback) {
+        stub.AuthAttempt.create = function (ip, username, userAgent, callback) {
 
             callback(Error('create auth attempt failed'));
         };
@@ -177,7 +177,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, false);
         };
 
-        stub.AuthAttempt.create = function (ip, username, callback) {
+        stub.AuthAttempt.create = function (ip, username, userAgent, callback) {
 
             callback(null, new AuthAttempt({}));
         };
@@ -197,6 +197,37 @@ lab.experiment('Login Plugin (Create Session)', () => {
     });
 
 
+    lab.test('it returns early after creating a new auth attempt with a x-forwarded-for header', (done) => {
+
+        stub.AuthAttempt.abuseDetected = function (ip, username, callback) {
+
+            callback(null, false);
+        };
+
+        stub.AuthAttempt.create = function (ip, username, userAgent, callback) {
+
+            callback(null, new AuthAttempt({}));
+        };
+
+        stub.User.findByCredentials = function (username, password, callback) {
+
+            callback();
+        };
+
+        request.headers = {
+            'x-forwarded-for': '127.0.0.1'
+        };
+
+        server.inject(request, (response) => {
+
+            Code.expect(response.statusCode).to.equal(400);
+            Code.expect(response.result.message).to.match(/username and password combination not found/i);
+
+            done();
+        });
+    });
+
+
     lab.test('it returns an error when creating a new session fails', (done) => {
 
         stub.AuthAttempt.abuseDetected = function (ip, username, callback) {
@@ -204,7 +235,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, false);
         };
 
-        stub.AuthAttempt.create = function (ip, username, callback) {
+        stub.AuthAttempt.create = function (ip, username, userAgent, callback) {
 
             callback(null, new AuthAttempt({}));
         };
@@ -240,7 +271,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, false);
         };
 
-        stub.AuthAttempt.create = function (ip, username, callback) {
+        stub.AuthAttempt.create = function (username, ip, userAgent, callback) {
 
             callback(null, new AuthAttempt({}));
         };
@@ -277,7 +308,7 @@ lab.experiment('Login Plugin (Create Session)', () => {
             callback(null, false);
         };
 
-        stub.AuthAttempt.create = function (ip, username, callback) {
+        stub.AuthAttempt.create = function (ip, username, userAgent, callback) {
 
             callback(null, new AuthAttempt({}));
         };

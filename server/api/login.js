@@ -70,10 +70,11 @@ internals.applyRoutes = function (server, next) {
                         return reply();
                     }
 
-                    const ip = request.info.remoteAddress;
+                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
                     const username = request.payload.username;
+                    const userAgent = request.headers['user-agent'];
 
-                    AuthAttempt.create(ip, username, (err, authAttempt) => {
+                    AuthAttempt.create(ip, username, userAgent, (err, authAttempt) => {
 
                         if (err) {
                             return reply(err);

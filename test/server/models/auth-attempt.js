@@ -35,7 +35,19 @@ lab.experiment('AuthAttempt Class Methods', () => {
 
     lab.test('it returns a new instance when create succeeds', (done) => {
 
-        AuthAttempt.create('127.0.0.1', 'ren', (err, result) => {
+        AuthAttempt.create('127.0.0.1', 'ren', 'userAgent', (err, result) => {
+
+            Code.expect(err).to.not.exist();
+            Code.expect(result).to.be.an.instanceOf(AuthAttempt);
+
+            done();
+        });
+    });
+
+
+    lab.test('it returns a new instance when create succeeds with a userAgent', (done) => {
+
+        AuthAttempt.create('127.0.0.1', 'ren', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36', (err, result) => {
 
             Code.expect(err).to.not.exist();
             Code.expect(result).to.be.an.instanceOf(AuthAttempt);
@@ -56,7 +68,7 @@ lab.experiment('AuthAttempt Class Methods', () => {
             callback(Error('insert failed'));
         };
 
-        AuthAttempt.create('127.0.0.1', 'ren', (err, result) => {
+        AuthAttempt.create('127.0.0.1', 'ren', 'userAgent', (err, result) => {
 
             Code.expect(err).to.be.an.object();
             Code.expect(result).to.not.exist();
@@ -86,7 +98,7 @@ lab.experiment('AuthAttempt Class Methods', () => {
         const authSpam = [];
         const authRequest = function (cb) {
 
-            AuthAttempt.create('127.0.0.1', 'stimpy', (err, result) => {
+            AuthAttempt.create('127.0.0.1', 'stimpy', 'userAgent', (err, result) => {
 
                 Code.expect(err).to.not.exist();
                 Code.expect(result).to.be.an.object();
@@ -119,7 +131,7 @@ lab.experiment('AuthAttempt Class Methods', () => {
         const authRequest = function (i, cb) {
 
             const randomUsername = 'mudskipper' + i;
-            AuthAttempt.create('127.0.0.2', randomUsername, (err, result) => {
+            AuthAttempt.create('127.0.0.2', randomUsername, 'userAgent',(err, result) => {
 
                 Code.expect(err).to.not.exist();
                 Code.expect(result).to.be.an.object();
