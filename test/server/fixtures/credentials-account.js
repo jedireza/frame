@@ -5,6 +5,7 @@ const Session = require('../../../server/models/session');
 
 
 const user = new User({
+    _id: '535HOW35',
     username: 'stimpy',
     roles: {
         account: {
