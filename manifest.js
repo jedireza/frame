@@ -1,6 +1,7 @@
 'use strict';
 const Confidence = require('confidence');
 const Config = require('./config');
+const Path = require('path');
 
 
 const criteria = {
@@ -14,138 +15,106 @@ const manifest = {
         debug: {
             request: ['error']
         },
-        connections: {
-            routes: {
-                security: true
-            }
-        }
+        routes: {
+            security: true
+        },
+        port: Config.get('/port/web')
     },
-    connections: [{
-        port: Config.get('/port/web'),
-        labels: ['web']
-    }],
-    registrations: [
-        {
-            plugin: 'hapi-auth-basic'
-        },
-        {
-            plugin: 'lout'
-        },
-        {
-            plugin: 'inert'
-        },
-        {
-            plugin: 'vision'
-        },
-        {
-            plugin: {
-                register: 'visionary',
+    register: {
+        plugins: [
+            {
+                plugin: 'good',
                 options: {
-                    engines: { jade: 'jade' },
-                    path: './server/web'
+                    reporters: {
+                        myConsoleReporter: [
+                            {
+                                module: 'good-squeeze',
+                                name: 'Squeeze',
+                                args: [{
+                                    error: '*',
+                                    log: '*',
+                                    request: '*',
+                                    response:'*'
+                                }]
+                            },
+                            {
+                                module: 'good-console',
+                                args: [{
+                                    color: {
+                                        $filter: 'env',
+                                        production: false,
+                                        $default: true
+                                    }
+                                }]
+                            },
+                            'stdout'
+                        ]
+                    }
                 }
-            }
-        },
-        {
-            plugin: {
-                register: 'hapi-mongo-models',
+            },
+            {
+                plugin: 'hapi-auth-basic'
+            },
+            {
+                plugin: 'hapi-remote-address'
+            },
+            {
+                plugin: 'hapi-mongo-models',
                 options: {
                     mongodb: Config.get('/hapiMongoModels/mongodb'),
-                    models: {
-                        Account: './server/models/account',
-                        AdminGroup: './server/models/admin-group',
-                        Admin: './server/models/admin',
-                        AuthAttempt: './server/models/auth-attempt',
-                        Session: './server/models/session',
-                        Status: './server/models/status',
-                        User: './server/models/user'
-                    },
+                    models: [
+                        Path.resolve(__dirname, './server/models/account'),
+                        Path.resolve(__dirname, './server/models/admin-group'),
+                        Path.resolve(__dirname, './server/models/admin'),
+                        Path.resolve(__dirname, './server/models/auth-attempt'),
+                        Path.resolve(__dirname, './server/models/session'),
+                        Path.resolve(__dirname, './server/models/status'),
+                        Path.resolve(__dirname, './server/models/user')
+                    ],
                     autoIndex: Config.get('/hapiMongoModels/autoIndex')
                 }
+            },
+            {
+                plugin: './server/auth'
+            },
+            {
+                plugin: './server/api/accounts'
+            },
+            {
+                plugin: './server/api/admin-groups'
+            },
+            {
+                plugin: './server/api/admins'
+            },
+            {
+                plugin: './server/api/contact'
+            },
+            {
+                plugin: './server/api/main'
+            },
+            {
+                plugin: './server/api/login'
+            },
+            {
+                plugin: './server/api/logout'
+            },
+            {
+                plugin: './server/api/sessions'
+            },
+            {
+                plugin: './server/api/signup'
+            },
+            {
+                plugin: './server/api/statuses'
+            },
+            {
+                plugin: './server/api/users'
+            },
+            {
+                plugin: './server/web/main'
             }
-        },
-        {
-            plugin: './server/auth'
-        },
-        {
-            plugin: './server/mailer'
-        },
-        {
-            plugin: './server/api/accounts',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/admin-groups',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/admins',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/auth-attempts',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/contact',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/index',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/login',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/logout',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/sessions',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/signup',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/statuses',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/api/users',
-            options: {
-                routes: { prefix: '/api' }
-            }
-        },
-        {
-            plugin: './server/web/index'
-        }
-    ]
+        ]
+    }
 };
 
 

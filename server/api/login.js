@@ -1,24 +1,19 @@
 'use strict';
-const Async = require('async');
+const AuthAttempt = require('../models/auth-attempt');
 const Bcrypt = require('bcrypt');
 const Boom = require('boom');
 const Config = require('../../config');
 const Joi = require('joi');
+const Mailer = require('../mailer');
+const Session = require('../models/session');
+const User = require('../models/user');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
-
-    const AuthAttempt = server.plugins['hapi-mongo-models'].AuthAttempt;
-    const Session = server.plugins['hapi-mongo-models'].Session;
-    const User = server.plugins['hapi-mongo-models'].User;
-
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'POST',
-        path: '/login',
+        path: '/api/login',
         config: {
             validate: {
                 payload: {
@@ -28,85 +23,55 @@ internals.applyRoutes = function (server, next) {
             },
             pre: [{
                 assign: 'abuseDetected',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
-                    const ip = request.info.remoteAddress;
+                    const ip = request.remoteAddress;
                     const username = request.payload.username;
+                    const detected = await AuthAttempt.abuseDetected(ip, username);
 
-                    AuthAttempt.abuseDetected(ip, username, (err, detected) => {
+                    if (detected) {
+                        throw Boom.badRequest('Maximum number of auth attempts reached.');
+                    }
 
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        if (detected) {
-                            return reply(Boom.badRequest('Maximum number of auth attempts reached. Please try again later.'));
-                        }
-
-                        reply();
-                    });
+                    return h.continue;
                 }
             }, {
                 assign: 'user',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
+                    const ip = request.remoteAddress;
                     const username = request.payload.username;
                     const password = request.payload.password;
+                    const user = await User.findByCredentials(username, password);
 
-                    User.findByCredentials(username, password, (err, user) => {
+                    if (!user) {
+                        await AuthAttempt.create(ip, username);
 
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        reply(user);
-                    });
-                }
-            }, {
-                assign: 'logAttempt',
-                method: function (request, reply) {
-
-                    if (request.pre.user) {
-                        return reply();
+                        throw Boom.badRequest('Credentials are invalid or account is inactive.');
                     }
 
-                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
-                    const username = request.payload.username;
-                    const userAgent = request.headers['user-agent'];
-
-                    AuthAttempt.create(ip, username, userAgent, (err, authAttempt) => {
-
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        return reply(Boom.badRequest('Username and password combination not found or account is inactive.'));
-                    });
+                    return user;
                 }
             }, {
                 assign: 'session',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
+                    const userId = `${request.pre.user._id}`;
+                    const ip = request.remoteAddress;
                     const userAgent = request.headers['user-agent'];
-                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
 
-                    Session.create(request.pre.user._id.toString(), ip, userAgent, (err, session) => {
-
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        return reply(session);
-                    });
+                    return await Session.create(userId, ip, userAgent);
                 }
             }]
         },
-        handler: function (request, reply) {
+        handler: function (request, h) {
 
-            const credentials = request.pre.session._id.toString() + ':' + request.pre.session.key;
-            const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+            const sessionId = request.pre.session._id;
+            const sessionKey = request.pre.session.key;
+            const credentials = `${sessionId}:${sessionKey}`;
+            const authHeader = `Basic ${new Buffer(credentials).toString('base64')}`;
 
-            reply({
+            return {
                 user: {
                     _id: request.pre.user._id,
                     username: request.pre.user.username,
@@ -115,14 +80,14 @@ internals.applyRoutes = function (server, next) {
                 },
                 session: request.pre.session,
                 authHeader
-            });
+            };
         }
     });
 
 
     server.route({
         method: 'POST',
-        path: '/login/forgot',
+        path: '/api/login/forgot',
         config: {
             validate: {
                 payload: {
@@ -131,165 +96,118 @@ internals.applyRoutes = function (server, next) {
             },
             pre: [{
                 assign: 'user',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
-                    const conditions = {
-                        email: request.payload.email
-                    };
+                    const query = { email: request.payload.email };
+                    const user = await User.findOne(query);
 
-                    User.findOne(conditions, (err, user) => {
+                    if (!user) {
+                        const response = h.response({ message: 'Success.' });
 
-                        if (err) {
-                            return reply(err);
-                        }
+                        return response.takeover();
+                    }
 
-                        if (!user) {
-                            return reply({ message: 'Success.' }).takeover();
-                        }
-
-                        reply(user);
-                    });
+                    return user;
                 }
             }]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            const mailer = request.server.plugins.mailer;
+            // set reset token
 
-            Async.auto({
-                keyHash: function (done) {
-
-                    Session.generateKeyHash(done);
-                },
-                user: ['keyHash', function (results, done) {
-
-                    const id = request.pre.user._id.toString();
-                    const update = {
-                        $set: {
-                            resetPassword: {
-                                token: results.keyHash.hash,
-                                expires: Date.now() + 10000000
-                            }
-                        }
-                    };
-
-                    User.findByIdAndUpdate(id, update, done);
-                }],
-                email: ['user', function (results, done) {
-
-                    const emailOptions = {
-                        subject: 'Reset your ' + Config.get('/projectName') + ' password',
-                        to: request.payload.email
-                    };
-                    const template = 'forgot-password';
-                    const context = {
-                        key: results.keyHash.key
-                    };
-
-                    mailer.sendEmail(emailOptions, template, context, done);
-                }]
-            }, (err, results) => {
-
-                if (err) {
-                    return reply(err);
+            const keyHash = await Session.generateKeyHash();
+            const update = {
+                $set: {
+                    resetPassword: {
+                        token: keyHash.hash,
+                        expires: Date.now() + 10000000
+                    }
                 }
+            };
 
-                reply({ message: 'Success.' });
-            });
+            await User.findByIdAndUpdate(request.pre.user._id, update);
+
+            // send email
+
+            const projectName = Config.get('/projectName');
+            const emailOptions = {
+                subject: `Reset your ${projectName} password`,
+                to: request.payload.email
+            };
+            const template = 'forgot-password';
+            const context = { key: keyHash.key };
+
+            await Mailer.sendEmail(emailOptions, template, context);
+
+            return { message: 'Success.' };
         }
     });
 
 
     server.route({
         method: 'POST',
-        path: '/login/reset',
+        path: '/api/login/reset',
         config: {
             validate: {
                 payload: {
-                    key: Joi.string().required(),
                     email: Joi.string().email().lowercase().required(),
+                    key: Joi.string().required(),
                     password: Joi.string().required()
                 }
             },
             pre: [{
                 assign: 'user',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
-                    const conditions = {
+                    const query = {
                         email: request.payload.email,
                         'resetPassword.expires': { $gt: Date.now() }
                     };
+                    const user = await User.findOne(query);
 
-                    User.findOne(conditions, (err, user) => {
+                    if (!user) {
+                        throw Boom.badRequest('Invalid email or key.');
+                    }
 
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        if (!user) {
-                            return reply(Boom.badRequest('Invalid email or key.'));
-                        }
-
-                        reply(user);
-                    });
+                    return user;
                 }
             }]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            Async.auto({
-                keyMatch: function (done) {
+            // validate reset token
 
-                    const key = request.payload.key;
-                    const token = request.pre.user.resetPassword.token;
-                    Bcrypt.compare(key, token, done);
+            const key = request.payload.key;
+            const token = request.pre.user.resetPassword.token;
+            const keyMatch = await Bcrypt.compare(key, token);
+
+            if (!keyMatch) {
+                throw Boom.badRequest('Invalid email or key.');
+            }
+
+            // update user
+
+            const password = request.payload.password;
+            const passwordHash = await User.generatePasswordHash(password);
+            const update = {
+                $set: {
+                    password: passwordHash.hash
                 },
-                passwordHash: ['keyMatch', function (results, done) {
-
-                    if (!results.keyMatch) {
-                        return reply(Boom.badRequest('Invalid email or key.'));
-                    }
-
-                    User.generatePasswordHash(request.payload.password, done);
-                }],
-                user: ['passwordHash', function (results, done) {
-
-                    const id = request.pre.user._id.toString();
-                    const update = {
-                        $set: {
-                            password: results.passwordHash.hash
-                        },
-                        $unset: {
-                            resetPassword: undefined
-                        }
-                    };
-
-                    User.findByIdAndUpdate(id, update, done);
-                }]
-            }, (err, results) => {
-
-                if (err) {
-                    return reply(err);
+                $unset: {
+                    resetPassword: undefined
                 }
+            };
 
-                reply({ message: 'Success.' });
-            });
+            await User.findByIdAndUpdate(request.pre.user._id, update);
+
+            return { message: 'Success.' };
         }
     });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency(['mailer', 'hapi-mongo-models'], internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'login'
+module.exports = {
+    name: 'api-login',
+    dependencies: ['hapi-mongo-models', 'hapi-remote-address'],
+    register
 };

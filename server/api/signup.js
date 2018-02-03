@@ -1,23 +1,18 @@
 'use strict';
-const Async = require('async');
+const Account = require('../models/account');
 const Boom = require('boom');
 const Config = require('../../config');
 const Joi = require('joi');
+const Mailer = require('../mailer');
+const Session = require('../models/session');
+const User = require('../models/user');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
-
-    const Account = server.plugins['hapi-mongo-models'].Account;
-    const Session = server.plugins['hapi-mongo-models'].Session;
-    const User = server.plugins['hapi-mongo-models'].User;
-
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'POST',
-        path: '/signup',
+        path: '/api/signup',
         config: {
             validate: {
                 payload: {
@@ -29,161 +24,93 @@ internals.applyRoutes = function (server, next) {
             },
             pre: [{
                 assign: 'usernameCheck',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
-                    const conditions = {
-                        username: request.payload.username
-                    };
+                    const user = await User.findByUsername(request.payload.username);
 
-                    User.findOne(conditions, (err, user) => {
+                    if (user) {
+                        throw Boom.conflict('Username already in use.');
+                    }
 
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        if (user) {
-                            return reply(Boom.conflict('Username already in use.'));
-                        }
-
-                        reply(true);
-                    });
+                    return h.continue;
                 }
             }, {
                 assign: 'emailCheck',
-                method: function (request, reply) {
+                method: async function (request, h) {
 
-                    const conditions = {
-                        email: request.payload.email
-                    };
+                    const user = await User.findByEmail(request.payload.email);
 
-                    User.findOne(conditions, (err, user) => {
+                    if (user) {
+                        throw Boom.conflict('Email already in use.');
+                    }
 
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        if (user) {
-                            return reply(Boom.conflict('Email already in use.'));
-                        }
-
-                        reply(true);
-                    });
+                    return h.continue;
                 }
             }]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            const mailer = request.server.plugins.mailer;
+            // create and link account and user documents
 
-            Async.auto({
-                user: function (done) {
+            let [account, user] = await Promise.all([
+                Account.create(request.payload.name),
+                User.create(
+                    request.payload.username,
+                    request.payload.password,
+                    request.payload.email
+                )
+            ]);
 
-                    const username = request.payload.username;
-                    const password = request.payload.password;
-                    const email = request.payload.email;
+            [account, user] = await Promise.all([
+                account.linkUser(`${user._id}`, user.username),
+                user.linkAccount(`${account._id}`, `${account.name.first} ${account.name.last}`)
+            ]);
 
-                    User.create(username, password, email, done);
-                },
-                account: ['user', function (results, done) {
+            // send welcome email
 
-                    const name = request.payload.name;
-
-                    Account.create(name, done);
-                }],
-                linkUser: ['account', function (results, done) {
-
-                    const id = results.account._id.toString();
-                    const update = {
-                        $set: {
-                            user: {
-                                id: results.user._id.toString(),
-                                name: results.user.username
-                            }
-                        }
-                    };
-
-                    Account.findByIdAndUpdate(id, update, done);
-                }],
-                linkAccount: ['account', function (results, done) {
-
-                    const id = results.user._id.toString();
-                    const update = {
-                        $set: {
-                            roles: {
-                                account: {
-                                    id: results.account._id.toString(),
-                                    name: results.account.name.first + ' ' + results.account.name.last
-                                }
-                            }
-                        }
-                    };
-
-                    User.findByIdAndUpdate(id, update, done);
-                }],
-                welcome: ['linkUser', 'linkAccount', function (results, done) {
-
-                    const emailOptions = {
-                        subject: 'Your ' + Config.get('/projectName') + ' account',
-                        to: {
-                            name: request.payload.name,
-                            address: request.payload.email
-                        }
-                    };
-                    const template = 'welcome';
-
-                    mailer.sendEmail(emailOptions, template, request.payload, (err) => {
-
-                        if (err) {
-                            console.warn('sending welcome email failed:', err.stack);
-                        }
-                    });
-
-                    done();
-                }],
-                session: ['linkUser', 'linkAccount', function (results, done) {
-
-                    const userAgent = request.headers['user-agent'];
-                    const ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
-
-                    Session.create(results.user._id.toString(), ip, userAgent, done);
-                }]
-            }, (err, results) => {
-
-                if (err) {
-                    return reply(err);
+            const emailOptions = {
+                subject: `Your ${Config.get('/projectName')} account`,
+                to: {
+                    name: request.payload.name,
+                    address: request.payload.email
                 }
+            };
 
-                const user = results.linkAccount;
-                const credentials = results.session._id + ':' + results.session.key;
-                const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+            try {
+                await Mailer.sendEmail(emailOptions, 'welcome', request.payload);
+            }
+            catch (err) {
+                request.log(['mailer', 'error'], err);
+            }
 
-                reply({
-                    user: {
-                        _id: user._id,
-                        username: user.username,
-                        email: user.email,
-                        roles: user.roles
-                    },
-                    session: results.session,
-                    authHeader
-                });
-            });
+            // create session
+
+            const userAgent = request.headers['user-agent'];
+            const ip = request.remoteAddress;
+            const session = await Session.create(`${user._id}`, ip, userAgent);
+
+            // create auth header
+
+            const credentials = `${session._id}:${session.key}`;
+            const authHeader = `Basic ${new Buffer(credentials).toString('base64')}`;
+
+            return {
+                user: {
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    roles: user.roles
+                },
+                session,
+                authHeader
+            };
         }
     });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency(['mailer', 'hapi-mongo-models'], internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'signup'
+module.exports = {
+    name: 'api-signup',
+    dependencies: ['hapi-remote-address', 'hapi-mongo-models'],
+    register
 };

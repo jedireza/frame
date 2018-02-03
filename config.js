@@ -32,11 +32,18 @@ const config = {
     },
     hapiMongoModels: {
         mongodb: {
-            uri: {
-                $filter: 'env',
-                production: process.env.MONGODB_URI,
-                test: 'mongodb://localhost:27017/frame-test',
-                $default: 'mongodb://localhost:27017/frame'
+            connection: {
+                uri: {
+                    $filter: 'env',
+                    production: process.env.MONGODB_URI,
+                    $default: 'mongodb://localhost:27017/'
+                },
+                db: {
+                    $filter: 'env',
+                    production: process.env.MONGODB_DB_NAME,
+                    test: 'frame-test',
+                    $default: 'frame'
+                }
             }
         },
         autoIndex: true

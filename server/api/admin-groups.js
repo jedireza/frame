@@ -1,20 +1,15 @@
 'use strict';
-const AuthPlugin = require('../auth');
+const AdminGroup = require('../models/admin-group');
 const Boom = require('boom');
 const Joi = require('joi');
+const Preware = require('../preware');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
-
-    const AdminGroup = server.plugins['hapi-mongo-models'].AdminGroup;
-
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'GET',
-        path: '/admin-groups',
+        path: '/api/admin-groups',
         config: {
             auth: {
                 strategy: 'simple',
@@ -22,69 +17,32 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 query: {
-                    fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
                     page: Joi.number().default(1)
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
             const query = {};
-            const fields = request.query.fields;
-            const sort = request.query.sort;
             const limit = request.query.limit;
             const page = request.query.page;
+            const options = {
+                sort: AdminGroup.sortAdapter(request.query.sort)
+            };
 
-            AdminGroup.pagedFind(query, fields, sort, limit, page, (err, results) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                reply(results);
-            });
-        }
-    });
-
-
-    server.route({
-        method: 'GET',
-        path: '/admin-groups/{id}',
-        config: {
-            auth: {
-                strategy: 'simple',
-                scope: 'admin'
-            },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
-        },
-        handler: function (request, reply) {
-
-            AdminGroup.findById(request.params.id, (err, adminGroup) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                if (!adminGroup) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply(adminGroup);
-            });
+            return await AdminGroup.pagedFind(query, limit, page, options);
         }
     });
 
 
     server.route({
         method: 'POST',
-        path: '/admin-groups',
+        path: '/api/admin-groups',
         config: {
             auth: {
                 strategy: 'simple',
@@ -96,28 +54,44 @@ internals.applyRoutes = function (server, next) {
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            const name = request.payload.name;
+            return await AdminGroup.create(request.payload.name);
+        }
+    });
 
-            AdminGroup.create(name, (err, adminGroup) => {
 
-                if (err) {
-                    return reply(err);
-                }
+    server.route({
+        method: 'GET',
+        path: '/api/admin-groups/{id}',
+        config: {
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
+            pre: [
+                Preware.requireAdminGroup('root')
+            ]
+        },
+        handler: async function (request, h) {
 
-                reply(adminGroup);
-            });
+            const adminGroup = await AdminGroup.findById(request.params.id);
+
+            if (!adminGroup) {
+                throw Boom.notFound('AdminGroup not found.');
+            }
+
+            return adminGroup;
         }
     });
 
 
     server.route({
         method: 'PUT',
-        path: '/admin-groups/{id}',
+        path: '/api/admin-groups/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -132,10 +106,10 @@ internals.applyRoutes = function (server, next) {
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
             const id = request.params.id;
             const update = {
@@ -143,26 +117,50 @@ internals.applyRoutes = function (server, next) {
                     name: request.payload.name
                 }
             };
+            const adminGroup = await AdminGroup.findByIdAndUpdate(id, update);
 
-            AdminGroup.findByIdAndUpdate(id, update, (err, adminGroup) => {
+            if (!adminGroup) {
+                throw Boom.notFound('AdminGroup not found.');
+            }
 
-                if (err) {
-                    return reply(err);
+            return adminGroup;
+        }
+    });
+
+
+    server.route({
+        method: 'DELETE',
+        path: '/api/admin-groups/{id}',
+        config: {
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
+            validate: {
+                params: {
+                    id: Joi.string().invalid('root')
                 }
+            },
+            pre: [
+                Preware.requireAdminGroup('root')
+            ]
+        },
+        handler: async function (request, h) {
 
-                if (!adminGroup) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
+            const adminGroup = await AdminGroup.findByIdAndDelete(request.params.id);
 
-                reply(adminGroup);
-            });
+            if (!adminGroup) {
+                throw Boom.notFound('AdminGroup not found.');
+            }
+
+            return { message: 'Success.' };
         }
     });
 
 
     server.route({
         method: 'PUT',
-        path: '/admin-groups/{id}/permissions',
+        path: '/api/admin-groups/{id}/permissions',
         config: {
             auth: {
                 strategy: 'simple',
@@ -177,10 +175,10 @@ internals.applyRoutes = function (server, next) {
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
             const id = request.params.id;
             const update = {
@@ -188,66 +186,20 @@ internals.applyRoutes = function (server, next) {
                     permissions: request.payload.permissions
                 }
             };
+            const adminGroup = await AdminGroup.findByIdAndUpdate(id, update);
 
-            AdminGroup.findByIdAndUpdate(id, update, (err, adminGroup) => {
+            if (!adminGroup) {
+                throw Boom.notFound('AdminGroup not found.');
+            }
 
-                if (err) {
-                    return reply(err);
-                }
-
-                reply(adminGroup);
-            });
+            return adminGroup;
         }
     });
-
-
-    server.route({
-        method: 'DELETE',
-        path: '/admin-groups/{id}',
-        config: {
-            auth: {
-                strategy: 'simple',
-                scope: 'admin'
-            },
-            validate: {
-                params: {
-                    id: Joi.string().invalid('root')
-                }
-            },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
-        },
-        handler: function (request, reply) {
-
-            AdminGroup.findByIdAndDelete(request.params.id, (err, adminGroup) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                if (!adminGroup) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply({ message: 'Success.' });
-            });
-        }
-    });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'admin-groups'
+module.exports = {
+    name: 'api-admin-groups',
+    dependencies: ['auth', 'hapi-auth-basic', 'hapi-mongo-models'],
+    register
 };

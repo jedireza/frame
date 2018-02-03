@@ -1,649 +1,160 @@
 'use strict';
-const Admin = require('../../server/models/admin');
-const AuthPlugin = require('../../server/auth');
+const Auth = require('../../server/auth');
 const Code = require('code');
-const Config = require('../../config');
+const Fixtures = require('./fixtures');
 const Hapi = require('hapi');
-const HapiAuthBasic = require('hapi-auth-basic');
 const Lab = require('lab');
-const MakeMockModel = require('./fixtures/make-mock-model');
 const Manifest = require('../../manifest');
-const Path = require('path');
-const Proxyquire = require('proxyquire');
 const Session = require('../../server/models/session');
 const User = require('../../server/models/user');
 
 
 const lab = exports.lab = Lab.script();
 let server;
-let stub;
 
 
-lab.beforeEach((done) => {
+lab.before(async () => {
 
-    stub = {
-        Session: MakeMockModel(),
-        User: MakeMockModel()
-    };
+    server = Hapi.Server();
 
-    const proxy = {};
-    proxy[Path.join(process.cwd(), './server/models/session')] = stub.Session;
-    proxy[Path.join(process.cwd(), './server/models/user')] = stub.User;
+    const plugins = Manifest.get('/register/plugins')
+        .filter((entry) => Auth.dependencies.includes(entry.plugin))
+        .map((entry) => {
 
-    const ModelsPlugin = {
-        register: Proxyquire('hapi-mongo-models', proxy),
-        options: Manifest.get('/registrations').filter((reg) => {
+            entry.plugin = require(entry.plugin);
 
-            if (reg.plugin &&
-                reg.plugin.register &&
-                reg.plugin.register === 'hapi-mongo-models') {
+            return entry;
+        });
 
-                return true;
+    plugins.push(Auth);
+
+    await server.register(plugins);
+    await server.start();
+    await Fixtures.Db.removeAllData();
+
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: async function (request, h) {
+
+            try {
+                await request.server.auth.test('simple', request);
+
+                return { isValid: true };
             }
-
-            return false;
-        })[0].plugin.options
-    };
-
-    const plugins = [HapiAuthBasic, ModelsPlugin, AuthPlugin];
-    server = new Hapi.Server();
-    server.connection({ port: Config.get('/port/web') });
-    server.register(plugins, (err) => {
-
-        if (err) {
-            return done(err);
+            catch (err) {
+                return { isValid: false };
+            }
         }
-
-        server.initialize(done);
     });
 });
 
 
-lab.afterEach((done) => {
+lab.after(async () => {
 
-    server.plugins['hapi-mongo-models'].MongoModels.disconnect();
-
-    done();
+    await Fixtures.Db.removeAllData();
+    await server.stop();
 });
 
 
-lab.experiment('Auth Plugin', () => {
+lab.experiment('Simple Auth Strategy', () => {
 
-    lab.test('it returns authentication credentials', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (username, callback) {
-
-            callback(null, new User({ _id: '1D', username: 'ren' }));
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
-
-                server.auth.test('simple', request, (err, credentials) => {
-
-                    Code.expect(err).to.not.exist();
-                    Code.expect(credentials).to.be.an.object();
-                    reply('ok');
-                });
-            }
-        });
+    lab.test('it returns as invalid without authentication provided', async () => {
 
         const request = {
             method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
-            }
+            url: '/'
         };
+        const response = await server.inject(request);
 
-        server.inject(request, (response) => {
-
-            done();
-        });
+        Code.expect(response.statusCode).to.equal(200);
+        Code.expect(response.result.isValid).to.equal(false);
     });
 
 
-    lab.test('it returns an error when the session is not found', (done) => {
+    lab.test('it returns as invalid when the session query misses', async () => {
 
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback();
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
-
-                server.auth.test('simple', request, (err, credentials) => {
-
-                    Code.expect(err).to.be.an.object();
-                    Code.expect(credentials).to.not.exist();
-                    reply('ok');
-                });
-            }
-        });
-
+        const sessionId = '000000000000000000000001';
+        const sessionKey = '01010101-0101-0101-0101-010101010101';
         const request = {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: Fixtures.Creds.authHeader(sessionId, sessionKey)
             }
         };
 
-        server.inject(request, (response) => {
+        const response = await server.inject(request);
 
-            done();
-        });
+        Code.expect(response.statusCode).to.equal(200);
+        Code.expect(response.result.isValid).to.equal(false);
     });
 
 
-    lab.test('it returns an error when the user is not found', (done) => {
+    lab.test('it returns as invalid when the user query misses', async () => {
 
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ username: 'ren', key: 'baddog' }));
-        };
-
-        stub.User.findByUsername = function (username, callback) {
-
-            callback();
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
-
-                server.auth.test('simple', request, (err, credentials) => {
-
-                    Code.expect(err).to.be.an.object();
-                    reply('ok');
-                });
-            }
-        });
-
+        const session = await Session.create('000000000000000000000000', '127.0.0.1', 'Lab');
         const request = {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: Fixtures.Creds.authHeader(session._id, session.key)
             }
         };
+        const response = await server.inject(request);
 
-        server.inject(request, (response) => {
-
-            done();
-        });
+        Code.expect(response.statusCode).to.equal(200);
+        Code.expect(response.result.isValid).to.equal(false);
     });
 
 
-    lab.test('it returns an error when a model error occurs', (done) => {
+    lab.test('it returns as invalid when the user is not active', async () => {
 
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(Error('session fail'));
+        const { user } = await Fixtures.Creds.createAdminUser(
+            'Ben Hoek', 'ben', 'badben', 'ben@stimpy.show'
+        );
+        const session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
+        const update = {
+            $set: {
+                isActive: false
+            }
         };
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
-
-                server.auth.test('simple', request, (err, credentials) => {
-
-                    Code.expect(err).to.be.an.object();
-                    Code.expect(credentials).to.not.exist();
-                    reply('ok');
-                });
-            }
-        });
+        await User.findByIdAndUpdate(user._id, update);
 
         const request = {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
+                authorization: Fixtures.Creds.authHeader(session._id, session.key)
             }
         };
 
-        server.inject(request, (response) => {
+        const response = await server.inject(request);
 
-            done();
-        });
+        Code.expect(response.statusCode).to.equal(200);
+        Code.expect(response.result.isValid).to.equal(false);
     });
 
 
-    lab.test('it takes over when the required role is missing', (done) => {
+    lab.test('it returns as valid when all is well', async () => {
 
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            callback(null, new User({ _id: '1D', username: 'ren' }));
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: 'admin'
-                }
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
+        const { user } = await Fixtures.Creds.createAdminUser(
+            'Ren Hoek', 'ren', 'baddog', 'ren@stimpy.show'
+        );
+        const session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
         const request = {
             method: 'GET',
             url: '/',
             headers: {
-                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
+                authorization: Fixtures.Creds.authHeader(session._id, session.key)
             }
         };
 
-        server.inject(request, (response) => {
+        const response = await server.inject(request);
 
-            Code.expect(response.result.message).to.match(/insufficient scope/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it continues through pre handler when role is present', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            const user = new User({
-                username: 'ren',
-                roles: {
-                    admin: {
-                        id: '953P150D35',
-                        name: 'Ren Höek'
-                    }
-                }
-            });
-
-            user._roles = {
-                admin: {
-                    _id: '953P150D35',
-                    name: {
-                        first: 'Ren',
-                        last: 'Höek'
-                    }
-                }
-            };
-
-            callback(null, user);
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: ['account', 'admin']
-                }
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
-
-        const request = {
-            method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
-            }
-        };
-
-        server.inject(request, (response) => {
-
-            Code.expect(response.result).to.match(/ok/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it takes over when the required group is missing', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            const user = new User({
-                username: 'ren',
-                roles: {
-                    admin: {
-                        id: '953P150D35',
-                        name: 'Ren Höek'
-                    }
-                }
-            });
-
-            user._roles = {
-                admin: new Admin({
-                    _id: '953P150D35',
-                    name: {
-                        first: 'Ren',
-                        last: 'Höek'
-                    }
-                })
-            };
-
-            callback(null, user);
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: 'admin'
-                },
-                pre: [
-                    AuthPlugin.preware.ensureAdminGroup('root')
-                ]
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
-
-        const request = {
-            method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
-            }
-        };
-
-        server.inject(request, (response) => {
-
-            Code.expect(response.result.message).to.match(/permission denied/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it continues through pre handler when group is present', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            const user = new User({
-                username: 'ren',
-                roles: {
-                    admin: {
-                        id: '953P150D35',
-                        name: 'Ren Höek'
-                    }
-                }
-            });
-
-            user._roles = {
-                admin: new Admin({
-                    _id: '953P150D35',
-                    name: {
-                        first: 'Ren',
-                        last: 'Höek'
-                    },
-                    groups: {
-                        root: 'Root'
-                    }
-                })
-            };
-
-            callback(null, user);
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: 'admin'
-                },
-                pre: [
-                    AuthPlugin.preware.ensureAdminGroup(['sales', 'root'])
-                ]
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
-
-        const request = {
-            method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('2D:baddog')).toString('base64')
-            }
-        };
-
-        server.inject(request, (response) => {
-
-            Code.expect(response.result).to.match(/ok/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it continues through pre handler when not acting the root user', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            const user = new User({
-                username: 'ren',
-                roles: {
-                    admin: {
-                        id: '953P150D35',
-                        name: 'Ren Höek'
-                    }
-                }
-            });
-
-            user._roles = {
-                admin: new Admin({
-                    _id: '953P150D35',
-                    name: {
-                        first: 'Ren',
-                        last: 'Höek'
-                    }
-                })
-            };
-
-            callback(null, user);
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: 'admin'
-                },
-                pre: [
-                    AuthPlugin.preware.ensureNotRoot
-                ]
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
-
-        const request = {
-            method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
-            }
-        };
-
-        server.inject(request, (response) => {
-
-            Code.expect(response.result).to.match(/ok/i);
-
-            done();
-        });
-    });
-
-
-    lab.test('it takes over when acting as the root user', (done) => {
-
-        stub.Session.findByCredentials = function (username, key, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        stub.User.findById = function (id, callback) {
-
-            const user = new User({
-                username: 'root',
-                roles: {
-                    admin: {
-                        id: '953P150D35',
-                        name: 'Root Admin'
-                    }
-                }
-            });
-
-            user._roles = {
-                admin: new Admin({
-                    _id: '953P150D35',
-                    name: {
-                        first: 'Root',
-                        last: 'Admin'
-                    }
-                })
-            };
-
-            callback(null, user);
-        };
-
-        stub.Session.findByIdAndUpdate = function (id, update, callback) {
-
-            callback(null, new Session({ _id: '2D', userId: '1D', key: 'baddog' }));
-        };
-
-        server.route({
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    strategy: 'simple',
-                    scope: 'admin'
-                },
-                pre: [
-                    AuthPlugin.preware.ensureNotRoot
-                ]
-            },
-            handler: function (request, reply) {
-
-                Code.expect(request.auth.credentials).to.be.an.object();
-
-                reply('ok');
-            }
-        });
-
-        const request = {
-            method: 'GET',
-            url: '/',
-            headers: {
-                authorization: 'Basic ' + (new Buffer('ren:baddog')).toString('base64')
-            }
-        };
-
-        server.inject(request, (response) => {
-
-            Code.expect(response.result.message).to.match(/not permitted for root user/i);
-
-            done();
-        });
+        Code.expect(response.statusCode).to.equal(200);
+        Code.expect(response.result.isValid).to.equal(true);
     });
 });

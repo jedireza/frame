@@ -1,3 +1,4 @@
 node_modules/*
 test/artifacts/*
 .env
+.eslintrc.js

@@ -1,133 +1,47 @@
 'use strict';
-const Async = require('async');
-const Boom = require('boom');
+const Session = require('./models/session');
+const User = require('./models/user');
 
 
-const internals = {};
-
-
-internals.applyStrategy = function (server, next) {
-
-    const Session = server.plugins['hapi-mongo-models'].Session;
-    const User = server.plugins['hapi-mongo-models'].User;
+const register = function (server, options) {
 
     server.auth.strategy('simple', 'basic', {
-        validateFunc: function (request, username, password, callback) {
+        validate: async function (request, sessionId, key, h) {
 
-            Async.auto({
-                session: function (done) {
+            const session = await Session.findByCredentials(sessionId, key);
 
-                    Session.findByCredentials(username, password, done);
-                },
-                user: ['session', function (results, done) {
+            if (!session) {
+                return { isValid: false };
+            }
 
-                    if (!results.session) {
-                        return done();
-                    }
+            session.updateLastActive();
 
-                    User.findById(results.session.userId, done);
-                }],
-                roles: ['user', function (results, done) {
+            const user = await User.findById(session.userId);
 
-                    if (!results.user) {
-                        return done();
-                    }
+            if (!user) {
+                return { isValid: false };
+            }
 
-                    results.user.hydrateRoles(done);
-                }],
-                scope: ['user', function (results, done) {
+            if (!user.isActive) {
+                return { isValid: false };
+            }
 
-                    if (!results.user || !results.user.roles) {
-                        return done();
-                    }
+            const roles = await user.hydrateRoles();
+            const credentials = {
+                scope: Object.keys(user.roles),
+                roles,
+                session,
+                user
+            };
 
-                    done(null, Object.keys(results.user.roles));
-                }],
-                updateSession: ['scope', function (results, done) {
-
-                    if (!results.scope) {
-                        return done();
-                    }
-
-                    const update = {
-                        $set: {
-                            lastActive: new Date()
-                        }
-                    };
-
-                    Session.findByIdAndUpdate(results.session._id.toString(), update, done);
-                }]
-            }, (err, results) => {
-
-                if (err) {
-                    return callback(err);
-                }
-
-                if (!results.session) {
-                    return callback(null, false);
-                }
-
-                callback(null, Boolean(results.user), results);
-            });
+            return { credentials, isValid: true };
         }
     });
-
-
-    next();
 };
 
 
-internals.preware = {
-    ensureNotRoot: {
-        assign: 'ensureNotRoot',
-        method: function (request, reply) {
-
-            if (request.auth.credentials.user.username === 'root') {
-                const message = 'Not permitted for root user.';
-
-                return reply(Boom.badRequest(message));
-            }
-
-            reply();
-        }
-    },
-    ensureAdminGroup: function (groups) {
-
-        return {
-            assign: 'ensureAdminGroup',
-            method: function (request, reply) {
-
-                if (Object.prototype.toString.call(groups) !== '[object Array]') {
-                    groups = [groups];
-                }
-
-                const groupFound = groups.some((group) => {
-
-                    return request.auth.credentials.roles.admin.isMemberOf(group);
-                });
-
-                if (!groupFound) {
-                    return reply(Boom.notFound('Permission denied to this resource.'));
-                }
-
-                reply();
-            }
-        };
-    }
-};
-
-
-exports.register = function (server, options, next) {
-
-    server.dependency('hapi-mongo-models', internals.applyStrategy);
-
-    next();
-};
-
-
-exports.preware = internals.preware;
-
-
-exports.register.attributes = {
-    name: 'auth'
+module.exports = {
+    name: 'auth',
+    dependencies: ['hapi-auth-basic', 'hapi-mongo-models'],
+    register
 };

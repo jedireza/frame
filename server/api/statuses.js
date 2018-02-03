@@ -1,20 +1,15 @@
 'use strict';
-const AuthPlugin = require('../auth');
 const Boom = require('boom');
 const Joi = require('joi');
+const Preware = require('../preware');
+const Status = require('../models/status');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
-
-    const Status = server.plugins['hapi-mongo-models'].Status;
-
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'GET',
-        path: '/statuses',
+        path: '/api/statuses',
         config: {
             auth: {
                 strategy: 'simple',
@@ -22,69 +17,32 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 query: {
-                    fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
                     page: Joi.number().default(1)
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
             const query = {};
-            const fields = request.query.fields;
-            const sort = request.query.sort;
             const limit = request.query.limit;
             const page = request.query.page;
+            const options = {
+                sort: Status.sortAdapter(request.query.sort)
+            };
 
-            Status.pagedFind(query, fields, sort, limit, page, (err, results) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                reply(results);
-            });
-        }
-    });
-
-
-    server.route({
-        method: 'GET',
-        path: '/statuses/{id}',
-        config: {
-            auth: {
-                strategy: 'simple',
-                scope: 'admin'
-            },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
-        },
-        handler: function (request, reply) {
-
-            Status.findById(request.params.id, (err, status) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                if (!status) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply(status);
-            });
+            return await Status.pagedFind(query, limit, page, options);
         }
     });
 
 
     server.route({
         method: 'POST',
-        path: '/statuses',
+        path: '/api/statuses',
         config: {
             auth: {
                 strategy: 'simple',
@@ -92,34 +50,49 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    pivot: Joi.string().required(),
-                    name: Joi.string().required()
+                    name: Joi.string().required(),
+                    pivot: Joi.string().required()
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            const pivot = request.payload.pivot;
-            const name = request.payload.name;
+            return await Status.create(request.payload.pivot, request.payload.name);
+        }
+    });
 
-            Status.create(pivot, name, (err, status) => {
 
-                if (err) {
-                    return reply(err);
-                }
+    server.route({
+        method: 'GET',
+        path: '/api/statuses/{id}',
+        config: {
+            auth: {
+                strategy: 'simple',
+                scope: 'admin'
+            },
+            pre: [
+                Preware.requireAdminGroup('root')
+            ]
+        },
+        handler: async function (request, h) {
 
-                reply(status);
-            });
+            const status = await Status.findById(request.params.id);
+
+            if (!status) {
+                throw Boom.notFound('Status not found.');
+            }
+
+            return status;
         }
     });
 
 
     server.route({
         method: 'PUT',
-        path: '/statuses/{id}',
+        path: '/api/statuses/{id}',
         config: {
             auth: {
                 strategy: 'simple',
@@ -131,10 +104,10 @@ internals.applyRoutes = function (server, next) {
                 }
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
             const id = request.params.id;
             const update = {
@@ -142,65 +115,45 @@ internals.applyRoutes = function (server, next) {
                     name: request.payload.name
                 }
             };
+            const status = await Status.findByIdAndUpdate(id, update);
 
-            Status.findByIdAndUpdate(id, update, (err, status) => {
+            if (!status) {
+                throw Boom.notFound('Status not found.');
+            }
 
-                if (err) {
-                    return reply(err);
-                }
-
-                if (!status) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply(status);
-            });
+            return status;
         }
     });
 
 
     server.route({
         method: 'DELETE',
-        path: '/statuses/{id}',
+        path: '/api/statuses/{id}',
         config: {
             auth: {
                 strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
+                Preware.requireAdminGroup('root')
             ]
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            Status.findByIdAndDelete(request.params.id, (err, status) => {
+            const status = await Status.findByIdAndDelete(request.params.id);
 
-                if (err) {
-                    return reply(err);
-                }
+            if (!status) {
+                throw Boom.notFound('Status not found.');
+            }
 
-                if (!status) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply({ message: 'Success.' });
-            });
+            return { message: 'Success.' };
         }
     });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'statuses'
+module.exports = {
+    name: 'api-statuses',
+    dependencies: ['auth', 'hapi-auth-basic', 'hapi-mongo-models'],
+    register
 };

@@ -1,57 +1,36 @@
 'use strict';
-const Boom = require('boom');
+const Session = require('../models/session');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
-
-    const Session = server.plugins['hapi-mongo-models'].Session;
-
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'DELETE',
-        path: '/logout',
+        path: '/api/logout',
         config: {
             auth: {
                 mode: 'try',
                 strategy: 'simple'
             }
         },
-        handler: function (request, reply) {
+        handler: function (request, h) {
 
-            const credentials = request.auth.credentials || { session: {} };
-            const session = credentials.session || {};
+            const credentials = request.auth.credentials;
 
-            Session.findByIdAndDelete(session._id, (err, sessionDoc) => {
+            if (!credentials) {
+                return { message: 'Success.' };
+            }
 
-                if (err) {
-                    return reply(err);
-                }
+            Session.findByIdAndDelete(credentials.session._id);
 
-                if (!sessionDoc) {
-                    return reply(Boom.notFound('Document not found.'));
-                }
-
-                reply({ message: 'Success.' });
-            });
+            return { message: 'Success.' };
         }
     });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'logout'
+module.exports = {
+    name: 'api-logout',
+    dependencies: ['auth', 'hapi-mongo-models'],
+    register
 };

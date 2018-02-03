@@ -1,16 +1,14 @@
 'use strict';
 const Config = require('../../config');
 const Joi = require('joi');
+const Mailer = require('../mailer');
 
 
-const internals = {};
-
-
-internals.applyRoutes = function (server, next) {
+const register = function (server, serverOptions) {
 
     server.route({
         method: 'POST',
-        path: '/contact',
+        path: '/api/contact',
         config: {
             validate: {
                 payload: {
@@ -20,9 +18,8 @@ internals.applyRoutes = function (server, next) {
                 }
             }
         },
-        handler: function (request, reply) {
+        handler: async function (request, h) {
 
-            const mailer = request.server.plugins.mailer;
             const emailOptions = {
                 subject: Config.get('/projectName') + ' contact form',
                 to: Config.get('/system/toAddress'),
@@ -33,30 +30,16 @@ internals.applyRoutes = function (server, next) {
             };
             const template = 'contact';
 
-            mailer.sendEmail(emailOptions, template, request.payload, (err, info) => {
+            await Mailer.sendEmail(emailOptions, template, request.payload);
 
-                if (err) {
-                    return reply(err);
-                }
-
-                reply({ message: 'Success.' });
-            });
+            return { message: 'Success.' };
         }
     });
-
-
-    next();
 };
 
 
-exports.register = function (server, options, next) {
-
-    server.dependency('mailer', internals.applyRoutes);
-
-    next();
-};
-
-
-exports.register.attributes = {
-    name: 'contact'
+module.exports = {
+    name: 'api-contact',
+    dependencies: [],
+    register
 };

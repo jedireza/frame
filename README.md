@@ -35,7 +35,6 @@ this repo and build one on top of Frame.
 | url                                                                        | username | password |
 |:-------------------------------------------------------------------------- |:-------- |:-------- |
 | [https://getframe.herokuapp.com/](https://getframe.herokuapp.com/)         | root     | root     |
-| [https://getframe.herokuapp.com/docs](https://getframe.herokuapp.com/docs) | ----     | ----     |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs. See the wiki for details on [how to
@@ -44,19 +43,14 @@ login](https://github.com/jedireza/frame/wiki/How-to-login).
 
 ## Requirements
 
-You need [Node.js](http://nodejs.org/download/) installed and you'll need
-[MongoDB](http://www.mongodb.org/downloads) installed and running.
-
-We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing
-secrets. If you have issues during installation related to `bcrypt` then [refer
-to this wiki
-page](https://github.com/jedireza/frame/wiki/bcrypt-Installation-Trouble).
+You need [Node.js](http://nodejs.org/download/) `>=8.x` and you'll need a
+[MongoDB](http://www.mongodb.org/downloads) `>=2.6` server running.
 
 
 ## Installation
 
 ```bash
-$ git clone git@github.com:jedireza/frame.git
+$ git clone https://github.com/jedireza/frame.git
 $ cd frame
 $ npm install
 ```
@@ -101,7 +95,7 @@ $ npm run first-time-setup
 ```bash
 $ npm start
 
-# > frame@0.0.0 start /Users/jedireza/projects/frame
+# > frame@0.0.0 start /home/jedireza/projects/frame
 # > ./node_modules/nodemon/bin/nodemon.js -e js,md server
 
 # 09 Sep 03:47:15 - [nodemon] v1.10.2
@@ -114,11 +108,28 @@ see the welcome message.
 [`nodemon`](https://github.com/remy/nodemon) watches for changes in server
 code and restarts the app automatically.
 
-We also pass the `--inspect` flag to Node so you have a debugger available.
-Watch the output of `$ npm start` and look for the debugging URL and open it in
-Chrome. It looks something like this:
+### With the debugger
 
-`chrome-devtools://devtools/remote/serve_file/@62cd277117e6f8ec53e31b1be58290a6f7ab42ef/inspector.html?experiments=true&v8only=true&ws=localhost:9229/node`
+```bash
+$ npm run inspect
+
+# > frame@0.0.0 inspect /home/jedireza/projects/frame
+# > nodemon --inspect -e js,md server.js
+
+# [nodemon] 1.14.12
+# [nodemon] to restart at any time, enter `rs`
+# [nodemon] watching: *.*
+# [nodemon] starting `node --inspect server.js`
+# Debugger listening on ws://127.0.0.1:9229/3d706d9a-b3e0-4fc6-b64e-e7968b7f94d0
+# For help see https://nodejs.org/en/docs/inspector
+# 180203/193534.071, [log,info,mongodb] data: HapiMongoModels: successfully connected to the db.
+# 180203/193534.127, [log,info,mongodb] data: HapiMongoModels: finished processing auto indexes.
+# Server started on port 9000
+```
+
+Once started with the debuger you can open Google Chrome and go to
+[chrome://inspect](chrome://inspect). See https://nodejs.org/en/docs/inspector/
+for more details.
 
 
 ## Running in production
@@ -157,21 +168,30 @@ use to write all of our tests.
 ```bash
 $ npm test
 
-# > frame@0.0.0 test /Users/jedireza/projects/frame
-# > ./node_modules/lab/bin/lab -c
+# > frame@0.0.0 test /home/jedireza/projects/frame
+# > lab -c -L
 
-# ..................................................
-# ..................................................
-# ..................................................
-# ..................................................
-# ..................................................
-# ........
+#  ..................................................
+#  ..................................................
+#  ..................................................
+#  ..............
 
-# 258 tests complete
-# Test duration: 2398 ms
+# 164 tests complete
+# Test duration: 14028 ms
 # No global variable leaks detected
 # Coverage: 100.00%
 # Linting results: No issues
+```
+
+### Targeted tests
+
+If you'd like to run a specific test or subset of tests you can use the
+`test-server` npm script.
+
+You specificy the path(s) via the `TEST_TARGET` environment variable like:
+
+```bash
+$ TEST_TARGET=test/server/web/main.js npm run test-server
 ```
 
 ## License
