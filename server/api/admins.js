@@ -295,27 +295,12 @@ const register = function (server, serverOptions) {
         },
         handler: async function (request, h) {
 
-            const preUser = request.pre.user;
-            const preAdmin = request.pre.admin;
-            const adminUpdate = {
-                $set: {
-                    user: {
-                        id: `${preUser._id}`,
-                        name: preUser.username
-                    }
-                }
-            };
-            const userUpdate = {
-                $set: {
-                    'roles.admin': {
-                        id: `${preAdmin._id}`,
-                        name: `${preAdmin.name.first} ${preAdmin.name.last}`
-                    }
-                }
-            };
-            const [admin] = await Promise.all([
-                Admin.findByIdAndUpdate(preAdmin._id, adminUpdate),
-                User.findByIdAndUpdate(preUser._id, userUpdate)
+            const user = request.pre.user;
+            let admin = request.pre.admin;
+
+            [admin] = await Promise.all([
+                admin.linkUser(`${user._id}`, user.username),
+                user.linkAdmin(`${admin._id}`, `${admin.name.first} ${admin.name.last}`)
             ]);
 
             return admin;
@@ -349,13 +334,7 @@ const register = function (server, serverOptions) {
                         }
 
                         if (!admin.user || !admin.user.id) {
-                            const update = {
-                                $unset: {
-                                    user: undefined
-                                }
-                            };
-
-                            admin = await Admin.findByIdAndUpdate(request.params.id, update);
+                            admin = await admin.unlinkUser();
 
                             return h.response(admin).takeover();
                         }
@@ -379,19 +358,9 @@ const register = function (server, serverOptions) {
         },
         handler: async function (request, h) {
 
-            const adminUpdate = {
-                $unset: {
-                    user: undefined
-                }
-            };
-            const userUpdate = {
-                $unset: {
-                    'roles.admin': undefined
-                }
-            };
             const [admin] = await Promise.all([
-                Admin.findByIdAndUpdate(request.params.id, adminUpdate),
-                User.findByIdAndUpdate(request.pre.user._id, userUpdate)
+                request.pre.admin.unlinkUser(),
+                request.pre.user.unlinkAdmin()
             ]);
 
             return admin;

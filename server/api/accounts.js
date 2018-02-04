@@ -199,27 +199,12 @@ const register = function (server, serverOptions) {
         },
         handler: async function (request, h) {
 
-            const preUser = request.pre.user;
-            const preAccount = request.pre.account;
-            const accountUpdate = {
-                $set: {
-                    user: {
-                        id: `${preUser._id}`,
-                        name: preUser.username
-                    }
-                }
-            };
-            const userUpdate = {
-                $set: {
-                    'roles.account': {
-                        id: `${preAccount._id}`,
-                        name: `${preAccount.name.first} ${preAccount.name.last}`
-                    }
-                }
-            };
-            const [account] = await Promise.all([
-                Account.findByIdAndUpdate(preAccount._id, accountUpdate),
-                User.findByIdAndUpdate(preUser._id, userUpdate)
+            const user = request.pre.user;
+            let account = request.pre.account;
+
+            [account] = await Promise.all([
+                account.linkUser(`${user._id}`, user.username),
+                user.linkAccount(`${account._id}`, `${account.name.first} ${account.name.last}`)
             ]);
 
             return account;
@@ -246,13 +231,7 @@ const register = function (server, serverOptions) {
                     }
 
                     if (!account.user || !account.user.id) {
-                        const update = {
-                            $unset: {
-                                user: undefined
-                            }
-                        };
-
-                        account = await Account.findByIdAndUpdate(request.params.id, update);
+                        account = await account.unlinkUser();
 
                         return h.response(account).takeover();
                     }
@@ -275,19 +254,9 @@ const register = function (server, serverOptions) {
         },
         handler: async function (request, h) {
 
-            const accountUpdate = {
-                $unset: {
-                    user: undefined
-                }
-            };
-            const userUpdate = {
-                $unset: {
-                    'roles.account': undefined
-                }
-            };
             const [account] = await Promise.all([
-                Account.findByIdAndUpdate(request.params.id, accountUpdate),
-                User.findByIdAndUpdate(request.pre.user._id, userUpdate)
+                request.pre.account.unlinkUser(),
+                request.pre.user.unlinkAccount()
             ]);
 
             return account;
