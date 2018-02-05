@@ -65,6 +65,11 @@ class Account extends MongoModels {
         };
     }
 
+    fullName() {
+
+        return `${this.name.first} ${this.name.last}`.trim();
+    }
+
     async linkUser(id, name) {
 
         Assert.ok(id, 'Missing id argument.');

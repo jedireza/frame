@@ -68,6 +68,11 @@ class Admin extends MongoModels {
         });
     }
 
+    fullName() {
+
+        return `${this.name.first} ${this.name.last}`.trim();
+    }
+
     async hasPermissionTo(permission) {
 
         Assert.ok(permission, 'Missing permission argument.');

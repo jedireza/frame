@@ -53,6 +53,21 @@ lab.experiment('Account Model', () => {
     });
 
 
+    lab.test('it parses returns a full name', async () => {
+
+        const account = await Account.create('Stan');
+        let name = account.fullName();
+
+        Code.expect(name).to.equal('Stan');
+
+        account.name = Account.nameAdapter('Ren Höek');
+
+        name = account.fullName();
+
+        Code.expect(name).to.equal('Ren Höek');
+    });
+
+
     lab.test('it returns an instance when finding by username', async () => {
 
         const document = new Account({

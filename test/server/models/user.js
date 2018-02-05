@@ -143,7 +143,7 @@ lab.experiment('User Model', () => {
                 roles: {
                     account: {
                         id: `${account._id}`,
-                        name: `${account.name.first} ${account.name.last}`
+                        name: account.fullName()
                     }
                 }
             }
@@ -169,7 +169,7 @@ lab.experiment('User Model', () => {
                 roles: {
                     admin: {
                         id: `${admin._id}`,
-                        name: `${admin.name.first} ${admin.name.last}`
+                        name: admin.fullName()
                     }
                 }
             }
@@ -194,8 +194,8 @@ lab.experiment('User Model', () => {
         Code.expect(user.roles.admin).to.not.exist();
         Code.expect(user.roles.account).to.not.exist();
 
-        user = await user.linkAdmin(`${admin._id}`, `${admin.name.first} ${admin.name.last}`);
-        user = await user.linkAccount(`${account._id}`, `${account.name.first} ${account.name.last}`);
+        user = await user.linkAdmin(`${admin._id}`, admin.fullName());
+        user = await user.linkAccount(`${account._id}`, account.fullName());
 
         Code.expect(user.roles.admin).to.be.an.object();
         Code.expect(user.roles.account).to.be.an.object();

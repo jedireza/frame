@@ -204,7 +204,7 @@ const register = function (server, serverOptions) {
 
             [account] = await Promise.all([
                 account.linkUser(`${user._id}`, user.username),
-                user.linkAccount(`${account._id}`, `${account.name.first} ${account.name.last}`)
+                user.linkAccount(`${account._id}`, account.fullName())
             ]);
 
             return account;
@@ -281,11 +281,12 @@ const register = function (server, serverOptions) {
         handler: async function (request, h) {
 
             const id = request.params.id;
+            const admin = request.auth.credentials.roles.admin;
             const newNote = new NoteEntry({
                 data: request.payload.data,
                 adminCreated: {
-                    id: `${request.auth.credentials.user._id}`,
-                    name: request.auth.credentials.user.username
+                    id: `${admin._id}`,
+                    name: admin.fullName()
                 }
             });
             const update = {
@@ -334,12 +335,13 @@ const register = function (server, serverOptions) {
         handler: async function (request, h) {
 
             const id = request.params.id;
+            const admin = request.auth.credentials.roles.admin;
             const newStatus = new StatusEntry({
                 id: `${request.pre.status._id}`,
                 name: request.pre.status.name,
                 adminCreated: {
-                    id: `${request.auth.credentials.user._id}`,
-                    name: request.auth.credentials.user.username
+                    id: `${admin._id}`,
+                    name: admin.fullName()
                 }
             });
             const update = {

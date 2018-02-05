@@ -63,7 +63,7 @@ const register = function (server, serverOptions) {
 
             [account, user] = await Promise.all([
                 account.linkUser(`${user._id}`, user.username),
-                user.linkAccount(`${account._id}`, `${account.name.first} ${account.name.last}`)
+                user.linkAccount(`${account._id}`, account.fullName())
             ]);
 
             // send welcome email

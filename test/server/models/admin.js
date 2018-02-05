@@ -54,6 +54,21 @@ lab.experiment('Admin Model', () => {
     });
 
 
+    lab.test('it parses returns a full name', async () => {
+
+        const admin = await Admin.create('Stan');
+        let name = admin.fullName();
+
+        Code.expect(name).to.equal('Stan');
+
+        admin.name = Admin.nameAdapter('Ren Höek');
+
+        name = admin.fullName();
+
+        Code.expect(name).to.equal('Ren Höek');
+    });
+
+
     lab.test('it returns a new instance when create succeeds', async () => {
 
         const admin = await Admin.create('Ren Höek');

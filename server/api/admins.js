@@ -300,7 +300,7 @@ const register = function (server, serverOptions) {
 
             [admin] = await Promise.all([
                 admin.linkUser(`${user._id}`, user.username),
-                user.linkAdmin(`${admin._id}`, `${admin.name.first} ${admin.name.last}`)
+                user.linkAdmin(`${admin._id}`, admin.fullName())
             ]);
 
             return admin;
