@@ -37,6 +37,8 @@ const register = function (server, options) {
             return { credentials, isValid: true };
         }
     });
+
+    server.auth.default('simple');
 };
 
 

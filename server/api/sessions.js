@@ -12,7 +12,6 @@ const register = function (server, serverOptions) {
         path: '/api/sessions',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -45,7 +44,6 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
@@ -70,7 +68,6 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
@@ -95,7 +92,6 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/my',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: ['admin', 'account']
             }
         },
@@ -113,11 +109,6 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'DELETE',
         path: '/api/sessions/my/{id}',
-        config: {
-            auth: {
-                strategy: 'simple'
-            }
-        },
         handler: async function (request, h) {
 
             const currentSession = `${request.auth.credentials.session._id}`;

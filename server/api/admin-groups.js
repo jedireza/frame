@@ -12,7 +12,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -45,7 +44,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -69,7 +67,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
@@ -94,7 +91,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -133,7 +129,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -163,7 +158,6 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}/permissions',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {

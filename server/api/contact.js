@@ -10,6 +10,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/contact',
         config: {
+            auth: false,
             validate: {
                 payload: {
                     name: Joi.string().required(),

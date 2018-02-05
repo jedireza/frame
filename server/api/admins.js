@@ -13,7 +13,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -46,7 +45,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -70,7 +68,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
@@ -95,7 +92,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -138,7 +134,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             pre: [
@@ -163,7 +158,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/groups',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -202,7 +196,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/permissions',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -241,7 +234,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/user',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {
@@ -313,7 +305,6 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/user',
         config: {
             auth: {
-                strategy: 'simple',
                 scope: 'admin'
             },
             validate: {

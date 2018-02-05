@@ -15,6 +15,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/login',
         config: {
+            auth: false,
             validate: {
                 payload: {
                     username: Joi.string().lowercase().required(),
@@ -89,6 +90,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/login/forgot',
         config: {
+            auth: false,
             validate: {
                 payload: {
                     email: Joi.string().email().lowercase().required()
@@ -148,6 +150,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/login/reset',
         config: {
+            auth: false,
             validate: {
                 payload: {
                     email: Joi.string().email().lowercase().required(),

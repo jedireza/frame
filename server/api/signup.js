@@ -14,6 +14,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/signup',
         config: {
+            auth: false,
             validate: {
                 payload: {
                     name: Joi.string().required(),

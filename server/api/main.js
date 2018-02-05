@@ -6,6 +6,9 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api',
+        config: {
+            auth: false
+        },
         handler: function (request, h) {
 
             return {

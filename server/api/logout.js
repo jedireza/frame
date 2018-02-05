@@ -9,8 +9,7 @@ const register = function (server, serverOptions) {
         path: '/api/logout',
         config: {
             auth: {
-                mode: 'try',
-                strategy: 'simple'
+                mode: 'try'
             }
         },
         handler: function (request, h) {
