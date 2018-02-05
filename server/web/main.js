@@ -6,6 +6,9 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/',
+        config: {
+            auth: false
+        },
         handler: function (request, h) {
 
             return '<h1>Welcome to the website.</h1>';
