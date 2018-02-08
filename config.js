@@ -25,11 +25,6 @@ const config = {
         forIp: 50,
         forIpAndUser: 7
     },
-    cookieSecret: {
-        $filter: 'env',
-        production: process.env.COOKIE_SECRET,
-        $default: '!k3yb04rdK4tz~4qu4~k3yb04rdd0gz!'
-    },
     hapiMongoModels: {
         mongodb: {
             connection: {
