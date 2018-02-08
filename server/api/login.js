@@ -14,7 +14,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/login',
-        config: {
+        options: {
             auth: false,
             validate: {
                 payload: {
@@ -89,7 +89,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/login/forgot',
-        config: {
+        options: {
             auth: false,
             validate: {
                 payload: {
@@ -149,7 +149,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/login/reset',
-        config: {
+        options: {
             auth: false,
             validate: {
                 payload: {

@@ -35,7 +35,7 @@ lab.before(async () => {
     server.route({
         method: 'GET',
         path: '/',
-        config: {
+        options: {
             auth: false
         },
         handler: async function (request, h) {

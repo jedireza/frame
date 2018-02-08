@@ -12,7 +12,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/users',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -44,7 +44,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/users',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -98,7 +98,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/users/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -122,7 +122,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'PUT',
         path: '/api/users/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -209,7 +209,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'DELETE',
         path: '/api/users/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -238,7 +238,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'PUT',
         path: '/api/users/{id}/password',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -276,7 +276,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/users/my',
-        config: {
+        options: {
             auth: {
                 scope: ['admin', 'account']
             }
@@ -294,7 +294,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'PUT',
         path: '/api/users/my',
-        config: {
+        options: {
             auth: {
                 scope: ['admin', 'account']
             },
@@ -375,7 +375,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'PUT',
         path: '/api/users/my/password',
-        config: {
+        options: {
             auth: {
                 scope: ['admin', 'account']
             },

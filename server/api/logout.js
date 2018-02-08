@@ -7,7 +7,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'DELETE',
         path: '/api/logout',
-        config: {
+        options: {
             auth: {
                 mode: 'try'
             }
@@ -30,6 +30,6 @@ const register = function (server, serverOptions) {
 
 module.exports = {
     name: 'api-logout',
-    dependencies: ['auth', 'hapi-mongo-models'],
+    dependencies: ['auth', 'hapi-auth-basic', 'hapi-mongo-models'],
     register
 };

@@ -39,7 +39,7 @@ lab.before(async () => {
     server.route({
         method: 'GET',
         path: '/limited/to/root/group',
-        config: {
+        options: {
             auth,
             pre: [
                 Preware.requireAdminGroup('root')
@@ -51,7 +51,7 @@ lab.before(async () => {
     server.route({
         method: 'GET',
         path: '/limited/to/multiple/groups',
-        config: {
+        options: {
             auth,
             pre: [
                 Preware.requireAdminGroup(['sales', 'support'])
@@ -63,7 +63,7 @@ lab.before(async () => {
     server.route({
         method: 'GET',
         path: '/just/not/the/root/user',
-        config: {
+        options: {
             auth,
             pre: [
                 Preware.requireNotRootUser

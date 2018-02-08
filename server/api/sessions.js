@@ -10,7 +10,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/sessions',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -42,7 +42,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/sessions/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -66,7 +66,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'DELETE',
         path: '/api/sessions/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -90,7 +90,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/sessions/my',
-        config: {
+        options: {
             auth: {
                 scope: ['admin', 'account']
             }
