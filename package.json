@@ -1,6 +1,6 @@
 {
   "name": "frame",
-  "version": "13.2.2",
+  "version": "13.2.3",
   "description": "A user system API starter",
   "main": "index.js",
   "scripts": {
