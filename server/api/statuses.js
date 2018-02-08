@@ -10,7 +10,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/statuses',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -42,7 +42,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/statuses',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -66,7 +66,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'GET',
         path: '/api/statuses/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -90,7 +90,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'PUT',
         path: '/api/statuses/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },
@@ -125,7 +125,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'DELETE',
         path: '/api/statuses/{id}',
-        config: {
+        options: {
             auth: {
                 scope: 'admin'
             },

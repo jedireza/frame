@@ -3,7 +3,6 @@ const AuthPlugin = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
 const Hapi = require('hapi');
-const HapiAuthBasic = require('hapi-auth-basic');
 const Lab = require('lab');
 const Logout = require('../../../server/api/logout');
 const Manifest = require('../../../manifest');
@@ -28,7 +27,6 @@ lab.before(async () => {
             return entry;
         });
 
-    plugins.push(HapiAuthBasic);
     plugins.push(AuthPlugin);
     plugins.push(Logout);
 

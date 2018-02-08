@@ -13,7 +13,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/signup',
-        config: {
+        options: {
             auth: false,
             validate: {
                 payload: {

@@ -9,7 +9,7 @@ const register = function (server, serverOptions) {
     server.route({
         method: 'POST',
         path: '/api/contact',
-        config: {
+        options: {
             auth: false,
             validate: {
                 payload: {

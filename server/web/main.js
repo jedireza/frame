@@ -6,7 +6,7 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/',
-        config: {
+        options: {
             auth: false
         },
         handler: function (request, h) {
