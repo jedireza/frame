@@ -44,6 +44,9 @@ const register = function (server, options) {
 
 module.exports = {
     name: 'auth',
-    dependencies: ['hapi-auth-basic', 'hapi-mongo-models'],
+    dependencies: [
+        'hapi-auth-basic',
+        'hapi-mongo-models'
+    ],
     register
 };

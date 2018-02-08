@@ -409,6 +409,10 @@ const register = function (server, serverOptions) {
 
 module.exports = {
     name: 'api-users',
-    dependencies: ['auth', 'hapi-auth-basic', 'hapi-mongo-models'],
+    dependencies: [
+        'auth',
+        'hapi-auth-basic',
+        'hapi-mongo-models'
+    ],
     register
 };
