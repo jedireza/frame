@@ -12,7 +12,7 @@ const User = require('../../../server/models/user');
 
 const lab = exports.lab = Lab.script();
 let server;
-let rootAuthHeader;
+let rootCredentials;
 
 
 lab.before(async () => {
@@ -35,12 +35,10 @@ lab.before(async () => {
     await server.start();
     await Fixtures.Db.removeAllData();
 
-    const [root] = await Promise.all([
+    [rootCredentials] = await Promise.all([
         Fixtures.Creds.createRootAdminUser(),
         Fixtures.Creds.createAdminUser('Ren Hoek', 'ren', 'baddog', 'ren@stimpy.show')
     ]);
-
-    rootAuthHeader = root.authHeader;
 });
 
 
@@ -61,9 +59,7 @@ lab.experiment('GET /api/admins', () => {
         request = {
             method: 'GET',
             url: '/api/admins',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -90,9 +86,7 @@ lab.experiment('POST /api/admins', () => {
         request = {
             method: 'POST',
             url: '/api/admins',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -123,9 +117,7 @@ lab.experiment('GET /api/admins/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/admins/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -167,9 +159,7 @@ lab.experiment('PUT /api/admins/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/admins/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -227,9 +217,7 @@ lab.experiment('DELETE /api/admins/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/admins/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -270,9 +258,7 @@ lab.experiment('PUT /api/admins/{id}/groups', () => {
         request = {
             method: 'PUT',
             url: '/api/admins/{id}/groups',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -330,9 +316,7 @@ lab.experiment('PUT /api/admins/{id}/permissions', () => {
         request = {
             method: 'PUT',
             url: '/api/admins/{id}/permissions',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -390,9 +374,7 @@ lab.experiment('PUT /api/admins/{id}/user', () => {
         request = {
             method: 'PUT',
             url: '/api/admins/{id}/user',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -429,7 +411,7 @@ lab.experiment('PUT /api/admins/{id}/user', () => {
 
     lab.test('it returns HTTP 409 when the user is linked to another admin', async () => {
 
-        const { admin: adminA } = await Fixtures.Creds.createAdminUser(
+        const { roles: { admin: adminA } } = await Fixtures.Creds.createAdminUser(
             'Trevor Noah', 'trevor', 'haha', 'trevor@daily.show'
         );
 
@@ -452,7 +434,7 @@ lab.experiment('PUT /api/admins/{id}/user', () => {
     lab.test('it returns HTTP 409 when the admin is currently linked to user', async () => {
 
         const user = await User.create('hay', 'st4ck', 'hay@stimpy.show');
-        const { admin } = await Fixtures.Creds.createAdminUser(
+        const { roles: { admin: admin } } = await Fixtures.Creds.createAdminUser(
             'Mr Horse', 'mrh', 'negh', 'mrh@stimpy.show'
         );
 
@@ -501,9 +483,7 @@ lab.experiment('DELETE /api/admins/{id}/user', () => {
         request = {
             method: 'DELETE',
             url: '/api/admins/{id}/user',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -537,7 +517,7 @@ lab.experiment('DELETE /api/admins/{id}/user', () => {
 
     lab.test('it returns HTTP 404 when `User.findById` misses', async () => {
 
-        const { admin, user } = await Fixtures.Creds.createAdminUser(
+        const { roles: { admin: admin }, user } = await Fixtures.Creds.createAdminUser(
             'Lil Horse', 'lilh', 'negh', 'lilh@stimpy.show'
         );
 
@@ -554,7 +534,7 @@ lab.experiment('DELETE /api/admins/{id}/user', () => {
 
     lab.test('it returns HTTP 200 when all is good', async () => {
 
-        const { admin, user } = await Fixtures.Creds.createAdminUser(
+        const { roles: { admin: admin }, user } = await Fixtures.Creds.createAdminUser(
             'Jr Horse', 'jrh', 'negh', 'jrh@stimpy.show'
         );
 

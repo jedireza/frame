@@ -11,8 +11,8 @@ const Users = require('../../../server/api/users');
 
 const lab = exports.lab = Lab.script();
 let server;
-let rootAuthHeader;
-let accountAuthHeader;
+let rootCredentials;
+let accountCredentials;
 
 
 lab.before(async () => {
@@ -35,14 +35,11 @@ lab.before(async () => {
     await server.start();
     await Fixtures.Db.removeAllData();
 
-    const [root, account] = await Promise.all([
+    [rootCredentials, accountCredentials] = await Promise.all([
         Fixtures.Creds.createRootAdminUser(),
         Fixtures.Creds.createAccountUser('Stimpson Cat', 'stimpy', 'goodcat', 'stimpy@ren.show'),
         Fixtures.Creds.createAdminUser('Ren Hoek', 'ren', 'baddog', 'ren@stimpy.show')
     ]);
-
-    rootAuthHeader = root.authHeader;
-    accountAuthHeader = account.authHeader;
 });
 
 
@@ -63,9 +60,7 @@ lab.experiment('GET /api/users', () => {
         request = {
             method: 'GET',
             url: '/api/users',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -92,9 +87,7 @@ lab.experiment('POST /api/users', () => {
         request = {
             method: 'POST',
             url: '/api/users',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -156,9 +149,7 @@ lab.experiment('GET /api/users/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/users/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -199,9 +190,7 @@ lab.experiment('PUT /api/users/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/users/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -285,9 +274,7 @@ lab.experiment('DELETE /api/users/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/users/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -328,9 +315,7 @@ lab.experiment('PUT /api/users/{id}/password', () => {
         request = {
             method: 'PUT',
             url: '/api/users/{id}/password',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -377,9 +362,7 @@ lab.experiment('GET /api/users/my', () => {
         request = {
             method: 'GET',
             url: '/api/users/my',
-            headers: {
-                authorization: accountAuthHeader
-            }
+            credentials: accountCredentials
         };
     });
 
@@ -405,9 +388,7 @@ lab.experiment('PUT /api/users/my', () => {
         request = {
             method: 'PUT',
             url: '/api/users/my',
-            headers: {
-                authorization: accountAuthHeader
-            }
+            credentials: accountCredentials
         };
     });
 
@@ -469,9 +450,7 @@ lab.experiment('PUT /api/users/my/password', () => {
         request = {
             method: 'PUT',
             url: '/api/users/my/password',
-            headers: {
-                authorization: accountAuthHeader
-            }
+            credentials: accountCredentials
         };
     });
 
