@@ -17,10 +17,9 @@ class Credentials {
 
     static async createRootAdminUser() {
 
-        let [admin, user, session, authHeader] = await Promise.all([
+        let [admin, user, session] = await Promise.all([
             Admin.create('Root Admin'),
             User.create('root', 'root', 'root@stimpy.show'),
-            undefined,
             undefined
         ]);
         const adminUpdate = {
@@ -45,22 +44,24 @@ class Credentials {
 
         session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
-        [admin, user, session, authHeader] = await Promise.all([
+        [admin, user] = await Promise.all([
             Admin.findByIdAndUpdate(admin._id, adminUpdate),
-            User.findByIdAndUpdate(user._id, userUpdate),
-            session,
-            this.authHeader(session._id, session.key)
+            User.findByIdAndUpdate(user._id, userUpdate)
         ]);
 
-        return { admin, user, session, authHeader };
+        return {
+            scope: Object.keys(user.roles),
+            roles: { admin },
+            user,
+            session
+        };
     }
 
     static async createAdminUser(name, username, password, email, groups = []) {
 
-        let [admin, user, session, authHeader] = await Promise.all([
+        let [admin, user, session] = await Promise.all([
             Admin.create(name),
             User.create(username, password, email),
-            undefined,
             undefined
         ]);
         const adminUpdate = {
@@ -88,22 +89,24 @@ class Credentials {
 
         session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
-        [admin, user, session, authHeader] = await Promise.all([
+        [admin, user] = await Promise.all([
             Admin.findByIdAndUpdate(admin._id, adminUpdate),
-            User.findByIdAndUpdate(user._id, userUpdate),
-            session,
-            this.authHeader(session._id, session.key)
+            User.findByIdAndUpdate(user._id, userUpdate)
         ]);
 
-        return { admin, user, session, authHeader };
+        return {
+            scope: Object.keys(user.roles),
+            roles: { admin },
+            user,
+            session
+        };
     }
 
     static async createAccountUser(name, username, password, email) {
 
-        let [account, user, session, authHeader] = await Promise.all([
+        let [account, user, session] = await Promise.all([
             Account.create(name),
             User.create(username, password, email),
-            undefined,
             undefined
         ]);
         const adminUpdate = {
@@ -125,14 +128,17 @@ class Credentials {
 
         session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
-        [account, user, session, authHeader] = await Promise.all([
+        [account, user] = await Promise.all([
             Account.findByIdAndUpdate(account._id, adminUpdate),
-            User.findByIdAndUpdate(user._id, userUpdate),
-            session,
-            this.authHeader(session._id, session.key)
+            User.findByIdAndUpdate(user._id, userUpdate)
         ]);
 
-        return { account, user, session, authHeader };
+        return {
+            scope: Object.keys(user.roles),
+            roles: { account },
+            user,
+            session
+        };
     }
 }
 

@@ -11,7 +11,7 @@ const Statuses = require('../../../server/api/statuses');
 
 const lab = exports.lab = Lab.script();
 let server;
-let rootAuthHeader;
+let rootCredentials;
 
 
 lab.before(async () => {
@@ -34,9 +34,7 @@ lab.before(async () => {
     await server.start();
     await Fixtures.Db.removeAllData();
 
-    const root = await Fixtures.Creds.createRootAdminUser();
-
-    rootAuthHeader = root.authHeader;
+    rootCredentials = await Fixtures.Creds.createRootAdminUser();
 });
 
 
@@ -57,9 +55,7 @@ lab.experiment('GET /api/statuses', () => {
         request = {
             method: 'GET',
             url: '/api/statuses',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -86,9 +82,7 @@ lab.experiment('POST /api/statuses', () => {
         request = {
             method: 'POST',
             url: '/api/statuses',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -120,9 +114,7 @@ lab.experiment('GET /api/statuses/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/statuses/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -164,9 +156,7 @@ lab.experiment('PUT /api/statuses/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/statuses/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -214,9 +204,7 @@ lab.experiment('DELETE /api/statuses/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/statuses/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 

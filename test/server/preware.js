@@ -6,12 +6,11 @@ const Hapi = require('hapi');
 const Lab = require('lab');
 const Manifest = require('../../manifest');
 const Preware = require('../../server/preware');
-const Session = require('../../server/models/session');
 
 
 const lab = exports.lab = Lab.script();
 let server;
-let adminAuthHeader;
+let adminCredentials;
 
 
 lab.before(async () => {
@@ -72,12 +71,9 @@ lab.before(async () => {
         handler
     });
 
-    const { user: adminUser } = await Fixtures.Creds.createAdminUser(
+    adminCredentials = await Fixtures.Creds.createAdminUser(
         'Ren Hoek', 'ren', 'baddog', 'ren@stimpy.show', ['Sales']
     );
-    const adminSession = await Session.create(`${adminUser._id}`, '127.0.0.1', 'Lab');
-
-    adminAuthHeader = Fixtures.Creds.authHeader(adminSession._id, adminSession.key);
 });
 
 
@@ -95,9 +91,7 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/limited/to/root/group',
-            headers: {
-                authorization: adminAuthHeader
-            }
+            credentials: adminCredentials
         };
         const response = await server.inject(request);
 
@@ -110,9 +104,7 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/limited/to/multiple/groups',
-            headers: {
-                authorization: adminAuthHeader
-            }
+            credentials: adminCredentials
         };
         const response = await server.inject(request);
 
@@ -122,14 +114,11 @@ lab.experiment('Preware', () => {
 
     lab.test('it prevents access to the root user', async () => {
 
-        const root = await Fixtures.Creds.createRootAdminUser();
-        const rootSession = await Session.create(`${root.user._id}`, '127.0.0.1', 'Lab');
+        const rootCredentails = await Fixtures.Creds.createRootAdminUser();
         const request = {
             method: 'GET',
             url: '/just/not/the/root/user',
-            headers: {
-                authorization: Fixtures.Creds.authHeader(rootSession._id, rootSession.key)
-            }
+            credentials: rootCredentails
         };
         const response = await server.inject(request);
 
@@ -142,9 +131,7 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/just/not/the/root/user',
-            headers: {
-                authorization: adminAuthHeader
-            }
+            credentials: adminCredentials
         };
         const response = await server.inject(request);
 

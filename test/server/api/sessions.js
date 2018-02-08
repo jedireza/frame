@@ -12,7 +12,7 @@ const User = require('../../../server/models/user');
 
 const lab = exports.lab = Lab.script();
 let server;
-let rootAuthHeader;
+let rootCredentials;
 let rootSession;
 
 
@@ -36,10 +36,9 @@ lab.before(async () => {
     await server.start();
     await Fixtures.Db.removeAllData();
 
-    const root = await Fixtures.Creds.createRootAdminUser();
+    rootCredentials = await Fixtures.Creds.createRootAdminUser();
 
-    rootAuthHeader = root.authHeader;
-    rootSession = root.session;
+    rootSession = rootCredentials.session;
 });
 
 
@@ -60,9 +59,7 @@ lab.experiment('GET /api/sessions', () => {
         request = {
             method: 'GET',
             url: '/api/sessions',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -89,9 +86,7 @@ lab.experiment('GET /api/sessions/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/sessions/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -133,9 +128,7 @@ lab.experiment('DELETE /api/sessions/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/sessions/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -177,9 +170,7 @@ lab.experiment('GET /api/sessions/my', () => {
         request = {
             method: 'GET',
             url: '/api/sessions/my',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -204,9 +195,7 @@ lab.experiment('DELETE /api/sessions/my/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/sessions/my/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 

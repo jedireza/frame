@@ -11,7 +11,7 @@ const Manifest = require('../../../manifest');
 
 const lab = exports.lab = Lab.script();
 let server;
-let rootAuthHeader;
+let rootCredentials;
 
 
 lab.before(async () => {
@@ -34,9 +34,7 @@ lab.before(async () => {
     await server.start();
     await Fixtures.Db.removeAllData();
 
-    const root = await Fixtures.Creds.createRootAdminUser();
-
-    rootAuthHeader = root.authHeader;
+    rootCredentials = await Fixtures.Creds.createRootAdminUser();
 });
 
 
@@ -57,9 +55,7 @@ lab.experiment('GET /api/admin-groups', () => {
         request = {
             method: 'GET',
             url: '/api/admin-groups',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -86,9 +82,7 @@ lab.experiment('POST /api/admin-groups', () => {
         request = {
             method: 'POST',
             url: '/api/admin-groups',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -118,9 +112,7 @@ lab.experiment('GET /api/admin-groups/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/admin-groups/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -161,9 +153,7 @@ lab.experiment('PUT /api/admin-groups/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/admin-groups/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -210,9 +200,7 @@ lab.experiment('DELETE /api/admin-groups/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/admin-groups/{id}',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
@@ -253,9 +241,7 @@ lab.experiment('PUT /api/admin-groups/{id}/permissions', () => {
         request = {
             method: 'PUT',
             url: '/api/admin-groups/{id}/permissions',
-            headers: {
-                authorization: rootAuthHeader
-            }
+            credentials: rootCredentials
         };
     });
 
