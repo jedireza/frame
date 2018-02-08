@@ -362,6 +362,10 @@ const register = function (server, serverOptions) {
 
 module.exports = {
     name: 'api-admins',
-    dependencies: ['auth', 'hapi-auth-basic', 'hapi-mongo-models'],
+    dependencies: [
+        'auth',
+        'hapi-auth-basic',
+        'hapi-mongo-models'
+    ],
     register
 };

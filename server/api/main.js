@@ -21,5 +21,6 @@ const register = function (server, serverOptions) {
 
 module.exports = {
     name: 'api-main',
+    dependencies: [],
     register
 };
