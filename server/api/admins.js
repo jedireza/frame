@@ -12,6 +12,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/admins',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -44,6 +45,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/admins',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -67,6 +69,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/admins/{id}',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -91,6 +94,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admins/{id}',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -157,6 +161,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admins/{id}/groups',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -195,6 +200,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admins/{id}/permissions',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -233,6 +239,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admins/{id}/user',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },
@@ -304,6 +311,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/admins/{id}/user',
         options: {
+            tags: ['api','admins'],
             auth: {
                 scope: 'admin'
             },

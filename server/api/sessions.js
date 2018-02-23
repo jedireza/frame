@@ -11,6 +11,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/sessions',
         options: {
+            tags: ['api','session'],
             auth: {
                 scope: 'admin'
             },
@@ -43,6 +44,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/sessions/{id}',
         options: {
+            tags: ['api','session'],
             auth: {
                 scope: 'admin'
             },
@@ -67,6 +69,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/sessions/{id}',
         options: {
+            tags: ['api','session'],
             auth: {
                 scope: 'admin'
             },
@@ -91,6 +94,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/sessions/my',
         options: {
+            tags: ['api','session'],
             auth: {
                 scope: ['admin', 'account']
             }

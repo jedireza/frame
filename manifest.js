@@ -1,6 +1,7 @@
 'use strict';
 const Confidence = require('confidence');
 const Config = require('./config');
+const Package = require('./package.json');
 const Path = require('path');
 
 
@@ -57,6 +58,23 @@ const manifest = {
             },
             {
                 plugin: 'hapi-remote-address'
+            },
+            {
+                plugin: 'inert'
+            },
+            {
+                plugin: 'vision'
+            },
+            {
+                plugin:'hapi-swagger',
+                options: {
+                    info: {
+                        title: 'Frame API Documentation',
+                        version: Package.version
+                    },
+                    grouping: 'tags',
+                    sortTags: 'name'
+                }
             },
             {
                 plugin: 'hapi-mongo-models',

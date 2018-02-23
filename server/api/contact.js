@@ -10,6 +10,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/contact',
         options: {
+            tags: ['api','contact'],
             auth: false,
             validate: {
                 payload: {

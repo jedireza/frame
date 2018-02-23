@@ -8,6 +8,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/logout',
         options: {
+            tags: ['api','logout'],
             auth: {
                 mode: 'try'
             }

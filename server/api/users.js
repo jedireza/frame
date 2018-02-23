@@ -13,6 +13,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/users',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -45,6 +46,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/users',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -99,6 +101,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/users/{id}',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -123,6 +126,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/users/{id}',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -210,6 +214,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/users/{id}',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -239,6 +244,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/users/{id}/password',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: 'admin'
             },
@@ -277,6 +283,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/users/my',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: ['admin', 'account']
             }
@@ -295,6 +302,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/users/my',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: ['admin', 'account']
             },
@@ -376,6 +384,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/users/my/password',
         options: {
+            tags: ['api','users'],
             auth: {
                 scope: ['admin', 'account']
             },

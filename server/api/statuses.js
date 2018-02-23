@@ -11,6 +11,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/statuses',
         options: {
+            tags: ['api','statuses'],
             auth: {
                 scope: 'admin'
             },
@@ -43,6 +44,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/statuses',
         options: {
+            tags: ['api','statuses'],
             auth: {
                 scope: 'admin'
             },
@@ -67,6 +69,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/statuses/{id}',
         options: {
+            tags: ['api','statuses'],
             auth: {
                 scope: 'admin'
             },
@@ -91,6 +94,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/statuses/{id}',
         options: {
+            tags: ['api','statuses'],
             auth: {
                 scope: 'admin'
             },
@@ -126,6 +130,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/statuses/{id}',
         options: {
+            tags: ['api','statuses'],
             auth: {
                 scope: 'admin'
             },

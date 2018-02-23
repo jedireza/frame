@@ -14,6 +14,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/signup',
         options: {
+            tags: ['api','signup'],
             auth: false,
             validate: {
                 payload: {

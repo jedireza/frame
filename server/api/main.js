@@ -7,6 +7,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api',
         options: {
+            tags: ['api','main'],
             auth: false
         },
         handler: function (request, h) {

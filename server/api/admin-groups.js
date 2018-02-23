@@ -11,6 +11,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/admin-groups',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },
@@ -43,6 +44,7 @@ const register = function (server, serverOptions) {
         method: 'POST',
         path: '/api/admin-groups',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },
@@ -66,6 +68,7 @@ const register = function (server, serverOptions) {
         method: 'GET',
         path: '/api/admin-groups/{id}',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },
@@ -90,6 +93,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admin-groups/{id}',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },
@@ -128,6 +132,7 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/admin-groups/{id}',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },
@@ -157,6 +162,7 @@ const register = function (server, serverOptions) {
         method: 'PUT',
         path: '/api/admin-groups/{id}/permissions',
         options: {
+            tags: ['api','admin-groups'],
             auth: {
                 scope: 'admin'
             },

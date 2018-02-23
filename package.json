@@ -31,7 +31,9 @@
     "hapi-auth-basic": "5.x.x",
     "hapi-mongo-models": "7.x.x",
     "hapi-remote-address": "1.x.x",
+    "hapi-swagger": "9.x.x",
     "hoek": "5.x.x",
+    "inert": "5.x.x",
     "joi": "13.x.x",
     "joistick": "1.x.x",
     "mongo-models": "2.x.x",
@@ -40,7 +42,8 @@
     "nodemailer-markdown": "1.x.x",
     "slug": "0.9.x",
     "useragent": "2.x.x",
-    "uuid": "3.x.x"
+    "uuid": "3.x.x",
+    "vision": "5.x.x"
   },
   "devDependencies": {
     "code": "5.x.x",
