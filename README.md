@@ -32,9 +32,10 @@ this repo and build one on top of Frame.
 
 ## Live demo
 
-| url                                                                        | username | password |
-|:-------------------------------------------------------------------------- |:-------- |:-------- |
-| [https://getframe.herokuapp.com/](https://getframe.herokuapp.com/)         | root     | root     |
+| url                                                                                                | username | password |
+|:-------------------------------------------------------------------------------------------------- |:-------- |:-------- |
+| [https://getframe.herokuapp.com/](https://getframe.herokuapp.com/)                                 | root     | root     |
+| [https://getframe.herokuapp.com/swagger.json](https://getframe.herokuapp.com/swagger.json)         |          |          |
 
 [Postman](http://www.getpostman.com/) is a great tool for testing and
 developing APIs. See the wiki for details on [how to
