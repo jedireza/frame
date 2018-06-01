@@ -16,6 +16,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts',
         options: {
             tags: ['api','accounts'],
+            description: 'Get a paginated list of all customer accounts. [Admin Scope]',
+            notes: 'Get a paginated list of all customer accounts.',
             auth: {
                 scope: 'admin'
             },
@@ -46,6 +48,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts',
         options: {
             tags: ['api','accounts'],
+            description: 'Create a new customer account. [Admin Scope]',
+            notes: 'Create a new customer account.',
             auth: {
                 scope: 'admin'
             },
@@ -67,6 +71,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}',
         options: {
             tags: ['api','accounts'],
+            description: 'Get a customer account by ID. [Admin Scope]',
+            notes: 'Get a customer account by ID.',
             auth: {
                 scope: 'admin'
             }
@@ -89,6 +95,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}',
         options: {
             tags: ['api','accounts'],
+            description: 'Update a customer account by ID. [Admin Scope]',
+            notes: 'Update a customer account by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -126,6 +134,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}',
         options: {
             tags: ['api','accounts'],
+            description: 'Delete a customer account by ID. [Root Scope]',
+            notes: 'Delete a customer account by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -151,6 +161,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}/user',
         options: {
             tags: ['api','accounts'],
+            description: 'Link a system user to a customer account. [Admin Scope]',
+            notes: 'Link a system user to a customer account.',
             auth: {
                 scope: 'admin'
             },
@@ -217,6 +229,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}/user',
         options: {
             tags: ['api','accounts'],
+            description: 'Unlink a system user to a customer account. [Admin Scope]',
+            notes: 'Unlink a system user to a customer account.',
             auth: {
                 scope: 'admin'
             },
@@ -269,6 +283,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}/notes',
         options: {
             tags: ['api','accounts'],
+            description: 'Add a new note on a customer account. [Admin Scope]',
+            notes: 'Add a new note on a customer account.',
             auth: {
                 scope: 'admin'
             },
@@ -310,6 +326,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/{id}/status',
         options: {
             tags: ['api','accounts'],
+            description: 'Update customer account status by ID. [Admin Scope]',
+            notes: 'Update customer account status by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -368,6 +386,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/my',
         options: {
             tags: ['api','accounts'],
+            description: 'Get the logged-in user\'s account details. [User Account Scope]',
+            notes: 'Get the logged-in user\'s account details.',
             auth: {
                 scope: 'account'
             }
@@ -387,6 +407,8 @@ const register = function (server, serverOptions) {
         path: '/api/accounts/my',
         options: {
             tags: ['api','accounts'],
+            description: 'Update the logged-in user\'s account details. [User Account Scope]',
+            notes: 'Update your account details.',
             auth: {
                 scope: 'account'
             },

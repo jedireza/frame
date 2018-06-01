@@ -15,6 +15,8 @@ const register = function (server, serverOptions) {
         path: '/api/signup',
         options: {
             tags: ['api','signup'],
+            description: 'Sign up for a new user account. [No Scope]',
+            notes: 'Sign up for a new user account. Creates a new User, new Account, and links the two.',
             auth: false,
             validate: {
                 payload: {

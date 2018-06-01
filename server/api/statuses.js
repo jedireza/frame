@@ -12,6 +12,8 @@ const register = function (server, serverOptions) {
         path: '/api/statuses',
         options: {
             tags: ['api','statuses'],
+            description: 'Get a paginated list of all statuses. [Root Scope]',
+            notes: 'Get a paginated list of all statuses.',
             auth: {
                 scope: 'admin'
             },
@@ -45,6 +47,8 @@ const register = function (server, serverOptions) {
         path: '/api/statuses',
         options: {
             tags: ['api','statuses'],
+            description: 'Add a new status. [Root Scope]',
+            notes: 'Add a new status.',
             auth: {
                 scope: 'admin'
             },
@@ -70,6 +74,8 @@ const register = function (server, serverOptions) {
         path: '/api/statuses/{id}',
         options: {
             tags: ['api','statuses'],
+            description: 'Get a status by ID. [Root Scope]',
+            notes: 'Get a status by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -95,6 +101,8 @@ const register = function (server, serverOptions) {
         path: '/api/statuses/{id}',
         options: {
             tags: ['api','statuses'],
+            description: 'Update a status by ID. [Root Scope]',
+            notes: 'Update a status by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -131,6 +139,8 @@ const register = function (server, serverOptions) {
         path: '/api/statuses/{id}',
         options: {
             tags: ['api','statuses'],
+            description: 'Delete a status by ID. [Root Scope]',
+            notes: 'Delete a status by ID.',
             auth: {
                 scope: 'admin'
             },

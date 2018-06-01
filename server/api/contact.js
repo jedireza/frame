@@ -11,6 +11,8 @@ const register = function (server, serverOptions) {
         path: '/api/contact',
         options: {
             tags: ['api','contact'],
+            description: 'Generate a contact email. [No Scope]',
+            notes: 'Generate a contact email.',
             auth: false,
             validate: {
                 payload: {

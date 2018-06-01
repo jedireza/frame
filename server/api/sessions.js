@@ -12,6 +12,8 @@ const register = function (server, serverOptions) {
         path: '/api/sessions',
         options: {
             tags: ['api','session'],
+            description: 'Get a paginated list of all user sessions. [Root Scope]',
+            notes: 'Get a paginated list of all user sessions.',
             auth: {
                 scope: 'admin'
             },
@@ -45,6 +47,8 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/{id}',
         options: {
             tags: ['api','session'],
+            description: 'Get a user session by ID. [Root Scope]',
+            notes: 'Get a user session by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -70,6 +74,8 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/{id}',
         options: {
             tags: ['api','session'],
+            description: 'Delete a user session by ID. [Root Scope]',
+            notes: 'Delete a user session by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -95,6 +101,8 @@ const register = function (server, serverOptions) {
         path: '/api/sessions/my',
         options: {
             tags: ['api','session'],
+            description: 'Get the logged-in user\'s session. [User Account Scope]',
+            notes: 'Get the logged-in user\'s session.',
             auth: {
                 scope: ['admin', 'account']
             }

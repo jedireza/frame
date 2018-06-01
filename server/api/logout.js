@@ -9,6 +9,8 @@ const register = function (server, serverOptions) {
         path: '/api/logout',
         options: {
             tags: ['api','logout'],
+            description: 'Delete the user\'s logged-in session. [User Account Scope]',
+            notes: 'Delete the user\'s logged-in session.',
             auth: {
                 mode: 'try'
             }

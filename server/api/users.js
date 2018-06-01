@@ -14,6 +14,8 @@ const register = function (server, serverOptions) {
         path: '/api/users',
         options: {
             tags: ['api','users'],
+            description: 'Get a paginated list of all users. [Root Scope]',
+            notes: 'Get a paginated list of all users.',
             auth: {
                 scope: 'admin'
             },
@@ -47,6 +49,8 @@ const register = function (server, serverOptions) {
         path: '/api/users',
         options: {
             tags: ['api','users'],
+            description: 'Create a new user. [Root Scope]',
+            notes: 'Create a new user. This does not map this user to an account.',
             auth: {
                 scope: 'admin'
             },
@@ -102,6 +106,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/{id}',
         options: {
             tags: ['api','users'],
+            description: 'Get a user by ID. [Root Scope]',
+            notes: 'Get a user by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -127,6 +133,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/{id}',
         options: {
             tags: ['api','users'],
+            description: 'Update a user by ID. [Root Scope]',
+            notes: 'Update a user by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -215,6 +223,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/{id}',
         options: {
             tags: ['api','users'],
+            description: 'Delete a user by ID. [Root Scope]',
+            notes: 'Delete a user by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -245,6 +255,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/{id}/password',
         options: {
             tags: ['api','users'],
+            description: 'Update a user password. [Root Scope]',
+            notes: 'Update a user password.',
             auth: {
                 scope: 'admin'
             },
@@ -284,6 +296,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/my',
         options: {
             tags: ['api','users'],
+            description: 'Get the logged-in user\'s user details like roles. [User Account Scope]',
+            notes: 'Get the logged-in user\'s user details like roles.',
             auth: {
                 scope: ['admin', 'account']
             }
@@ -303,6 +317,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/my',
         options: {
             tags: ['api','users'],
+            description: 'Update the logged-in user\'s user details like username and email. [User Account Scope]',
+            notes: 'Update the logged-in user\'s user details like username and email.',
             auth: {
                 scope: ['admin', 'account']
             },
@@ -385,6 +401,8 @@ const register = function (server, serverOptions) {
         path: '/api/users/my/password',
         options: {
             tags: ['api','users'],
+            description: 'Update the logged-in user\'s password. [User Account Scope]',
+            notes: 'Update the logged-in user\'s password.',
             auth: {
                 scope: ['admin', 'account']
             },

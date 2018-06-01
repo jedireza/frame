@@ -13,6 +13,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins',
         options: {
             tags: ['api','admins'],
+            description: 'Get a paginated list of all admin accounts. [Root Scope]',
+            notes: 'Get a paginated list of all admin accounts.',
             auth: {
                 scope: 'admin'
             },
@@ -46,6 +48,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins',
         options: {
             tags: ['api','admins'],
+            description: 'Create a new admin account. [Root Scope]',
+            notes: 'Create a new admin account.',
             auth: {
                 scope: 'admin'
             },
@@ -70,6 +74,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}',
         options: {
             tags: ['api','admins'],
+            description: 'Get an admin account by ID. [Root Scope]',
+            notes: 'Get an admin account by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -95,6 +101,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}',
         options: {
             tags: ['api','admins'],
+            description: 'Update an admin account by ID. [Root Scope]',
+            notes: 'Update an admin account by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -137,6 +145,9 @@ const register = function (server, serverOptions) {
         method: 'DELETE',
         path: '/api/admins/{id}',
         options: {
+            tags: ['api','admins'],
+            description: 'Delete an admin account by ID. [Root Scope]',
+            notes: 'Delete an admin account by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -162,6 +173,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/groups',
         options: {
             tags: ['api','admins'],
+            description: 'Update an admin account\'s groups by ID. [Root Scope]',
+            notes: 'Update an admin account\'s groups by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -201,6 +214,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/permissions',
         options: {
             tags: ['api','admins'],
+            description: 'Update an admin account\'s custom permissions by ID. [Root Scope]',
+            notes: 'Update an admin account\'s custom permissions by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -240,6 +255,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/user',
         options: {
             tags: ['api','admins'],
+            description: 'Link an admin account to a user account. [Root Scope]',
+            notes: 'Link an admin account to a user account.',
             auth: {
                 scope: 'admin'
             },
@@ -312,6 +329,8 @@ const register = function (server, serverOptions) {
         path: '/api/admins/{id}/user',
         options: {
             tags: ['api','admins'],
+            description: 'Unlink an admin account from a user account. [Root Scope]',
+            notes: 'Unlink an admin account from a user account.',
             auth: {
                 scope: 'admin'
             },

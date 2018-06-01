@@ -12,6 +12,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Get a paginated list of all admin groups. [Root Scope]',
+            notes: 'Get a paginated list of all admin groups.',
             auth: {
                 scope: 'admin'
             },
@@ -45,6 +47,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Create a new admin group. [Root Scope]',
+            notes: 'Create a new admin group.',
             auth: {
                 scope: 'admin'
             },
@@ -69,6 +73,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Get an admin group by ID. [Root Scope]',
+            notes: 'Get an admin group by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -94,6 +100,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Update an admin group by ID. [Root Scope]',
+            notes: 'Update an admin group by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -133,6 +141,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Delete an admin group by ID. [Root Scope]',
+            notes: 'Delete an admin group by ID.',
             auth: {
                 scope: 'admin'
             },
@@ -163,6 +173,8 @@ const register = function (server, serverOptions) {
         path: '/api/admin-groups/{id}/permissions',
         options: {
             tags: ['api','admin-groups'],
+            description: 'Update an admin group\'s permissions. [Root Scope]',
+            notes: 'Update an admin group\'s permissions.',
             auth: {
                 scope: 'admin'
             },
