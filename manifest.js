@@ -68,24 +68,32 @@ const manifest = {
             {
                 plugin:'hapi-swagger',
                 options: {
+                    securityDefinitions: {
+                        'basic': {
+                            'type': 'apiKey',
+                            'name': 'Authorization',
+                            'in': 'header'
+                        }
+                    },
+                    security: [{ 'basic': [] }],
                     info: {
                         title: 'Frame API Documentation',
                         version: Package.version,
                         description: `Check out the **[Github Wiki](https://github.com/jedireza/frame/wiki)** for common questions and how-tos.
-   
-A few key things to be aware of:   
-The core User model found in the /api/users/ endpoints have these basic fields: _id, email, username, password, isActive, roles, timeCreated.
-   
-This framework decorates the core User models with additional role specific fields via mapping it to 1 or more roles. Frame comes with 2 default roles, customers and admins.    
 
-/api/accounts/ is the "customer account" role.    
+A few key things to be aware of:
+The core User model found in the /api/users/ endpoints have these basic fields: _id, email, username, password, isActive, roles, timeCreated.
+
+This framework decorates the core User models with additional role specific fields via mapping it to 1 or more roles. Frame comes with 2 default roles, customers and admins.
+
+/api/accounts/ is the "customer account" role.
 When users sign up via /api/signup the framework automatically creates a new User and a new Account (aka customer role) and links the two. Users can have multiple roles but each new instance of a role model can only be mapped to one user.
 The customer Account role adds these additional fields for users who are customers: "name" (first, middle last), "notes", and "status". "Notes" allows admins to add notes to accounts.
-   
-/api/admins/ is the "admin" role.   
+
+/api/admins/ is the "admin" role.
 This role contains a "name" (first, middle, last), "permissions", and "groups" property allowing you to assign multiple admin-groups. The first admin-group is "root" which is allowed to perform the "Root Scope" actions.
 
-More details on [Users, Roles & Groups](https://github.com/jedireza/frame/wiki/Users,-Roles-&-Groups)   
+More details on [Users, Roles & Groups](https://github.com/jedireza/frame/wiki/Users,-Roles-&-Groups)
 More details on [Admin & Admin Group Permissions](https://github.com/jedireza/frame/wiki/Admin-&-Admin-Group-Permissions)`
                     },
                     grouping: 'tags',
