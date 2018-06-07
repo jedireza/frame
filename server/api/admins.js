@@ -76,6 +76,11 @@ const register = function (server, serverOptions) {
             tags: ['api','admins'],
             description: 'Get an admin account by ID. [Root Scope]',
             notes: 'Get an admin account by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to get an admin')
+                }
+            },
             auth: {
                 scope: 'admin'
             },
@@ -148,6 +153,11 @@ const register = function (server, serverOptions) {
             tags: ['api','admins'],
             description: 'Delete an admin account by ID. [Root Scope]',
             notes: 'Delete an admin account by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to delete an admin')
+                }
+            },
             auth: {
                 scope: 'admin'
             },

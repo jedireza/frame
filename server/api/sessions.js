@@ -49,6 +49,11 @@ const register = function (server, serverOptions) {
             tags: ['api','session'],
             description: 'Get a user session by ID. [Root Scope]',
             notes: 'Get a user session by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to get session')
+                }
+            },
             auth: {
                 scope: 'admin'
             },
@@ -76,6 +81,11 @@ const register = function (server, serverOptions) {
             tags: ['api','session'],
             description: 'Delete a user session by ID. [Root Scope]',
             notes: 'Delete a user session by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to delete a session')
+                }
+            },
             auth: {
                 scope: 'admin'
             },

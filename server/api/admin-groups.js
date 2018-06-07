@@ -75,6 +75,11 @@ const register = function (server, serverOptions) {
             tags: ['api','admin-groups'],
             description: 'Get an admin group by ID. [Root Scope]',
             notes: 'Get an admin group by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to get an admin group')
+                }
+            },
             auth: {
                 scope: 'admin'
             },

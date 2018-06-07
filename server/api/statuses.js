@@ -76,6 +76,11 @@ const register = function (server, serverOptions) {
             tags: ['api','statuses'],
             description: 'Get a status by ID. [Root Scope]',
             notes: 'Get a status by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to get status')
+                }
+            },
             auth: {
                 scope: 'admin'
             },
@@ -109,6 +114,9 @@ const register = function (server, serverOptions) {
             validate: {
                 payload: {
                     name: Joi.string().required()
+                },
+                params: {
+                    id : Joi.string().required().description('the id to update a status')
                 }
             },
             pre: [
@@ -141,6 +149,11 @@ const register = function (server, serverOptions) {
             tags: ['api','statuses'],
             description: 'Delete a status by ID. [Root Scope]',
             notes: 'Delete a status by ID.',
+            validate: {
+                params: {
+                    id : Joi.string().required().description('the id to delete a status')
+                }
+            },
             auth: {
                 scope: 'admin'
             },
