@@ -1,9 +1,10 @@
 'use strict';
+
 const Auth = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const Status = require('../../../server/models/status');
 const Statuses = require('../../../server/api/statuses');
@@ -55,7 +56,10 @@ lab.experiment('GET /api/statuses', () => {
         request = {
             method: 'GET',
             url: '/api/statuses',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -82,7 +86,10 @@ lab.experiment('POST /api/statuses', () => {
         request = {
             method: 'POST',
             url: '/api/statuses',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -114,7 +121,10 @@ lab.experiment('GET /api/statuses/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/statuses/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -156,7 +166,10 @@ lab.experiment('PUT /api/statuses/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/statuses/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -204,7 +217,10 @@ lab.experiment('DELETE /api/statuses/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/statuses/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 

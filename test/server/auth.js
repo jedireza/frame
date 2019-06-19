@@ -1,9 +1,10 @@
 'use strict';
+
 const Auth = require('../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('./fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../manifest');
 const Session = require('../../server/models/session');
 const User = require('../../server/models/user');

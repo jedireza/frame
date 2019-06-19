@@ -1,9 +1,16 @@
 'use strict';
+
+const BasicAuth = require('@hapi/basic');
 const Session = require('./models/session');
 const User = require('./models/user');
 
 
 const register = function (server, options) {
+
+    // register the @hapi/basic plugin on our own otherwise
+    // the unit tests will fail because the module name '@hapi/basic'
+    // doesn't match the plugin name 'basic'.
+    server.register(BasicAuth, { once: true });
 
     server.auth.strategy('simple', 'basic', {
         validate: async function (request, sessionId, key, h) {
@@ -45,7 +52,6 @@ const register = function (server, options) {
 module.exports = {
     name: 'auth',
     dependencies: [
-        'hapi-auth-basic',
         'hapi-mongo-models'
     ],
     register

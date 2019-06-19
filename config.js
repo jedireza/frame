@@ -1,4 +1,5 @@
 'use strict';
+
 const Confidence = require('confidence');
 const Dotenv = require('dotenv');
 
@@ -31,7 +32,7 @@ const config = {
                 uri: {
                     $filter: 'env',
                     production: process.env.MONGODB_URI,
-                    $default: 'mongodb://localhost:27017/'
+                    $default: process.env.MONGODB_URI || 'mongodb://localhost:27017/'
                 },
                 db: {
                     $filter: 'env',

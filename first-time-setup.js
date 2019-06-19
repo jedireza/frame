@@ -1,4 +1,5 @@
 'use strict';
+
 const Account = require('./server/models/account');
 const Admin = require('./server/models/admin');
 const AdminGroup = require('./server/models/admin-group');
@@ -17,7 +18,7 @@ const main = async function () {
     // get mongodb connection info
 
     options = {
-        default: 'mongodb://localhost:27017/'
+        default: process.env.MONGODB_URI || 'mongodb://localhost:27017/'
     };
     const mongodbUri = await Promptly.prompt(`MongoDB URI: (${options.default})`, options);
 

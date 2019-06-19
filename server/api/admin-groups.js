@@ -1,7 +1,8 @@
 'use strict';
+
 const AdminGroup = require('../models/admin-group');
-const Boom = require('boom');
-const Joi = require('joi');
+const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
 const Preware = require('../preware');
 
 
@@ -219,7 +220,6 @@ module.exports = {
     name: 'api-admin-groups',
     dependencies: [
         'auth',
-        'hapi-auth-basic',
         'hapi-mongo-models'
     ],
     register

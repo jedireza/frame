@@ -1,5 +1,6 @@
 'use strict';
-const Glue = require('glue');
+
+const Glue = require('@hapi/glue');
 const Manifest = require('./manifest');
 
 
@@ -18,6 +19,5 @@ const main = async function () {
 
     console.log(`Server started on port ${Manifest.get('/server/port')}`);
 };
-
 
 main();

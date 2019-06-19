@@ -1,11 +1,12 @@
 'use strict';
+
 const AdminGroup = require('../../../server/models/admin-group');
 const AdminGroups = require('../../../server/api/admin-groups');
 const Auth = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 
 
@@ -55,7 +56,10 @@ lab.experiment('GET /api/admin-groups', () => {
         request = {
             method: 'GET',
             url: '/api/admin-groups',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -82,7 +86,10 @@ lab.experiment('POST /api/admin-groups', () => {
         request = {
             method: 'POST',
             url: '/api/admin-groups',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -112,7 +119,10 @@ lab.experiment('GET /api/admin-groups/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/admin-groups/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -153,7 +163,10 @@ lab.experiment('PUT /api/admin-groups/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/admin-groups/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -200,7 +213,10 @@ lab.experiment('DELETE /api/admin-groups/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/admin-groups/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -241,7 +257,10 @@ lab.experiment('PUT /api/admin-groups/{id}/permissions', () => {
         request = {
             method: 'PUT',
             url: '/api/admin-groups/{id}/permissions',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 

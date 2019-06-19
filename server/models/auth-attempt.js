@@ -1,7 +1,8 @@
 'use strict';
+
 const Assert = require('assert');
 const Config = require('../../config');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const MongoModels = require('mongo-models');
 const NewDate = require('joistick/new-date');
 

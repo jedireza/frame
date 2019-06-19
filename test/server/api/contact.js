@@ -1,8 +1,9 @@
 'use strict';
-const Code = require('code');
+
+const Code = require('@hapi/code');
 const Contact = require('../../../server/api/contact');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Mailer = require('../../../server/mailer');
 
 

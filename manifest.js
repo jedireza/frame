@@ -1,4 +1,5 @@
 'use strict';
+
 const Confidence = require('confidence');
 const Config = require('./config');
 const Package = require('./package.json');
@@ -24,12 +25,12 @@ const manifest = {
     register: {
         plugins: [
             {
-                plugin: 'good',
+                plugin: '@hapi/good',
                 options: {
                     reporters: {
                         myConsoleReporter: [
                             {
-                                module: 'good-squeeze',
+                                module: '@hapi/good-squeeze',
                                 name: 'Squeeze',
                                 args: [{
                                     error: '*',
@@ -39,7 +40,7 @@ const manifest = {
                                 }]
                             },
                             {
-                                module: 'good-console',
+                                module: '@hapi/good-console',
                                 args: [{
                                     color: {
                                         $filter: 'env',
@@ -54,16 +55,16 @@ const manifest = {
                 }
             },
             {
-                plugin: 'hapi-auth-basic'
+                plugin: '@hapi/basic'
             },
             {
                 plugin: 'hapi-remote-address'
             },
             {
-                plugin: 'inert'
+                plugin: '@hapi/inert'
             },
             {
-                plugin: 'vision'
+                plugin: '@hapi/vision'
             },
             {
                 plugin:'hapi-swagger',
@@ -97,7 +98,7 @@ More details on [Users, Roles & Groups](https://github.com/jedireza/frame/wiki/U
 More details on [Admin & Admin Group Permissions](https://github.com/jedireza/frame/wiki/Admin-&-Admin-Group-Permissions)`
                     },
                     grouping: 'tags',
-                    sortTags: 'name',
+                    sortTags: 'alpha',
                     tags: [
                         {
                             name: 'accounts',

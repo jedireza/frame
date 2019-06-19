@@ -1,4 +1,5 @@
 'use strict';
+
 const Creds = require('./creds');
 const Db = require('./db');
 const Hapi = require('./hapi');

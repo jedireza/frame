@@ -1,9 +1,10 @@
 'use strict';
+
 const Auth = require('../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('./fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../manifest');
 const Preware = require('../../server/preware');
 
@@ -91,7 +92,10 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/limited/to/root/group',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
         const response = await server.inject(request);
 
@@ -104,7 +108,10 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/limited/to/multiple/groups',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
         const response = await server.inject(request);
 
@@ -118,7 +125,10 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/just/not/the/root/user',
-            credentials: rootCredentails
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentails
+            }
         };
         const response = await server.inject(request);
 
@@ -131,7 +141,10 @@ lab.experiment('Preware', () => {
         const request = {
             method: 'GET',
             url: '/just/not/the/root/user',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
         const response = await server.inject(request);
 

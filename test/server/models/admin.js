@@ -1,10 +1,11 @@
 'use strict';
+
 const Admin = require('../../../server/models/admin');
 const AdminGroup = require('../../../server/models/admin-group');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const User = require('../../../server/models/user');
 
 

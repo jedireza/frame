@@ -1,9 +1,10 @@
 'use strict';
+
 const AuthAttempt = require('../../../server/models/auth-attempt');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Login = require('../../../server/api/login');
 const Mailer = require('../../../server/mailer');
 const Manifest = require('../../../manifest');

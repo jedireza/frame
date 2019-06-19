@@ -1,7 +1,8 @@
 'use strict';
+
 const Assert = require('assert');
 const Bcrypt = require('bcrypt');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const MongoModels = require('mongo-models');
 const NewDate = require('joistick/new-date');
 const Useragent = require('useragent');

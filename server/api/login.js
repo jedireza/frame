@@ -1,9 +1,10 @@
 'use strict';
+
 const AuthAttempt = require('../models/auth-attempt');
 const Bcrypt = require('bcrypt');
-const Boom = require('boom');
+const Boom = require('@hapi/boom');
 const Config = require('../../config');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const Mailer = require('../mailer');
 const Session = require('../models/session');
 const User = require('../models/user');
@@ -73,7 +74,7 @@ const register = function (server, serverOptions) {
             const sessionId = request.pre.session._id;
             const sessionKey = request.pre.session.key;
             const credentials = `${sessionId}:${sessionKey}`;
-            const authHeader = `Basic ${new Buffer(credentials).toString('base64')}`;
+            const authHeader = `Basic ${Buffer.from(credentials).toString('base64')}`;
 
             return {
                 user: {

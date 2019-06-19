@@ -1,8 +1,9 @@
 'use strict';
-const Code = require('code');
+
+const Code = require('@hapi/code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Status = require('../../../server/models/status');
 
 

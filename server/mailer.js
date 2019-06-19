@@ -1,8 +1,9 @@
 'use strict';
+
 const Config = require('../config');
 const Fs = require('fs');
 const Handlebars = require('handlebars');
-const Hoek = require('hoek');
+const Hoek = require('@hapi/hoek');
 const Markdown = require('nodemailer-markdown').markdown;
 const Nodemailer = require('nodemailer');
 const Path = require('path');

@@ -1,9 +1,10 @@
 'use strict';
+
 const AuthPlugin = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Logout = require('../../../server/api/logout');
 const Manifest = require('../../../manifest');
 const Session = require('../../../server/models/session');
@@ -71,10 +72,13 @@ lab.experiment('DELETE /api/logout', () => {
         const user = await User.create('ren', 'baddog', 'ren@stimpy.show');
         const session = await Session.create('ren', 'baddog', 'ren@stimpy.show');
 
-        request.credentials = {
-            roles: [],
-            session,
-            user
+        request.auth = {
+            strategy: 'basic',
+            credentials: {
+                roles: [],
+                session,
+                user
+            }
         };
 
         const response = await server.inject(request);

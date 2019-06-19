@@ -1,8 +1,9 @@
 'use strict';
+
 const Admin = require('../models/admin');
 const Account = require('../models/account');
-const Boom = require('boom');
-const Joi = require('joi');
+const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
 const Preware = require('../preware');
 const User = require('../models/user');
 
@@ -443,7 +444,6 @@ module.exports = {
     name: 'api-users',
     dependencies: [
         'auth',
-        'hapi-auth-basic',
         'hapi-mongo-models'
     ],
     register

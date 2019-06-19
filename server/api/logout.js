@@ -1,4 +1,5 @@
 'use strict';
+
 const Session = require('../models/session');
 
 
@@ -35,7 +36,6 @@ module.exports = {
     name: 'api-logout',
     dependencies: [
         'auth',
-        'hapi-auth-basic',
         'hapi-mongo-models'
     ],
     register

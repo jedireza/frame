@@ -1,6 +1,7 @@
 'use strict';
+
 const Assert = require('assert');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const MongoModels = require('mongo-models');
 const Slug = require('slug');
 

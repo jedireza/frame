@@ -1,9 +1,10 @@
 'use strict';
+
 const Auth = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const User = require('../../../server/models/user');
 const Users = require('../../../server/api/users');
@@ -60,7 +61,10 @@ lab.experiment('GET /api/users', () => {
         request = {
             method: 'GET',
             url: '/api/users',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -87,7 +91,10 @@ lab.experiment('POST /api/users', () => {
         request = {
             method: 'POST',
             url: '/api/users',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -149,7 +156,10 @@ lab.experiment('GET /api/users/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/users/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -167,7 +177,7 @@ lab.experiment('GET /api/users/{id}', () => {
 
     lab.test('it returns HTTP 200 when all is well', async () => {
 
-        const user = await User.create('mrcolbert', 'colbert123', 'mr@colbert.baz');
+        const user = await User.create('mrcolbert', 'colbert123', 'mr.colbert.baz@github.com');
 
         request.url = request.url.replace(/{id}/, user._id);
 
@@ -190,7 +200,10 @@ lab.experiment('PUT /api/users/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/users/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -274,7 +287,10 @@ lab.experiment('DELETE /api/users/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/users/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -292,7 +308,7 @@ lab.experiment('DELETE /api/users/{id}', () => {
 
     lab.test('it returns HTTP 200 when all is well', async () => {
 
-        const user = await User.create('deleteme', '0000', 'delete@me.please');
+        const user = await User.create('deleteme', '0000', 'delete.me.please@github.com');
 
         request.url = request.url.replace(/{id}/, user._id);
 
@@ -315,7 +331,10 @@ lab.experiment('PUT /api/users/{id}/password', () => {
         request = {
             method: 'PUT',
             url: '/api/users/{id}/password',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -362,7 +381,10 @@ lab.experiment('GET /api/users/my', () => {
         request = {
             method: 'GET',
             url: '/api/users/my',
-            credentials: accountCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: accountCredentials
+            }
         };
     });
 
@@ -388,7 +410,10 @@ lab.experiment('PUT /api/users/my', () => {
         request = {
             method: 'PUT',
             url: '/api/users/my',
-            credentials: accountCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: accountCredentials
+            }
         };
     });
 
@@ -450,7 +475,10 @@ lab.experiment('PUT /api/users/my/password', () => {
         request = {
             method: 'PUT',
             url: '/api/users/my/password',
-            credentials: accountCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: accountCredentials
+            }
         };
     });
 

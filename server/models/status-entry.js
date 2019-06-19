@@ -1,5 +1,6 @@
 'use strict';
-const Joi = require('joi');
+
+const Joi = require('@hapi/joi');
 const MongoModels = require('mongo-models');
 const NewDate = require('joistick/new-date');
 

@@ -1,9 +1,10 @@
 'use strict';
+
 const Auth = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const Session = require('../../../server/models/session');
 const Sessions = require('../../../server/api/sessions');
@@ -59,7 +60,10 @@ lab.experiment('GET /api/sessions', () => {
         request = {
             method: 'GET',
             url: '/api/sessions',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -86,7 +90,10 @@ lab.experiment('GET /api/sessions/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/sessions/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -104,7 +111,7 @@ lab.experiment('GET /api/sessions/{id}', () => {
 
     lab.test('it returns HTTP 200 when all is well', async () => {
 
-        const user = await User.create('darcie', 'uplate', 'darcie@late.night');
+        const user = await User.create('darcie', 'uplate', 'darcie.late.night@github.com');
         const session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
         request.url = request.url.replace(/{id}/, session._id);
@@ -128,7 +135,10 @@ lab.experiment('DELETE /api/sessions/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/sessions/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -146,7 +156,7 @@ lab.experiment('DELETE /api/sessions/{id}', () => {
 
     lab.test('it returns HTTP 200 when all is well', async () => {
 
-        const user = await User.create('aldon', 'thirsty', 'aldon@late.night');
+        const user = await User.create('aldon', 'thirsty', 'aldon.late.night@github.com');
         const session = await Session.create(`${user._id}`, '127.0.0.1', 'Lab');
 
         request.url = request.url.replace(/{id}/, session._id);
@@ -170,7 +180,10 @@ lab.experiment('GET /api/sessions/my', () => {
         request = {
             method: 'GET',
             url: '/api/sessions/my',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -195,7 +208,10 @@ lab.experiment('DELETE /api/sessions/my/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/sessions/my/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 

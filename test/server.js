@@ -1,7 +1,8 @@
 // 'use strict';
-// const Code = require('code');
+//
+// const Code = require('@hapi/code');
 // const Composer = require('../server');
-// const Lab = require('lab');
+// const Lab = require('@hapi/lab');
 //
 //
 // const lab = exports.lab = Lab.script();

@@ -1,6 +1,7 @@
 'use strict';
+
 const Config = require('../../config');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const Mailer = require('../mailer');
 
 

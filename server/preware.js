@@ -1,5 +1,6 @@
 'use strict';
-const Boom = require('boom');
+
+const Boom = require('@hapi/boom');
 
 
 class Preware {

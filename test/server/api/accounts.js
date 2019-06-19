@@ -1,11 +1,12 @@
 'use strict';
+
 const Account = require('../../../server/models/account');
 const Accounts = require('../../../server/api/accounts');
 const Auth = require('../../../server/auth');
-const Code = require('code');
+const Code = require('@hapi/code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const Status = require('../../../server/models/status');
 const User = require('../../../server/models/user');
@@ -63,7 +64,10 @@ lab.experiment('GET /api/accounts', () => {
         request = {
             method: 'GET',
             url: '/api/accounts',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -90,7 +94,10 @@ lab.experiment('POST /api/accounts', () => {
         request = {
             method: 'POST',
             url: '/api/accounts',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -121,7 +128,10 @@ lab.experiment('GET /api/accounts/{id}', () => {
         request = {
             method: 'GET',
             url: '/api/accounts/{id}',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -163,7 +173,10 @@ lab.experiment('PUT /api/accounts/{id}', () => {
         request = {
             method: 'PUT',
             url: '/api/accounts/{id}',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -221,7 +234,10 @@ lab.experiment('DELETE /api/accounts/{id}', () => {
         request = {
             method: 'DELETE',
             url: '/api/accounts/{id}',
-            credentials: rootCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: rootCredentials
+            }
         };
     });
 
@@ -262,7 +278,10 @@ lab.experiment('PUT /api/accounts/{id}/user', () => {
         request = {
             method: 'PUT',
             url: '/api/accounts/{id}/user',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -370,7 +389,10 @@ lab.experiment('DELETE /api/accounts/{id}/user', () => {
         request = {
             method: 'DELETE',
             url: '/api/accounts/{id}/user',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -455,7 +477,10 @@ lab.experiment('POST /api/accounts/{id}/notes', () => {
         request = {
             method: 'POST',
             url: '/api/accounts/{id}/notes',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -505,7 +530,10 @@ lab.experiment('POST /api/accounts/{id}/status', () => {
         request = {
             method: 'POST',
             url: '/api/accounts/{id}/status',
-            credentials: adminCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: adminCredentials
+            }
         };
     });
 
@@ -577,7 +605,10 @@ lab.experiment('GET /api/accounts/my', () => {
         request = {
             method: 'GET',
             url: '/api/accounts/my',
-            credentials: accountCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: accountCredentials
+            }
         };
     });
 
@@ -603,7 +634,10 @@ lab.experiment('PUT /api/accounts/my', () => {
         request = {
             method: 'PUT',
             url: '/api/accounts/my',
-            credentials: accountCredentials
+            auth: {
+                strategy: 'basic',
+                credentials: accountCredentials
+            }
         };
     });
 

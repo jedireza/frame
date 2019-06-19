@@ -1,6 +1,7 @@
 'use strict';
-const Boom = require('boom');
-const Joi = require('joi');
+
+const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
 const Preware = require('../preware');
 const Session = require('../models/session');
 
@@ -158,7 +159,6 @@ module.exports = {
     name: 'api-sessions',
     dependencies: [
         'auth',
-        'hapi-auth-basic',
         'hapi-mongo-models'
     ],
     register
