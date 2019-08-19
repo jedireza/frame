@@ -42,7 +42,7 @@ const config = {
                 }
             }
         },
-        autoIndex: true
+        autoIndex: false
     },
     nodemailer: {
         host: 'smtp.gmail.com',
