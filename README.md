@@ -1,3 +1,12 @@
+# No longer maintained
+
+Boilerplates can be a huge time sink to maintain and I've decieded to archive
+this project.
+
+Thanks for your interest in my projects.
+
+- - - - - - - - - -
+
 # Frame
 
 A user system API starter. Bring your own front-end.
